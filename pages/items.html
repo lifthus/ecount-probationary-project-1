@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ko">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" href="/styles/common.css" />
+        <title>1차 프로젝트 대비 과제</title>
+    </head>
+    <body>
+        <div class="basic-title">■ 품목조회</div>
+        <form class="filter-box">
+            <div>
+                <div class="filter-item">
+                    <div class="flex-box">
+                        <label class="w-100px">품목 코드</label>
+                        <div class="icon-dummy-box">🔍</div>
+                        <input placeholder="품목 코드" />
+                    </div>
+                </div>
+                <div class="filter-item">
+                    <label class="w-100px">품목명</label>
+                    <input placeholder="품목명" />
+                </div>
+                <div class="filter-item">
+                    <button class="blue-btn">검색</button>
+                </div>
+            </div>
+        </form>
+        <button class="gray-btn">< 이전</button>
+        <button class="gray-btn">다음 ></button>
+        <table class="bordered-table">
+            <thead>
+                <tr>
+                    <th><input type="checkbox" /></th>
+                    <th>품목코드</th>
+                    <th>품목명</th>
+                    <th>수정</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><input type="checkbox" /></td>
+                    <td>P123454</td>
+                    <td>이카운트</td>
+                    <td><a href="https://google.com">수정</a></td>
+                </tr>
+            </tbody>
+        </table>
+        <button class="blue-btn">적용</button>
+        <button class="gray-btn">신규</button>
+        <button class="gray-btn">닫기</button>
+    </body>
+    <footer></footer>
+</html>

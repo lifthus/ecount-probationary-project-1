@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ko">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" href="/styles/common.css" />
+        <title>1차 프로젝트 대비 과제</title>
+    </head>
+    <body>
+        <div class="basic-title">■ 판매조회</div>
+        <form class="filter-box">
+            <div>
+                <div class="filter-item">
+                    <label class="w-100px">전표일자</label>
+                    <select>
+                        <option value="2024">2024</option>
+                        <option value="2023">2023</option>
+                        <option value="2022">2022</option>
+                    </select>
+                    /
+                    <select>
+                        <option value="12">12</option>
+                    </select>
+                    /
+                    <select>
+                        <option value="31">31</option>
+                    </select>
+                    ~
+                    <select>
+                        <option value="2024">2024</option>
+                        <option value="2023">2023</option>
+                        <option value="2022">2022</option>
+                    </select>
+                    /
+                    <select>
+                        <option value="12">12</option>
+                    </select>
+                    /
+                    <select>
+                        <option value="31">31</option>
+                    </select>
+                </div>
+                <div class="filter-item">
+                    <div class="flex-box">
+                        <label class="w-100px">품목</label>
+                        <div class="icon-dummy-box">🔍</div>
+                        <input placeholder="품목" />
+                    </div>
+                </div>
+                <div class="filter-item">
+                    <label class="w-100px">적요</label>
+                    <input placeholder="적요" />
+                </div>
+                <div class="filter-item">
+                    <button class="blue-btn">검색</button>
+                </div>
+            </div>
+        </form>
+        <button class="gray-btn">< 이전</button>
+        <button class="gray-btn">다음 ></button>
+        <table class="bordered-table">
+            <thead>
+                <tr>
+                    <th><input type="checkbox" /></th>
+                    <th>전표일자/번호</th>
+                    <th>품목코드</th>
+                    <th>품목명</th>
+                    <th>수량</th>
+                    <th>단가</th>
+                    <th>적요</th>
+                </tr>
+            </thead>
+            <tbody id="sales-table-body"></tbody>
+        </table>
+        <button class="blue-btn">신규</button>
+        <button class="gray-btn">선택삭제</button>
+        <script src="/scripts/sales.js"></script>
+    </body>
+    <footer></footer>
+</html>
