@@ -37,18 +37,13 @@
                     <th>수정</th>
                 </tr>
             </thead>
-            <tbody>
-                <tr>
-                    <td><input type="checkbox" /></td>
-                    <td>P123454</td>
-                    <td>이카운트</td>
-                    <td><a href="https://google.com">수정</a></td>
-                </tr>
-            </tbody>
+            <tbody id="item-table-body"></tbody>
         </table>
         <button class="blue-btn">적용</button>
-        <button class="gray-btn">신규</button>
+        <button class="gray-btn" onclick="openPopup('/popups/item-create-input.html');">신규</button>
         <button class="gray-btn">닫기</button>
+        <script src="/scripts/items.js" type="module"></script>
+        <script src="/scripts/common.js"></script>
     </body>
     <footer></footer>
 </html>
