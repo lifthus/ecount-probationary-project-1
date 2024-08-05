@@ -13,7 +13,7 @@ export class ItemDTO {
  * @param {ItemDTO} item
  */
 export async function createItem(item) {
-    DB_ITEM.push(item);
+    return createItemLS(item);
 }
 
 export class QueryItemsResponseDTO {
@@ -33,11 +33,41 @@ export class QueryItemsResponseDTO {
     }
 }
 
+export async function getItem(code) {
+    const itemList = getItemsLS();
+    const item = itemList.find((it) => it.code === code);
+    if (!item) return null;
+    return new ItemDTO(item.code, item.name);
+}
+
 export async function getItems(page = 1, pageSize = 10) {
+    const itemList = getItemsLS();
     return new QueryItemsResponseDTO({
         page: page,
-        totalPages: Math.ceil(DB_ITEM.length / pageSize),
-        items: DB_ITEM.slice((page - 1) * pageSize, page * pageSize),
+        totalPages: Math.ceil(itemList.length / pageSize),
+        items: itemList.slice((page - 1) * pageSize, page * pageSize),
+    });
+}
+
+/**
+ *
+ * @param {*} code
+ * @param {*} name
+ * @param {*} page
+ * @param {*} pageSize
+ * @returns {QueryItemsResponseDTO}
+ */
+export async function searchItems(code, name, page = 1, pageSize = 10) {
+    if (!code) code = "";
+    if (!name) name = "";
+    const itemList = getItemsLS();
+    const filteredItems = itemList.filter((item) => {
+        return item.code.includes(code) && item.name.includes(name);
+    });
+    return new QueryItemsResponseDTO({
+        page: page,
+        totalPages: Math.ceil(filteredItems.length / pageSize),
+        items: filteredItems.slice((page - 1) * pageSize, page * pageSize),
     });
 }
 
@@ -46,35 +76,43 @@ export async function getItems(page = 1, pageSize = 10) {
  * @param {ItemDTO} item
  */
 export async function updateItem(item) {
-    const index = DB_ITEM.findIndex((it) => it.code === item.code);
-    if (index < 0) return;
-    DB_ITEM[index] = item;
+    return updateItemLS(item);
 }
 
 /**
  *
  * @param {string[]} codes
  */
-export async function deleteItems(codes) {
-    DB_ITEM = DB_ITEM.filter((it) => !codes.includes(it.code));
+export async function deleteItem(code) {
+    return deleteItemLS(code);
 }
 
 // ========== fake server ==========
 
-/**
- * @type {ItemDTO[]}
- */
-const DB_ITEM = [
-    new ItemDTO("P12345", "상품1"),
-    new ItemDTO("P12346", "상품2"),
-    new ItemDTO("P12347", "상품3"),
-    new ItemDTO("P12348", "상품4"),
-    new ItemDTO("P12349", "상품5"),
-    new ItemDTO("P12350", "상품6"),
-    // new ItemDTO("P12351", "상품7"),
-    // new ItemDTO("P12352", "상품8"),
-    // new ItemDTO("P12353", "상품9"),
-    // new ItemDTO("P12354", "상품10"),
-    // new ItemDTO("P12355", "상품11"),
-    // new ItemDTO("P12356", "상품12"),
-];
+function getItemsLS() {
+    return JSON.parse(localStorage.getItem("DB_ITEM")) || [];
+}
+
+function createItemLS(item) {
+    if (!item.code || !item.name) return;
+    const itemList = getItemsLS();
+    itemList.push(item);
+    localStorage.setItem("DB_ITEM", JSON.stringify(itemList));
+    return item;
+}
+
+function updateItemLS(itemDTO) {
+    const itemList = getItemsLS();
+    const item = itemList.find((it) => it.code === itemDTO.code);
+    if (!item) return;
+    item.name = itemDTO.name;
+    localStorage.setItem("DB_ITEM", JSON.stringify(itemList));
+    return item;
+}
+
+function deleteItemLS(code) {
+    const itemList = getItemsLS();
+    localStorage.setItem("DB_ITEM", JSON.stringify(itemList.filter((it) => code !== it.code)));
+    console.log("deleteItemLS", code);
+    return code;
+}

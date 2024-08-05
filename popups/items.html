@@ -8,30 +8,32 @@
     </head>
     <body>
         <div class="basic-title">■ 품목조회</div>
-        <form class="filter-box">
+        <form class="filter-box" id="item-search-form">
             <div>
                 <div class="filter-item">
                     <div class="flex-box">
                         <label class="w-100px">품목 코드</label>
-                        <div class="icon-dummy-box">🔍</div>
-                        <input placeholder="품목 코드" />
+                        <input name="item-code" placeholder="품목 코드" />
                     </div>
                 </div>
                 <div class="filter-item">
                     <label class="w-100px">품목명</label>
-                    <input placeholder="품목명" />
+                    <input name="item-name" placeholder="품목명" />
                 </div>
                 <div class="filter-item">
-                    <button class="blue-btn">검색</button>
+                    <button class="blue-btn" type="button" onclick="onSearch()">검색</button>
                 </div>
             </div>
         </form>
-        <button class="gray-btn">< 이전</button>
-        <button class="gray-btn">다음 ></button>
+        <div class="flex-box">
+            <button class="gray-btn" onclick="onPrevPage()">< 이전</button>
+            <div id="page-container"></div>
+            <button class="gray-btn" onclick="onNextPage()">다음 ></button>
+        </div>
         <table class="bordered-table">
             <thead>
                 <tr>
-                    <th><input type="checkbox" /></th>
+                    <th class="w-10px"><input type="checkbox" /></th>
                     <th>품목코드</th>
                     <th>품목명</th>
                     <th>수정</th>
@@ -39,10 +41,16 @@
             </thead>
             <tbody id="item-table-body"></tbody>
         </table>
-        <button class="blue-btn">적용</button>
-        <button class="gray-btn" onclick="openPopup('/popups/item-create-input.html');">신규</button>
-        <button class="gray-btn">닫기</button>
-        <script src="/scripts/items.js" type="module"></script>
+        <button class="blue-btn" type="button">적용</button>
+        <button class="gray-btn" type="button" onclick="openPopup('/popups/item-create-input.html');">신규</button>
+        <button class="gray-btn" type="button" onclick="self.close()">닫기</button>
+        <script type="module">
+            import { renderItemTable, onSearch, onPrevPage, onNextPage } from "/scripts/items.js";
+            renderItemTable();
+            window.onSearch = onSearch;
+            window.onPrevPage = onPrevPage;
+            window.onNextPage = onNextPage;
+        </script>
         <script src="/scripts/common.js"></script>
     </body>
     <footer></footer>

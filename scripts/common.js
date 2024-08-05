@@ -1,4 +1,4 @@
-function openPopup(url) {
-    var popup = window.open(url, "popup", "width=400,height=400");
+function openPopup(url, w = 400, h = 400) {
+    var popup = window.open(url, "popup", `width=${w},height=${h}`);
     popup.focus();
 }

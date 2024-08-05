@@ -8,7 +8,7 @@
     </head>
     <body>
         <div class="basic-title">■ 품목등록</div>
-        <form class="filter-box" onsubmit="onSubmit" id="item-create-form">
+        <form class="filter-box" onsubmit="return onSubmit()" id="item-create-form">
             <div>
                 <div class="filter-item">
                     <div class="flex-box">
@@ -22,20 +22,33 @@
                 </div>
             </div>
             <div class="flex-box">
-                <button class="blue-btn" onclick="onSubmit">저장</button>
-                <button class="gray-btn">다시작성</button>
-                <button class="gray-btn" onclick="self.close()">닫기</button>
+                <button class="blue-btn" type="submit">저장</button>
+                <button class="gray-btn" type="reset">다시작성</button>
+                <button class="gray-btn" type="button" onclick="onClose()">닫기</button>
             </div>
         </form>
         <script src="/scripts/items.js" type="module"></script>
+        <script type="module">
+            import { ItemDTO, createItem } from "/scripts/api/items.js";
+            window.createItem = createItem;
+            window.ItemDTO = ItemDTO;
+        </script>
         <script>
-            function onSubmit(e) {
-                e.preventDefault();
+            function onSubmit() {
                 const form = document.getElementById("item-create-form");
                 const formData = new FormData(form);
                 const itemCode = formData.get("item-code");
                 const itemName = formData.get("item-name");
-                console.log(itemCode, itemName);
+                createItem(new ItemDTO(itemCode, itemName));
+                self.close();
+                return false;
+            }
+            function onClear() {
+                const form = document.getElementById("item-create-form");
+                form.reset();
+            }
+            function onClose() {
+                self.close();
             }
         </script>
     </body>
