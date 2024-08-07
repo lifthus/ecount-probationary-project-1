@@ -155,6 +155,10 @@ export function deleteSale(saleNumber) {
     deleteSaleLS(saleNumber);
 }
 
+export function deleteSales(saleNumbers) {
+    deleteSalesLS(saleNumbers);
+}
+
 // ========== fake server ==========
 
 /**
@@ -162,7 +166,6 @@ export function deleteSale(saleNumber) {
  * @param {SalesQueryRequestDTO} dto
  */
 function getSalesLS(dto) {
-    console.log(dto, "TTT");
     /**
      * @type {SaleDTO[]}
      */
@@ -233,5 +236,11 @@ function updateSaleLS(sale) {
 function deleteSaleLS(saleNumber) {
     const dbSales = JSON.parse(localStorage.getItem("DB_SALE")) || [];
     const filteredDbSales = dbSales.filter((s) => s.saleNumber !== saleNumber);
+    localStorage.setItem("DB_SALE", JSON.stringify(filteredDbSales));
+}
+
+function deleteSalesLS(saleNumbers) {
+    const dbSales = JSON.parse(localStorage.getItem("DB_SALE")) || [];
+    const filteredDbSales = dbSales.filter((s) => !saleNumbers.includes(s.saleNumber));
     localStorage.setItem("DB_SALE", JSON.stringify(filteredDbSales));
 }

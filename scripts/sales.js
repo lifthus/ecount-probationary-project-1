@@ -13,7 +13,7 @@ function _renderSalesTable(sales) {
         salesTableBody.innerHTML += `
     <tr>
         <td>
-            <input type="checkbox" />
+            <input type="checkbox" data-sale-number="${s.saleNumber}"/>
         </td>
         <td>
         <a class="text-blue" onclick="openPopup('/popups/sale-update-input.html?saleNumber=${s.saleNumber}')">

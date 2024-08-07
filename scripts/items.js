@@ -60,7 +60,7 @@ function _renderItemTable(items) {
         itemTableBody.innerHTML += `
     <tr>
         <td>
-            <input type="checkbox" />
+            <input type="checkbox" data-item-code="${item.code}" onclick="onCheckItem(event)" />
         </td>
         <td>
             <a class="text-blue">

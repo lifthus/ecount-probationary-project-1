@@ -73,7 +73,7 @@
                     <div class="filter-item">
                         <div class="flex-box">
                             <label class="w-100px">품목</label>
-                            <div class="icon-dummy-box">🔍</div>
+                            <button class="icon-dummy-box" type="button" onclick="openPopup('/popups/items.html?maxSelect=1')">🔍</div>
                             <input name="item-code" placeholder="품목" />
                         </div>
                     </div>
@@ -100,6 +100,7 @@
             window.createSale = createSale;
             window.SaleDTO = SaleDTO;
         </script>
+        <script src="/scripts/common.js"></script>
         <script>
             function onSubmit() {
                 const form = document.querySelector("#sale-create-form");
@@ -114,6 +115,10 @@
                 createSale(new SaleDTO(saleDate, saleNumber, itemCode, amount, unitPrice, briefs));
                 self.close();
                 return false;
+            }
+            function onItemSelect(itemCodes) {
+                const itemCodeInput = document.querySelector("#sale-create-form input[name='item-code']");
+                itemCodeInput.value = itemCodes[0] || "";
             }
         </script>
     </body>

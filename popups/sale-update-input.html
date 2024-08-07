@@ -73,7 +73,7 @@
                     <div class="filter-item">
                         <div class="flex-box">
                             <label class="w-100px">품목</label>
-                            <div class="icon-dummy-box">🔍</div>
+                            <button class="icon-dummy-box" type="button" onclick="openPopup('/popups/items.html?maxSelect=1')">🔍</div>
                             <input name="item-code" placeholder="품목" />
                         </div>
                     </div>
@@ -97,6 +97,7 @@
             <button class="gray-btn" type="reset">다시작성</button>
             <button class="gray-btn" type="button" onclick="self.close()">닫기</button>
         </form>
+        <script src="/scripts/common.js"></script>
         <script type="module">
             import { createSale, SaleDTO, querySale, updateSale, deleteSale } from "/scripts/api/sales.js";
             window.createSale = createSale;
@@ -142,6 +143,10 @@
                 const saleNumber = Number(urlQueries.get("saleNumber"));
                 deleteSale(saleNumber);
                 self.close();
+            }
+            function onItemSelect(itemCodes) {
+                const itemCodeInput = document.querySelector("#sale-update-form input[name='item-code']");
+                itemCodeInput.value = itemCodes[0] || "";
             }
         </script>
     </body>

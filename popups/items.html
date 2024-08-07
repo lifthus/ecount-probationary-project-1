@@ -33,7 +33,7 @@
         <table class="bordered-table">
             <thead>
                 <tr>
-                    <th class="w-10px"><input type="checkbox" /></th>
+                    <th class="w-10px"><input type="checkbox" id="check-all" onclick="onCheckAll()" /></th>
                     <th>품목코드</th>
                     <th>품목명</th>
                     <th>수정</th>
@@ -41,7 +41,7 @@
             </thead>
             <tbody id="item-table-body"></tbody>
         </table>
-        <button class="blue-btn" type="button">적용</button>
+        <button class="blue-btn" type="button" onclick="onApply()">적용</button>
         <button class="gray-btn" type="button" onclick="openPopup('/popups/item-create-input.html');">신규</button>
         <button class="gray-btn" type="button" onclick="self.close()">닫기</button>
         <script type="module">
@@ -52,6 +52,43 @@
             window.onNextPage = onNextPage;
         </script>
         <script src="/scripts/common.js"></script>
+        <script>
+            const urlParams = new URLSearchParams(window.location.search);
+            const maxSelect = Number(urlParams.get("maxSelect")) || 3;
+            function onApply() {
+                const checkboxes = document.querySelectorAll("#item-table-body input[type='checkbox']:checked");
+                const selectedItems = Array.from(checkboxes)
+                    .filter((cb) => cb.checked)
+                    .map((cb) => {
+                        const itemcode = cb.getAttribute("data-item-code");
+                        return itemcode;
+                    });
+                opener.onItemSelect(selectedItems);
+                self.close();
+            }
+            function onCheckAll() {
+                const checkAllBox = document.querySelector("#check-all");
+                if (!checkAllBox.checked) {
+                    const checkboxes = document.querySelectorAll("#item-table-body input[type='checkbox']");
+                    checkboxes.forEach((cb) => {
+                        cb.checked = false;
+                    });
+                }
+            }
+            function onCheckItem(e) {
+                const target = e.target;
+                const checkboxes = document.querySelectorAll("#item-table-body input[type='checkbox']");
+                const checkedCount = Array.from(checkboxes).filter((cb) => cb.checked).length;
+                if (checkedCount > maxSelect) {
+                    target.checked = false;
+                    alert(`최대 ${maxSelect}개까지 선택 가능합니다.`);
+                }
+                if (target.checked) {
+                    const checkAllBox = document.querySelector("#check-all");
+                    checkAllBox.checked = true;
+                }
+            }
+        </script>
     </body>
     <footer></footer>
 </html>
