@@ -7,6 +7,7 @@
         <title>1차 프로젝트 대비 과제</title>
     </head>
     <body>
+        <a id="home-button" href="/pages/index.html">💒</a>
         <div class="basic-title">■ 품목조회</div>
         <form class="filter-box" id="item-search-form">
             <div>
@@ -41,8 +42,9 @@
             </thead>
             <tbody id="item-table-body"></tbody>
         </table>
-        <button class="blue-btn" type="button" onclick="onApply()">적용</button>
+        <button id="apply-button" class="blue-btn" type="button" onclick="onApply()">적용</button>
         <button class="gray-btn" type="button" onclick="openPopup('/popups/item-create-input.html');">신규</button>
+        <button class="gray-btn" type="button" onclick="onDeleteItems()">선택삭제</button>
         <button class="gray-btn" type="button" onclick="self.close()">닫기</button>
         <script type="module">
             import { renderItemTable, onSearch, onPrevPage, onNextPage } from "/scripts/items.js";
@@ -50,6 +52,8 @@
             window.onSearch = onSearch;
             window.onPrevPage = onPrevPage;
             window.onNextPage = onNextPage;
+            import { deleteItems } from "/scripts/api/items.js";
+            window.deleteItems = deleteItems;
         </script>
         <script src="/scripts/common.js"></script>
         <script>
@@ -87,6 +91,23 @@
                     const checkAllBox = document.querySelector("#check-all");
                     checkAllBox.checked = true;
                 }
+            }
+            function onDeleteItems() {
+                const checkboxes = document.querySelectorAll("#item-table-body input[type='checkbox']:checked");
+                const selectedItemCodes = Array.from(checkboxes)
+                    .filter((cb) => cb.checked)
+                    .map((cb) => {
+                        return cb.getAttribute("data-item-code");
+                    });
+                const confirmDelete = confirm(`선택한 ${selectedItemCodes.length}개 품목을 정말 삭제하시겠습니까?`);
+                if (!confirmDelete) return;
+                deleteItems(selectedItemCodes);
+            }
+            const popupQuery = Number(new URLSearchParams(window.location.search).get("popup"));
+            if (!popupQuery) {
+                document.getElementById("apply-button").style.display = "none";
+            } else {
+                document.getElementById("home-button").style.display = "none";
             }
         </script>
     </body>

@@ -87,6 +87,12 @@ export async function deleteItem(code) {
     return deleteItemLS(code);
 }
 
+export async function deleteItems(codes) {
+    for (const code of codes) {
+        deleteItemLS(code);
+    }
+}
+
 // ========== fake server ==========
 
 function getItemsLS() {
@@ -113,6 +119,5 @@ function updateItemLS(itemDTO) {
 function deleteItemLS(code) {
     const itemList = getItemsLS();
     localStorage.setItem("DB_ITEM", JSON.stringify(itemList.filter((it) => code !== it.code)));
-    console.log("deleteItemLS", code);
     return code;
 }
