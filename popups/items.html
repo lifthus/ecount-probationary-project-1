@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="ko">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" href="/styles/common.css" />
+        <title>1차 프로젝트 대비 과제</title>
+    </head>
+    <body>
+        <a id="home-button" href="/pages/index.html">💒</a>
+        <div class="basic-title">■ 품목조회</div>
+        <form class="filter-box" id="item-search-form">
+            <div>
+                <div class="filter-item">
+                    <div class="flex-box">
+                        <label class="w-100px">품목 코드</label>
+                        <input name="item-code" placeholder="품목 코드" />
+                    </div>
+                </div>
+                <div class="filter-item">
+                    <label class="w-100px">품목명</label>
+                    <input name="item-name" placeholder="품목명" />
+                </div>
+                <div class="filter-item">
+                    <button class="blue-btn" type="button" onclick="onSearch()">검색</button>
+                </div>
+            </div>
+        </form>
+        <div class="flex-box">
+            <button class="gray-btn" onclick="onPrevPage()">< 이전</button>
+            <div id="page-container"></div>
+            <button class="gray-btn" onclick="onNextPage()">다음 ></button>
+        </div>
+        <table class="bordered-table">
+            <thead>
+                <tr>
+                    <th class="w-10px"><input type="checkbox" id="check-all" onclick="onCheckAll()" /></th>
+                    <th>품목코드</th>
+                    <th>품목명</th>
+                    <th>수정</th>
+                </tr>
+            </thead>
+            <tbody id="item-table-body"></tbody>
+        </table>
+        <button id="apply-button" class="blue-btn" type="button" onclick="onApply()">적용</button>
+        <button class="gray-btn" type="button" onclick="openPopup('/popups/item-create-input.html');">신규</button>
+        <button class="gray-btn" type="button" onclick="onDeleteItems()">선택삭제</button>
+        <button class="gray-btn" type="button" onclick="self.close()">닫기</button>
+        <script type="module">
+            import { renderItemTable, onSearch, onPrevPage, onNextPage } from "/scripts/items.js";
+            renderItemTable();
+            window.onSearch = onSearch;
+            window.onPrevPage = onPrevPage;
+            window.onNextPage = onNextPage;
+            import { deleteItems } from "/scripts/api/items.js";
+            window.deleteItems = deleteItems;
+        </script>
+        <script src="/scripts/common.js"></script>
+        <script>
+            const urlParams = new URLSearchParams(window.location.search);
+            const maxSelect = Number(urlParams.get("maxSelect")) || 3;
+            function onApply() {
+                const checkboxes = document.querySelectorAll("#item-table-body input[type='checkbox']:checked");
+                const selectedItems = Array.from(checkboxes)
+                    .filter((cb) => cb.checked)
+                    .map((cb) => {
+                        const itemcode = cb.getAttribute("data-item-code");
+                        return itemcode;
+                    });
+                opener.onItemSelect(selectedItems);
+                self.close();
+            }
+            function onCheckAll() {
+                const checkAllBox = document.querySelector("#check-all");
+                if (!checkAllBox.checked) {
+                    const checkboxes = document.querySelectorAll("#item-table-body input[type='checkbox']");
+                    checkboxes.forEach((cb) => {
+                        cb.checked = false;
+                    });
+                }
+            }
+            function onCheckItem(e) {
+                const target = e.target;
+                const checkboxes = document.querySelectorAll("#item-table-body input[type='checkbox']");
+                const checkedCount = Array.from(checkboxes).filter((cb) => cb.checked).length;
+                if (checkedCount > maxSelect) {
+                    target.checked = false;
+                    alert(`최대 ${maxSelect}개까지 선택 가능합니다.`);
+                }
+                if (target.checked) {
+                    const checkAllBox = document.querySelector("#check-all");
+                    checkAllBox.checked = true;
+                }
+            }
+            function onDeleteItems() {
+                const checkboxes = document.querySelectorAll("#item-table-body input[type='checkbox']:checked");
+                const selectedItemCodes = Array.from(checkboxes)
+                    .filter((cb) => cb.checked)
+                    .map((cb) => {
+                        return cb.getAttribute("data-item-code");
+                    });
+                const confirmDelete = confirm(`선택한 ${selectedItemCodes.length}개 품목을 정말 삭제하시겠습니까?`);
+                if (!confirmDelete) return;
+                deleteItems(selectedItemCodes);
+            }
+            const popupQuery = Number(new URLSearchParams(window.location.search).get("popup"));
+            if (!popupQuery) {
+                document.getElementById("apply-button").style.display = "none";
+            } else {
+                document.getElementById("home-button").style.display = "none";
+            }
+        </script>
+    </body>
+    <footer></footer>
+</html>

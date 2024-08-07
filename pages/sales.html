@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="ko">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" href="/styles/common.css" />
+        <title>1차 프로젝트 대비 과제</title>
+    </head>
+    <body>
+        <a href="/pages/index.html">💒</a>
+        <div class="basic-title">■ 판매조회</div>
+        <form class="filter-box" id="sales-filter-form">
+            <div>
+                <div class="filter-item">
+                    <label class="w-100px">전표일자</label>
+                    <select name="start-sales-year">
+                        <option value="undefined"></option>
+                        <option value="2024">2024</option>
+                        <option value="2023">2023</option>
+                        <option value="2022">2022</option>
+                        <option value="2021">2021</option>
+                        <option value="2020">2020</option>
+                    </select>
+                    /
+                    <select name="start-sales-month">
+                        <option value="undefined"></option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                        <option value="7">7</option>
+                        <option value="8">8</option>
+                        <option value="9">9</option>
+                        <option value="10">10</option>
+                        <option value="11">11</option>
+                        <option value="12">12</option>
+                    </select>
+                    /
+                    <select name="start-sales-day">
+                        <option value="undefined"></option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                        <option value="7">7</option>
+                        <option value="8">8</option>
+                        <option value="9">9</option>
+                        <option value="10">10</option>
+                        <option value="11">11</option>
+                        <option value="12">12</option>
+                        <option value="13">13</option>
+                        <option value="14">14</option>
+                        <option value="15">15</option>
+                        <option value="16">16</option>
+                        <option value="17">17</option>
+                        <option value="18">18</option>
+                        <option value="19">19</option>
+                        <option value="20">20</option>
+                        <option value="21">21</option>
+                        <option value="22">22</option>
+                        <option value="23">23</option>
+                        <option value="24">24</option>
+                        <option value="25">25</option>
+                        <option value="26">26</option>
+                        <option value="27">27</option>
+                        <option value="28">28</option>
+                        <option value="29">29</option>
+                        <option value="30">30</option>
+                        <option value="31">31</option>
+                    </select>
+                    ~
+                    <select name="end-sales-year">
+                        <option value="undefined"></option>
+                        <option value="2024">2024</option>
+                        <option value="2023">2023</option>
+                        <option value="2022">2022</option>
+                        <option value="2021">2021</option>
+                        <option value="2020">2020</option>
+                    </select>
+                    /
+                    <select name="end-sales-month">
+                        <option value="undefined"></option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                        <option value="7">7</option>
+                        <option value="8">8</option>
+                        <option value="9">9</option>
+                        <option value="10">10</option>
+                        <option value="11">11</option>
+                        <option value="12">12</option>
+                    </select>
+                    /
+                    <select name="end-sales-day">
+                        <option value="undefined"></option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                        <option value="7">7</option>
+                        <option value="8">8</option>
+                        <option value="9">9</option>
+                        <option value="10">10</option>
+                        <option value="11">11</option>
+                        <option value="12">12</option>
+                        <option value="13">13</option>
+                        <option value="14">14</option>
+                        <option value="15">15</option>
+                        <option value="16">16</option>
+                        <option value="17">17</option>
+                        <option value="18">18</option>
+                        <option value="19">19</option>
+                        <option value="20">20</option>
+                        <option value="21">21</option>
+                        <option value="22">22</option>
+                        <option value="23">23</option>
+                        <option value="24">24</option>
+                        <option value="25">25</option>
+                        <option value="26">26</option>
+                        <option value="27">27</option>
+                        <option value="28">28</option>
+                        <option value="29">29</option>
+                        <option value="30">30</option>
+                        <option value="31">31</option>
+                    </select>
+                </div>
+                <div class="filter-item">
+                    <div class="flex-box">
+                        <label class="w-100px">품목</label>
+                        <button class="icon-dummy-box" type="button" onclick="openPopup('/popups/items.html?popup=1')">🔍</div>
+                        <input placeholder="품목" name="sales-item-codes" />
+                    </div>
+                </div>
+                <div class="filter-item">
+                    <label class="w-100px">적요</label>
+                    <input placeholder="적요" name="sales-briefs" />
+                </div>
+                <div class="filter-item">
+                    <button class="blue-btn" type="button" onclick="onSearchSales()">검색</button>
+                </div>
+            </div>
+        </form>
+        <button class="gray-btn" onclick="onPrevSalesPage()">< 이전</button>
+        <button class="gray-btn" onclick="onNextSalesPage()">다음 ></button>
+        <table class="bordered-table">
+            <thead>
+                <tr>
+                    <th class="w-10px"><input type="checkbox" id="check-whole" onclick="onCheckAll()" /></th>
+                    <th>전표일자/번호</th>
+                    <th>품목코드</th>
+                    <th>품목명</th>
+                    <th>수량</th>
+                    <th>단가</th>
+                    <th>적요</th>
+                </tr>
+            </thead>
+            <tbody id="sales-table-body"></tbody>
+        </table>
+        <button class="blue-btn" onclick="openPopup('/popups/sale-create-input.html');">신규</button>
+        <button class="gray-btn" onclick="onDeleteSales()">선택삭제</button>
+        <script type="module">
+            import { onPrevSalesPage, onNextSalesPage, onSearchSales } from "/scripts/sales.js";
+            window.onPrevSalesPage = onPrevSalesPage;
+            window.onNextSalesPage = onNextSalesPage;
+            window.onSearchSales = onSearchSales;
+
+            import { deleteSales } from "/scripts/api/sales.js";
+            window.deleteSales = deleteSales;
+        </script>
+        <script>
+            function onCheckAll() {
+                const checkWhole = document.querySelector("#check-whole");
+                const checkboxes = document.querySelectorAll("#sales-table-body input[type='checkbox']");
+                const isChecked = checkWhole.checked;
+                checkboxes.forEach((checkbox) => {
+                    checkbox.checked = isChecked;
+                });
+            }
+            function onDeleteSales() {
+                const checkboxes = document.querySelectorAll("#sales-table-body input[type='checkbox']:checked");
+                const saleNumbers = Array.from(checkboxes).map((checkbox) => Number(checkbox.getAttribute("data-sale-number")));
+                deleteSales(saleNumbers);
+                alert(`${saleNumbers.length}개의 판매가 삭제되었습니다.`);
+            }
+            function onItemSelect(itemCodes) {
+                setItemCodeFilter(itemCodes);
+            }
+            function setItemCodeFilter(itemCodes) {
+                const itemCodeInput = document.querySelector("input[name='sales-item-codes']");
+                itemCodeInput.value = itemCodes.join(",");
+            }
+        </script>
+        <script src="/scripts/common.js"></script>
+    </body>
+    <footer></footer>
+</html>

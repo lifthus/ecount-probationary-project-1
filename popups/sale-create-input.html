@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="ko">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" href="/styles/common.css" />
+        <title>1차 프로젝트 대비 과제</title>
+    </head>
+    <body>
+        <div class="basic-title">■ 판매입력</div>
+        <form id="sale-create-form" onsubmit="return onSubmit()">
+            <div class="filter-box">
+                <div>
+                    <div class="filter-item">
+                        <label class="w-100px">전표일자</label>
+                        <select name="sale-year">
+                            <option value="2024">2024</option>
+                            <option value="2023">2023</option>
+                            <option value="2022">2022</option>
+                            <option value="2021">2021</option>
+                            <option value="2020">2020</option>
+                        </select>
+                        /
+                        <select name="sale-month">
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                            <option value="8">8</option>
+                            <option value="9">9</option>
+                            <option value="10">10</option>
+                            <option value="11">11</option>
+                            <option value="12">12</option>
+                        </select>
+                        /
+                        <select name="sale-day">
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                            <option value="8">8</option>
+                            <option value="9">9</option>
+                            <option value="10">10</option>
+                            <option value="11">11</option>
+                            <option value="12">12</option>
+                            <option value="13">13</option>
+                            <option value="14">14</option>
+                            <option value="15">15</option>
+                            <option value="16">16</option>
+                            <option value="17">17</option>
+                            <option value="18">18</option>
+                            <option value="19">19</option>
+                            <option value="20">20</option>
+                            <option value="21">21</option>
+                            <option value="22">22</option>
+                            <option value="23">23</option>
+                            <option value="24">24</option>
+                            <option value="25">25</option>
+                            <option value="26">26</option>
+                            <option value="27">27</option>
+                            <option value="28">28</option>
+                            <option value="29">29</option>
+                            <option value="30">30</option>
+                            <option value="31">31</option>
+                        </select>
+                    </div>
+                    <div class="filter-item">
+                        <div class="flex-box">
+                            <label class="w-100px">품목</label>
+                            <button class="icon-dummy-box" type="button" onclick="openPopup('/popups/items.html?maxSelect=1&popup=1')">🔍</div>
+                            <input name="item-code" placeholder="품목" />
+                        </div>
+                    </div>
+                    <div class="filter-item">
+                        <label class="w-100px">수량</label>
+                        <input name="amount" placeholder="수량" />
+                    </div>
+                    <div class="filter-item">
+                        <label class="w-100px">단가</label>
+                        <input name="unit-price" placeholder="단가" />
+                    </div>
+                    <div class="filter-item">
+                        <label class="w-100px">적요</label>
+                        <input name="briefs" placeholder="적요" />
+                    </div>
+                </div>
+            </div>
+            <button class="blue-btn" type="submit">저장</button>
+            <button class="gray-btn" type="reset">다시작성</button>
+            <button class="gray-btn" type="button" onclick="self.close()">닫기</button>
+        </form>
+        <script type="module">
+            import { createSale, SaleDTO } from "/scripts/api/sales.js";
+            window.createSale = createSale;
+            window.SaleDTO = SaleDTO;
+        </script>
+        <script src="/scripts/common.js"></script>
+        <script>
+            function onSubmit() {
+                const form = document.querySelector("#sale-create-form");
+                const formData = new FormData(form);
+                const sf = Object.fromEntries(formData);
+                const saleDate = new Date(sf["sale-year"], sf["sale-month"] - 1, sf["sale-day"]);
+                const saleNumber = undefined;
+                const itemCode = sf["item-code"];
+                const amount = Number(sf["amount"]);
+                const unitPrice = sf["unit-price"];
+                const briefs = sf["briefs"];
+                createSale(new SaleDTO(saleDate, saleNumber, itemCode, amount, unitPrice, briefs));
+                self.close();
+                return false;
+            }
+            function onItemSelect(itemCodes) {
+                const itemCodeInput = document.querySelector("#sale-create-form input[name='item-code']");
+                itemCodeInput.value = itemCodes[0] || "";
+            }
+        </script>
+    </body>
+    <footer></footer>
+</html>
