@@ -5,25 +5,19 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link rel="stylesheet" href="/styles/common.css" />
         <link rel="stylesheet" href="/styles/util.css" />
-        <title>1차 프로젝트 대비 과제</title>
-        <style>
-            .menu-item {
-                background-color: #87ceeb;
-                border-radius: 5px;
-                text-decoration: none;
-            }
-            .menu-item:hover {
-                background-color: #6495ed;
-            }
-        </style>
+        <title>ERP</title>
     </head>
     <body>
+        <!-- header part -->
         <div class="bdr-md bg-crimson txt-white px-md py-s">
             <h1>ERP</h1>
         </div>
-        <a class="menu-item" href="/pages/sales.html">판매 조회</a>
-        <a class="menu-item" href="/popups/items.html">품목 조회</a>
-        <menu-item name="판매 조회" href="/pages/sales.html"></menu-item>
+        <!-- -->
+
+        <menu-button href="/pages/sales.html">판매 조회</menu-button>
+        <menu-button href="/popups/items.html">품목 조회</menu-button>
+
+        <script type="module" src="/components/component.js"></script>
         <script>
             /* web component */
             class MenuItem extends HTMLElement {
