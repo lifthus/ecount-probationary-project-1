@@ -3,25 +3,15 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link rel="stylesheet" href="/styles/common.css" />
-        <title>1차 프로젝트 대비 과제</title>
-        <style>
-            .menu-item {
-                background-color: #87ceeb;
-                border-radius: 5px;
-                text-decoration: none;
-            }
-            .menu-item:hover {
-                background-color: #6495ed;
-            }
-        </style>
+        <link rel="stylesheet" href="/styles/util.css" />
+        <title>ERP</title>
     </head>
     <body>
-        <h1>ERP</h1>
-        <hr />
-        <h2>메뉴</h2>
-        <a class="menu-item" href="/pages/sales.html">판매 조회</a>
-        <a class="menu-item" href="/popups/items.html">품목 조회</a>
+        <!-- header part -->
+        <erp-banner></erp-banner>
+        <nav-bar></nav-bar>
+
+        <script type="module" src="/components/component.js"></script>
     </body>
     <footer></footer>
 </html>

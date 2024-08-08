@@ -1,0 +1,11 @@
+.bg-crimson {
+    background-color: crimson;
+}
+
+.bg-darkwhite {
+    background-color: whitesmoke;
+}
+
+.hover\:bg-lightgray:hover {
+    background-color: lightgray;
+}

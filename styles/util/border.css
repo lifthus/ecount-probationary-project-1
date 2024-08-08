@@ -1,0 +1,22 @@
+/* border radius */
+.bdr-sm {
+    border-radius: 0.25rem;
+}
+.bdr-md {
+    border-radius: 1rem;
+}
+
+/* border style */
+.bd-solid {
+    border-style: solid;
+}
+
+/* border width */
+.bd-md {
+    border-width: 0.125rem;
+}
+
+/* border color */
+.bd-lightgray {
+    border-color: lightgray;
+}

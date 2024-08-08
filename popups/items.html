@@ -4,10 +4,11 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link rel="stylesheet" href="/styles/common.css" />
+        <link rel="stylesheet" href="/styles/util.css" />
         <title>1차 프로젝트 대비 과제</title>
     </head>
     <body>
-        <a id="home-button" href="/pages/index.html">💒</a>
+        <erp-banner></erp-banner>
         <div class="basic-title">■ 품목조회</div>
         <form class="filter-box" id="item-search-form">
             <div>
@@ -33,6 +34,7 @@
         </div>
         <table class="bordered-table">
             <thead>
+                <abc></abc>
                 <tr>
                     <th class="w-10px"><input type="checkbox" id="check-all" onclick="onCheckAll()" /></th>
                     <th>품목코드</th>
@@ -46,6 +48,7 @@
         <button class="gray-btn" type="button" onclick="openPopup('/popups/item-create-input.html');">신규</button>
         <button class="gray-btn" type="button" onclick="onDeleteItems()">선택삭제</button>
         <button class="gray-btn" type="button" onclick="self.close()">닫기</button>
+        <script type="module" src="/components/component.js"></script>
         <script type="module">
             import { renderItemTable, onSearch, onPrevPage, onNextPage } from "/scripts/items.js";
             renderItemTable();

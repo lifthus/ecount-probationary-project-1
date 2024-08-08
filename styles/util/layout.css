@@ -1,0 +1,24 @@
+/* inside element layout */
+.p-sm {
+    padding: 0.25em;
+}
+.p-md {
+    padding: 0.5rem;
+}
+.px-md {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+}
+.py-s {
+    padding-top: 0.25rem;
+    padding-bottom: 0.25rem;
+}
+
+/* inter element layout */
+.flex {
+    display: flex;
+}
+
+.gap-md {
+    gap: 0.5rem;
+}
