@@ -4,6 +4,7 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link rel="stylesheet" href="/styles/common.css" />
+        <link rel="stylesheet" href="/styles/util.css" />
         <title>1차 프로젝트 대비 과제</title>
         <style>
             .menu-item {
@@ -17,11 +18,40 @@
         </style>
     </head>
     <body>
-        <h1>ERP</h1>
-        <hr />
-        <h2>메뉴</h2>
+        <div class="bdr-md bg-crimson txt-white px-md py-s">
+            <h1>ERP</h1>
+        </div>
         <a class="menu-item" href="/pages/sales.html">판매 조회</a>
         <a class="menu-item" href="/popups/items.html">품목 조회</a>
+        <menu-item name="판매 조회" href="/pages/sales.html"></menu-item>
+        <script>
+            /* web component */
+            class MenuItem extends HTMLElement {
+                constructor() {
+                    super();
+                    this.style.backgroundColor = "#87ceeb";
+                    this.style.borderRadius = "5px";
+                    this.style.textDecoration = "none";
+                    this.style.display = "block";
+                    this.style.padding = "10px 20px";
+                    this.style.margin = "10px";
+                    this.style.color = "black";
+                    this.style.textAlign = "center";
+                    this.style.cursor = "pointer";
+                    this.addEventListener("mouseover", () => {
+                        this.style.backgroundColor = "#6495ed";
+                    });
+                    this.addEventListener("mouseout", () => {
+                        this.style.backgroundColor = "#87ceeb";
+                    });
+                }
+                connectedCallback() {
+                    this.innerHTML = this.getAttribute("name");
+                    this.href = this.getAttribute("href");
+                }
+            }
+            customElements.define("menu-item", MenuItem);
+        </script>
     </body>
     <footer></footer>
 </html>

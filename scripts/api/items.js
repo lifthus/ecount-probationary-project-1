@@ -93,6 +93,8 @@ export async function deleteItems(codes) {
     }
 }
 
+html` <html></html> `;
+
 // ========== fake server ==========
 
 function getItemsLS() {

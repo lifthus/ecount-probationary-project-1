@@ -1,0 +1,9 @@
+/* element layout */
+.px-md {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+}
+.py-s {
+    padding-top: 0.25rem;
+    padding-bottom: 0.25rem;
+}
