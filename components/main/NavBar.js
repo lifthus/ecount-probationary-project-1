@@ -8,7 +8,10 @@ class NavBar extends HTMLElement {
         const content = this.innerHTML.trim() || href;
 
         this.shadowRoot.innerHTML = `
-          <a href="${href}">${content}</a>
+        <div class="p-md">
+            <menu-button href="/pages/sales.html">판매 조회</menu-button>
+            <menu-button href="/popups/items.html">품목 조회</menu-button>
+        </div>
         `;
     }
 }

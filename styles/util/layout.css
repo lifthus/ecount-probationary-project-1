@@ -1,4 +1,7 @@
 /* element layout */
+.p-md {
+    padding: 0.5rem;
+}
 .px-md {
     padding-left: 0.5rem;
     padding-right: 0.5rem;
