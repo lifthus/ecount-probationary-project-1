@@ -1,4 +1,4 @@
-class MenuButton extends HTMLElement {
+export class MenuButton extends HTMLElement {
     constructor() {
         super();
     }
@@ -13,4 +13,3 @@ class MenuButton extends HTMLElement {
         `;
     }
 }
-customElements.define("menu-button", MenuButton);

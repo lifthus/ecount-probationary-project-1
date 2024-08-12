@@ -9,6 +9,62 @@ export class ItemDTO {
     }
 }
 
+export class ItemQueryRequestDTO {
+    /**
+     * @param {string} itemCode
+     * @param {string} itemName
+     */
+    constructor(itemCode, itemName) {
+        /**
+         * @type {string}
+         */
+        this.itemCode = itemCode;
+        /**
+         * @type {string}
+         */
+        this.itemName = itemName;
+    }
+}
+
+export class QueryItemResponseDTO {
+    constructor(resp) {
+        /**
+         * @type {number}
+         */
+        this.page = resp.page;
+        /**
+         * @type {number}
+         */
+        this.totalPages = resp.totalPages;
+        /**
+         * @type {ItemDTO[]}
+         */
+        this.items = resp.items.map((it) => new ItemDTO(it.code, it.name));
+        /**
+         * @type {string}
+         */
+        this.itemCode = resp.itemCode;
+        /**
+         * @type {string}
+         */
+        this.itemName = resp.itemName;
+    }
+}
+
+/**
+ *
+ * @param {ItemQueryRequestDTO} dto
+ * @return {QueryItemResponseDTO}
+ */
+export function queryItems(dto) {
+    dto.page = dto.page || 1;
+    dto.pageSize = dto.pageSize || 10;
+    dto.itemCode = dto.itemCode || "";
+    dto.itemName = dto.itemName || "";
+
+    return queryItemsLS(dto);
+}
+
 /**
  * @param {ItemDTO} item
  */
@@ -95,6 +151,29 @@ export async function deleteItems(codes) {
 
 // ========== fake server ==========
 
+/**
+ *
+ * @param {ItemQueryRequestDTO} dto
+ * @returns {QueryItemResponseDTO}
+ */
+function queryItemsLS(dto) {
+    const items = getItemsLS();
+    const filteredItems = items.filter((item) => {
+        return item.code.includes(dto.itemCode) && item.name.includes(dto.itemName);
+    });
+    return new QueryItemResponseDTO({
+        page: dto.page,
+        totalPages: Math.ceil(filteredItems.length / dto.pageSize),
+        items: filteredItems.slice((dto.page - 1) * dto.pageSize, dto.page * dto.pageSize).map((item) => new ItemDTO(item.code, item.name)),
+        itemCode: dto.itemCode,
+        itemName: dto.itemName,
+    });
+}
+
+/**
+ *
+ * @returns {ItemDTO[]}
+ */
 function getItemsLS() {
     return JSON.parse(localStorage.getItem("DB_ITEM")) || [];
 }

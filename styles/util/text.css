@@ -1,3 +1,10 @@
 .txt-white {
     color: white;
 }
+.txt-mildblue {
+    color: #477eed;
+}
+
+.txt-center {
+    text-align: center;
+}

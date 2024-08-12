@@ -5,11 +5,13 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link rel="stylesheet" href="/styles/common.css" />
         <link rel="stylesheet" href="/styles/util.css" />
+        <script type="module" src="/components/component.js" defer></script>
         <title>1차 프로젝트 대비 과제</title>
     </head>
     <body>
         <erp-banner></erp-banner>
-        <div class="basic-title">■ 판매조회</div>
+        <erp-body>
+        <menu-title>판매 조회</menu-title>
         <form class="filter-box" id="sales-filter-form">
             <div>
                 <div class="filter-item">
@@ -168,7 +170,7 @@
         </table>
         <button class="blue-btn" onclick="openPopup('/popups/sale-create-input.html');">신규</button>
         <button class="gray-btn" onclick="onDeleteSales()">선택삭제</button>
-        <script type="module" src="/components/component.js"></script>
+        </erp-body>
         <script type="module">
             import { onPrevSalesPage, onNextSalesPage, onSearchSales } from "/scripts/sales.js";
             window.onPrevSalesPage = onPrevSalesPage;

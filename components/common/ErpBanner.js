@@ -1,12 +1,12 @@
 import { MAIN_PATH } from "../../constant.js";
 
-class ErpBanner extends HTMLElement {
+export class ErpBanner extends HTMLElement {
     constructor() {
         super();
     }
     connectedCallback() {
         const urlParams = new URLSearchParams(window.location.search);
-        const popup = Number(urlParams.get('popup'));
+        const popup = Number(urlParams.get("popup"));
         if (popup) return;
         this.innerHTML = `
           <div 
@@ -18,4 +18,3 @@ class ErpBanner extends HTMLElement {
         `;
     }
 }
-customElements.define("erp-banner", ErpBanner);

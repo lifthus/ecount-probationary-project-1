@@ -1,4 +1,4 @@
-class NavBar extends HTMLElement {
+export class NavBar extends HTMLElement {
     constructor() {
         super();
     }
@@ -11,7 +11,3 @@ class NavBar extends HTMLElement {
         `;
     }
 }
-customElements.define("nav-bar", NavBar);
-
-const NavBarStyle = `
-`;

@@ -7,16 +7,29 @@
 }
 
 /* border style */
+.bd-none {
+    border-style: none;
+}
 .bd-solid {
     border-style: solid;
 }
+.bd-collapse {
+    border-collapse: collapse;
+}
 
 /* border width */
+.bd-sm {
+    border-width: 0.0625rem;
+}
 .bd-md {
     border-width: 0.125rem;
 }
 
+
 /* border color */
 .bd-lightgray {
     border-color: lightgray;
+}
+.bd-gray {
+    border-color: gray;
 }

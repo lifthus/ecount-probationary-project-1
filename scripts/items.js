@@ -59,18 +59,18 @@ function _renderItemTable(items) {
     items.forEach((item) => {
         itemTableBody.innerHTML += `
     <tr>
-        <td>
+        <td class="bd-sm bd-solid bd-gray">
             <input type="checkbox" data-item-code="${item.code}" onclick="onCheckItem(event)" />
         </td>
-        <td>
+        <td class="bd-sm bd-solid bd-gray">
             <a class="text-blue">
                 ${item.code}
             </a>
         </td>
-        <td>
+        <td class="bd-sm bd-solid bd-gray">
             ${item.name}
         </td>
-        <td>
+        <td class="bd-sm bd-solid bd-gray">
         <a class="text-blue" onclick="openPopup('/popups/item-update-input.html?code=${item.code}')">
             수정
         </a>

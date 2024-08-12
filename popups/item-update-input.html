@@ -53,6 +53,7 @@
                 const code = urlParams.get("code");
                 const itemName = formData.get("item-name");
                 updateItem(new ItemDTO(code, itemName));
+                opener.location.reload();
                 self.close();
                 return false;
             }
