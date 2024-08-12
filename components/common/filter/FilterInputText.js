@@ -5,8 +5,8 @@ export class FilterInputText extends HTMLElement {
     connectedCallback() {
         const filterId = this.getAttribute("filterId");
         const filterName = this.getAttribute("filterName");
-        const defaultValue = this.getAttribute("defaultValue");
-        const content = this.innerHTML.trim() || href;
+        const defaultValue = this.getAttribute("defaultValue") || "";
+        const content = this.innerHTML.trim();
         this.innerHTML = `
           <div class="flex bg-whitesmoke bd-solid bd-sm p-sm">
             <label

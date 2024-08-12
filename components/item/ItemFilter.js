@@ -8,7 +8,6 @@ export class ItemFilter extends HTMLElement {
         const href = this.getAttribute("href");
         const content = this.innerHTML.trim() || href;
 
-        /* eventlistner to item-search-button */
         this.addEventListener("click", (event) => {
             if (event.target.id === "item-search-button") {
                 const code = document.getElementById("filter-item-code").value;

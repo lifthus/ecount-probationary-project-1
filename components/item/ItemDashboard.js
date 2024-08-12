@@ -3,8 +3,6 @@ export class ItemDashboard extends HTMLElement {
         super();
     }
     connectedCallback() {
-        const isApplicable = this.getAttribute("applicable") !== null;
-
         this.innerHTML = `
           <item-filter></item-filter>
           <item-table></item-table>
