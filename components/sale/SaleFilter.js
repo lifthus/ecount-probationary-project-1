@@ -1,44 +1,31 @@
-import { ITEM_PATH, SALE_PATH } from "../../constant.js";
+import { SALE_PATH } from "../../constant.js";
 
 export class SaleFilter extends HTMLElement {
     constructor() {
         super();
     }
-    connectedCallback() {
-        const href = this.getAttribute("href");
-        const content = this.innerHTML.trim() || href;
 
+    /* 쿼리 상태 */
+    startDate = "";
+    endDate = "";
+    itemList = [];
+    briefs = "";
+    page = 1;
+
+    connectedCallback() {
+        /* 쿼리 파라미터에서 조회 쿼리 값 가져오기 */
         const query = new URLSearchParams(window.location.search);
-        const startDate = query.get("startDate") || "";
-        const endDate = query.get("endDate") || "";
+        this.startDate = query.get("startDate") || "";
+        this.endDate = query.get("endDate") || "";
+        // TODO: 일단 쿼리에 아이템 코드/명 무지성으로 넣음. 추후에 가능하면 좀 더 깔끔하게 수정
         const itemCodes = query.get("itemCodes") ? query.get("itemCodes").split(",") : [];
         const itemNames = query.get("itemNames") ? query.get("itemNames").split(",") : [];
-        const briefs = query.get("briefs") || "";
-        const page = Number(query.get("page")) || 1;
+        this.itemList = itemCodes.map((code, idx) => ({ code, name: itemNames[idx] }));
+        this.briefs = query.get("briefs") || "";
+        this.page = Number(query.get("page")) || 1;
 
-        this.innerHTML = `
-          <form class="flex-col" id="item-search-form">
-                <filter-date-range 
-                    startDateId="start-date-value" 
-                    endDateId="end-date-value"
-                    defaultStartDate="${startDate}"
-                    defaultEndDate="${endDate}"    
-                >전표일자</filter-date-range>
-                <filter-item-select
-                    max="1"
-                >품목</filter-item-select>
-                <filter-input-text
-                    filterId="filter-sale-briefs"
-                    filterName="filter-sale-briefs"
-                    defaultValue="${briefs}"
-                >
-                    적요
-                </filter-input-text>
-                <filter-item-div>
-                    <blue-button buttonId="sale-search-button">검색</blue-button>
-                </div>
-            </form>
-        `;
+        this.render();
+
         const saleSearchButton = this.querySelector("#sale-search-button");
         saleSearchButton.addEventListener("click", () => {
             const startDateValue = this.querySelector("#start-date-value").value;
@@ -51,7 +38,35 @@ export class SaleFilter extends HTMLElement {
                 `&page=1`;
         });
         window.onItemSelect = (itemList) => {
-            itemList = [...itemList.map((it) => ({ code: it }))];
+            this.itemList = itemList;
+            this.render();
         };
+    }
+
+    render() {
+        this.innerHTML = `
+          <form class="flex-col" id="item-search-form">
+                <filter-date-range 
+                    startDateId="start-date-value" 
+                    endDateId="end-date-value"
+                    defaultStartDate="${this.startDate}"
+                    defaultEndDate="${this.endDate}"    
+                >전표일자</filter-date-range>
+                <filter-item-select
+                    maxSelect="3"
+                    itemList='${JSON.stringify(this.itemList)}'
+                >품목</filter-item-select>
+                <filter-input-text
+                    filterId="filter-sale-briefs"
+                    filterName="filter-sale-briefs"
+                    defaultValue="${this.briefs}"
+                >
+                    적요
+                </filter-input-text>
+                <filter-item-div>
+                    <blue-button buttonId="sale-search-button">검색</blue-button>
+                </div>
+            </form>
+        `;
     }
 }

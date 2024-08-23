@@ -1,4 +1,7 @@
 /* inside element layout */
+.p-0 {
+    padding: 0;
+}
 .p-xs {
     padding: 0.125rem;
 }
@@ -54,4 +57,12 @@
 }
 .w-100 {
     width: 100%;
+}
+.h-100 {
+    height: 100%;
+}
+
+/* outside element layout */
+.m-xs {
+    margin: 0.125rem;
 }

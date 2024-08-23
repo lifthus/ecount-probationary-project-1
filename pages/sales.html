@@ -13,6 +13,7 @@
         <erp-body>
             <menu-title>판매 조회</menu-title>
             <sale-dashboard></sale-dashboard>
+            <hr/>
         <form class="filter-box" id="sales-filter-form">
             <div>
                 <div class="filter-item">
@@ -202,6 +203,9 @@
             function setItemCodeFilter(itemCodes) {
                 const itemCodeInput = document.querySelector("input[name='sales-item-codes']");
                 itemCodeInput.value = itemCodes.join(",");
+            }
+            function applyItems(items) {
+                console.log(items);
             }
         </script>
         <script src="/scripts/common.js"></script>

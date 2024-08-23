@@ -1,4 +1,4 @@
-import { ITEM_PATH } from "../../constant.js";
+import { ITEM_PATH, ITEM_SELECT_POPUP_PATH } from "../../constant.js";
 
 export class ItemFilter extends HTMLElement {
     constructor() {
@@ -6,13 +6,15 @@ export class ItemFilter extends HTMLElement {
     }
     connectedCallback() {
         const href = this.getAttribute("href");
-        const content = this.innerHTML.trim() || href;
+        const urlQuery = new URLSearchParams(window.location.search);
+        const maxSelect = Number(urlQuery.get("maxSelect")) || undefined;
 
         this.addEventListener("click", (event) => {
             if (event.target.id === "item-search-button") {
                 const code = document.getElementById("filter-item-code").value;
                 const name = document.getElementById("filter-item-name").value;
-                window.location.href = ITEM_PATH + `?code=${code || ""}&name=${name || ""}`;
+                const targetPath = maxSelect ? ITEM_SELECT_POPUP_PATH : ITEM_PATH;
+                window.location.href = targetPath + `?code=${code || ""}&name=${name || ""}&maxSelect=${maxSelect || ""}`;
             }
         });
 
