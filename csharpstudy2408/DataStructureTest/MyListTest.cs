@@ -113,7 +113,52 @@ namespace DataStructureTest
             Assert.AreEqual(strMAL[1], "C");
 
             Assert.IsFalse(strMAL.Remove("B"));
+
+            intMAL.Add(3);
+            intMAL.Add(4);
+            intMAL.Add(42);
+            intMAL.Add(123);
+            intMAL.Add(5);
+            intMAL.Add(123);
+            intMAL.Add(55);
+            intMAL.Add(7);
+
+            var firstSize = intMAL.Count;
+
+            intMAL.Remove(n => n == 42);
+
+            Assert.AreEqual(firstSize - 1, intMAL.Count);
+            Assert.AreEqual(123, intMAL[2]);
+
+            firstSize = intMAL.Count;
+
+            intMAL.RemoveAll(n => n >= 10);
+
+            Assert.AreEqual(firstSize - 3, intMAL.Count);
+            Assert.AreEqual(3, intMAL[0]);
+            Assert.AreEqual(4, intMAL[1]);
+            Assert.AreEqual(5, intMAL[2]);
+            Assert.AreEqual(7, intMAL[3]);
+
+            var TCMAL = new MyList<TestClass>();
+
+            TCMAL.Add(new TestClass(3));
+            TCMAL.Add(new TestClass(42));
+            TCMAL.Add(new TestClass(42));
+            TCMAL.Add(new TestClass(5));
+            TCMAL.Add(new TestClass(42));
+            TCMAL.Add(new TestClass(9));
+
+            firstSize = TCMAL.Count;
+
+            TCMAL.RemoveAll(tc => tc.Test == 42);
+
+            Assert.AreEqual(firstSize - 3, TCMAL.Count);
+            Assert.AreEqual(3, TCMAL[0].Test);
+            Assert.AreEqual(5, TCMAL[1].Test);
+            Assert.AreEqual(9, TCMAL[2].Test);
         }
+
         [Test]
         public void TestRemoveAt()
         {
@@ -168,22 +213,21 @@ namespace DataStructureTest
             Assert.Throws<IndexOutOfRangeException>(() => {
                 var _ = intArr[5];
             });
-        }
-        [Test]
-        public void TestFailCopyTo()
-        {
-            intMAL.Add(0);
-            intMAL.Add(2);
 
-            var intArr = new int[1];
+            // Fail test 
+
+            intMAL2.Add(0);
+            intMAL2.Add(2);
+
+            var intArr2 = new int[1];
 
             Assert.Throws<ArgumentOutOfRangeException>(() => {
-                intMAL.CopyTo(intArr);
+                intMAL2.CopyTo(intArr2);
             });
 
-            intArr = new int[5];
+            intArr2 = new int[5];
             Assert.Throws<ArgumentOutOfRangeException>(() => {
-                intMAL.CopyTo(intArr, 4);
+                intMAL2.CopyTo(intArr2, 4);
             });
         }
 
@@ -236,6 +280,9 @@ namespace DataStructureTest
             intMAL.Add(3);
             Assert.IsTrue(intMAL.Contains(2));
             Assert.IsFalse(intMAL.Contains(42));
+
+            Assert.IsTrue(intMAL.Contains(n => n == 2));
+            Assert.IsFalse(intMAL.Contains(n => n == 42));
         }
 
         [Test]
@@ -327,6 +374,172 @@ namespace DataStructureTest
             {
                 return x.GetHashCode();
             }
+        }
+
+        [Test]
+        public void TestBinarySearch()
+        {
+            intMAL.Add(42);
+            intMAL.Add(45);
+            intMAL.Add(47);
+            intMAL.Add(55);
+            intMAL.Add(67);
+            intMAL.Add(99);
+            Assert.IsTrue( 0 > intMAL.BinarySearch(424242));
+            Assert.AreEqual(3, intMAL.BinarySearch(55));
+
+            intMAL2.Add(99);
+            intMAL2.Add(67);
+            intMAL2.Add(55);
+            intMAL2.Add(47);
+            intMAL2.Add(45);
+            intMAL2.Add(42);
+            Assert.IsTrue(0 > intMAL2.BinarySearch(100, new IntDescComparer()));
+            Assert.AreEqual(2, intMAL2.BinarySearch(55, new IntDescComparer()));
+        }
+
+        private class IntDescComparer : IComparer<int>
+        {
+            public int Compare(int a, int b)
+            {
+                return b.CompareTo(a);
+            }
+        }
+
+        [Test]
+        public void TestSort()
+        {
+            intMAL.Add(5);
+            intMAL.Add(3);
+            intMAL.Add(7);
+            intMAL.Add(2);
+            intMAL.Add(-5);
+            intMAL.Add(42);
+            intMAL.Sort();
+            for (int i = 1; i < intMAL.Count; i++) {
+                Assert.IsTrue(intMAL[i] >= intMAL[i - 1]);
+            }
+
+            intMAL2.Add(5);
+            intMAL2.Add(3);
+            intMAL2.Add(7);
+            intMAL2.Add(2);
+            intMAL2.Add(-5);
+            intMAL2.Add(42);
+            intMAL2.Sort(new IntDescComparer());
+            for (int i = 1; i < intMAL2.Count; i++) {
+                Assert.IsTrue(intMAL2[i] <= intMAL2[i - 1]);
+            }
+        }
+
+        [Test]
+        public void TestFind()
+        {
+            intMAL.Add(5);
+            intMAL.Add(3);
+            intMAL.Add(42);
+            intMAL.Add(7);
+            intMAL.Add(9);
+
+            Assert.AreEqual(42, intMAL.Find((n) => n == 42));
+            Assert.AreEqual(default(int), intMAL.Find((n) => n == 424242));
+
+            var TCMAL = new MyList<TestClass>();
+            TCMAL.Add(new TestClass(41));
+            TCMAL.Add(new TestClass(42));
+            TCMAL.Add(new TestClass(43));
+
+            Assert.IsNull(TCMAL.Find(tc => tc.Test == 42424242));
+        }
+
+        [Test]
+        public void TestFindIndex()
+        {
+            intMAL.Add(5);
+            intMAL.Add(3);
+            intMAL.Add(42);
+            intMAL.Add(7);
+            intMAL.Add(42);
+            intMAL.Add(7);
+            intMAL.Add(9);
+
+            Assert.AreEqual(-1, intMAL.FindIndex(n => n == 4242));
+            Assert.AreEqual(2, intMAL.FindIndex(n => n == 42));
+
+            Assert.AreEqual(-1, intMAL.FindIndex(5, n => n == 42));
+            Assert.AreEqual(4, intMAL.FindIndex(3, n => n == 42));
+
+            Assert.AreEqual(-1, intMAL.FindIndex(1, 1, n => n == 42));
+            Assert.AreEqual(4, intMAL.FindIndex(3, 3, n => n == 42));
+        }
+
+        [Test]
+        public void TestFindLast()
+        {
+            intMAL.Add(5);
+            intMAL.Add(3);
+            intMAL.Add(42);
+            intMAL.Add(7);
+            intMAL.Add(9);
+
+            Assert.AreEqual(7, intMAL.FindLast(n => n == 7));
+            Assert.AreEqual(default(int), intMAL.FindLast(n => n == 4242));
+        }
+
+        [Test]
+        public void TestFindLastIndex()
+        {
+            intMAL.Add(5);
+            intMAL.Add(3);
+            intMAL.Add(42);
+            intMAL.Add(7);
+            intMAL.Add(42);
+            intMAL.Add(7);
+            intMAL.Add(9);
+
+            Assert.AreEqual(-1, intMAL.FindLastIndex(n => n == 4242));
+            Assert.AreEqual(4, intMAL.FindLastIndex(n => n == 42));
+
+            Assert.AreEqual(-1, intMAL.FindLastIndex(5, n => n == 42));
+            Assert.AreEqual(4, intMAL.FindLastIndex(1, n => n == 42));
+
+            Assert.AreEqual(-1, intMAL.FindLastIndex(1, 1, n => n == 42));
+            Assert.AreEqual(2, intMAL.FindLastIndex(2, 2, n => n == 42));
+
+        }
+
+        [Test]
+        public void TestForEach()
+        {
+            intMAL.Add(5);
+            intMAL.Add(3);
+            intMAL.Add(42);
+            intMAL.Add(7);
+            intMAL.Add(42);
+            intMAL.Add(7);
+            intMAL.Add(9);
+
+            var ForEachCnt = 0;
+            intMAL.ForEach(n => {
+                ForEachCnt += n;
+            });
+
+            var foreachCnt = 0;
+            foreach (var n in intMAL) {
+                foreachCnt += n;
+            }
+
+            Assert.AreEqual(foreachCnt, ForEachCnt);
+        }
+    }
+
+    public class TestClass
+    {
+        public int Test { get; set; }
+
+        public TestClass (int test)
+        {
+            Test = test;
         }
     }
 }
