@@ -1,0 +1,21 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - ERP</title>
+
+    <script type="module" src="~/Scripts/components/component.js" defer></script>
+    @Styles.Render("~/Content/css")
+</head>
+<body>
+    <div class="container body-content">
+        @RenderBody()
+        <hr />
+        <footer>
+            <p>&copy; @DateTime.Now.Year - ECOUNT Probationary ERP</p>
+        </footer>
+    </div>
+</body>
+</html>
