@@ -116,6 +116,15 @@ namespace MyCollection
         }
 
 
+        public void Clear()
+        {
+            _head = null;
+            _tail = null;
+            _size = 0;
+        }
+
+        // ========== Enumerable ==========
+
         public IEnumerator<T> GetEnumerator()
         {
             return new MySLinkedListEnumerator(this);
@@ -150,7 +159,8 @@ namespace MyCollection
             public bool MoveNext()
             {
                 if (_node != null) {
-                    //TODO: current와 node를 설정 
+                    _current = _node.Data;
+                    _node = _node.Next;
                     return true;
                 }
                 return false;
@@ -159,7 +169,8 @@ namespace MyCollection
             public void Reset()
             {
                 // TODO: current와 node를 초기화 시킨다.
-
+                _current = default(T);
+                _node = _list.First;
             }
 
             public void Dispose()

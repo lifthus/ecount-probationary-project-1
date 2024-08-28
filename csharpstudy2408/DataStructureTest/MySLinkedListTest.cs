@@ -23,6 +23,7 @@ namespace DataStructureTest
 
         MySLinkedList<TestClass> tcMSLL;
         TestClass[] tcs;
+        MySLinkedList<int> intMSLL;
 
         [SetUp]
         public void SetUp()
@@ -32,6 +33,8 @@ namespace DataStructureTest
             tcs[0] = new TestClass(0, "0");
             tcs[1] = new TestClass(1, "1");
             tcs[2] = new TestClass(2, "2");
+
+            intMSLL = new MySLinkedList<int>();
         }
 
         [Test]
@@ -112,6 +115,39 @@ namespace DataStructureTest
                 Assert.AreEqual(tcs[i].T1, newArr[i].T1);
                 Assert.AreEqual(tcs[i].T2, newArr[i].T2);
             }
+        }
+
+        [Test]
+        public void TestClear()
+        {
+            tcMSLL.AddLast(tcs[0]);
+            tcMSLL.AddLast(tcs[1]);
+
+            tcMSLL.Clear();
+
+            Assert.IsNull(tcMSLL.First);
+            Assert.IsNull(tcMSLL.Last);
+            Assert.That(tcMSLL.Count, Is.EqualTo(0));
+        }
+
+        [Test]
+        public void TestEnumerable()
+        {
+            intMSLL.AddLast(1);
+            intMSLL.AddLast(5);
+            intMSLL.AddLast(3);
+            intMSLL.AddLast(7);
+
+            var answer = new int[10];
+            var cnt = 1;
+            foreach (var it in intMSLL) {
+                answer[it] = cnt++;
+            }
+
+            Assert.That(answer[1], Is.EqualTo(1));
+            Assert.That(answer[5], Is.EqualTo(2));
+            Assert.That(answer[3], Is.EqualTo(3));
+            Assert.That(answer[7], Is.EqualTo(4));
         }
     }
 }
