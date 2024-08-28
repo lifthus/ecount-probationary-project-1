@@ -136,7 +136,9 @@ namespace MyCollection
         {
             if (node == _head) {
                 _head = node.Next;
-                _head.Prev = null;
+                if (_head != null) {
+                    _head.Prev = null;
+                }
             } else {
                 // TODO... tail 로직의 반대로
                 node.Prev.Next = node.Next;
@@ -145,7 +147,9 @@ namespace MyCollection
             if (node == _tail) {
                 // TODO... head 로직의 반대로
                 _tail = node.Prev;
-                _tail.Next = null;
+                if (_tail != null) {
+                    _tail.Next = null;
+                }
             } else {
                 node.Next.Prev = node.Prev;
             }
