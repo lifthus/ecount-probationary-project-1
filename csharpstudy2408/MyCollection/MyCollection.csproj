@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MyHashSet.cs" />
     <Compile Include="MyLinkedList.cs" />
     <Compile Include="MyList.cs" />
     <Compile Include="MyArrayList.cs" />
