@@ -87,7 +87,6 @@ namespace MyCollection
                         var newIndex = GetBucketIndex(item, newSize);
                         if (newBucket[newIndex] == null) {
                             newBucket[newIndex] = new MyLinkedList<T>(_equalityComparer);
-                            _count++;
                         }
                         newBucket[newIndex].AddLast(item);
                     }
@@ -146,7 +145,6 @@ namespace MyCollection
                     _count--;
                     return true;
                 }
-                return false;
             }
             return false;
         }

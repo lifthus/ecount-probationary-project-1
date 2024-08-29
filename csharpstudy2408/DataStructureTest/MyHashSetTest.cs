@@ -119,5 +119,36 @@ namespace DataStructureTest
                 Assert.That(arr[i], Is.EqualTo(2));
             }
         }
+
+        [Test]
+        public void TestResize()
+        {
+            intHS.Add(1);
+            Assert.That(intHS.Count, Is.EqualTo(1));
+            intHS.Add(2);
+            Assert.That(intHS.Count, Is.EqualTo(2));
+            intHS.Add(3);
+            Assert.That(intHS.Count, Is.EqualTo(3));
+            intHS.Add(4);
+            Assert.That(intHS.Count, Is.EqualTo(4));
+            intHS.Add(5);
+            Assert.That(intHS.Count, Is.EqualTo(5));
+            intHS.Add(6);
+            Assert.That(intHS.Count, Is.EqualTo(6));
+            intHS.Add(7);
+            Assert.That(intHS.Count, Is.EqualTo(7));
+            intHS.Add(8);
+            Assert.That(intHS.Count, Is.EqualTo(8));
+            intHS.Add(9);
+            Assert.That(intHS.Count, Is.EqualTo(9));
+            intHS.Add(10);
+            Assert.That(intHS.Count, Is.EqualTo(10));
+            intHS.Add(11);
+            Assert.That(intHS.Count, Is.EqualTo(11));
+            intHS.Add(12);
+            Assert.That(intHS.Count, Is.EqualTo(12));
+            intHS.Add(13);
+            Assert.That(intHS.Count, Is.EqualTo(13));
+        }
     }
 }

@@ -117,6 +117,7 @@
     <Compile Include="04 Data\Entity\Sale.cs" />
     <Compile Include="04 Data\IEntity.cs" />
     <Compile Include="05 BizDomain\Product\DeleteProductCommand.cs" />
+    <Compile Include="05 BizDomain\Product\SelectProductCommand.cs" />
     <Compile Include="05 BizDomain\Product\UpdateProductCommand.cs" />
     <Compile Include="05 BizDomain\Product\GetProductCommand.cs" />
     <Compile Include="05 BizDomain\Product\CreateProductCommand.cs" />
