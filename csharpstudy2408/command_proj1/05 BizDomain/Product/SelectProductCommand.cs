@@ -8,10 +8,26 @@ namespace command_proj1
 {
     public class SelectProductCommandInput : SelectProductDACRequestDTO
     {
+        /// <summary>
+        /// EQUAL
+        /// </summary>
         public string COM_CODE;
+
+        /// <summary>
+        /// LIKE
+        /// </summary>
         public string PROD_CD;
+        /// <summary>
+        /// LIKE
+        /// </summary>
         public string PROD_NM;
-        public bool 
+
+        /// <summary>
+        /// -1 DESC
+        /// 0 NONE
+        /// 1 ASC
+        /// </summary>
+        public int prodNmOrd; // -1 DESC 1 ASC
     }
 
     public class SelectProductCommand

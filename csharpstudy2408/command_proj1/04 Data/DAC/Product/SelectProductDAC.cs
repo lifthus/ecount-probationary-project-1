@@ -11,24 +11,26 @@ namespace command_proj1
 {
     public class SelectProductDACRequestDTO
     {
-        public class EqualFilter {
-            public string COM_CODE;
-        }
+        /// <summary>
+        /// EQUAL
+        /// </summary>
+        public string COM_CODE;
 
-        public class LikeFilter
-        {
-            public string PROD_CD;
-            public string PROD_NM;
-        }
+        /// <summary>
+        /// LIKE
+        /// </summary>
+        public string PROD_CD;
+        /// <summary>
+        /// LIKE
+        /// </summary>
+        public string PROD_NM;
 
-        public class OrderFilter
-        {
-            public int PROD_NM;
-        }
-
-        public EqualFilter Equal;
-        public LikeFilter Like;
-        public OrderFilter OrderBy;
+        /// <summary>
+        /// -1 DESC
+        /// 0 NONE
+        /// 1 ASC
+        /// </summary>
+        public int prodNmOrd; // -1 DESC 1 ASC
     }
 
     public class SelectProductDAC : Command<List<Product>>
@@ -41,25 +43,17 @@ namespace command_proj1
             if (Input == null) {
                 throw new InexecutableCommandError("품목 조회 필터 정보 필요");
             }
-            if (Input.Equal == null || Input.Equal.COM_CODE == null) {
+            if (Input.COM_CODE == null) {
                 throw new InexecutableCommandError("회사 코드 필요");
             }
         }
-        protected override void OnExecuting() {
-            // LIKE 필터 설정
-            if (Input.Like == null) {
-                Input.Like = new SelectProductDACRequestDTO.LikeFilter();
+        protected override void OnExecuting()
+        {
+            if (Input.PROD_CD == null) {
+                Input.PROD_CD = "";
             }
-            if (Input.Like.PROD_CD == null) {
-                Input.Like.PROD_CD = "";
-            }
-            if (Input.Like.PROD_NM == null) {
-                Input.Like.PROD_NM = "";
-            }
-
-            // ORDER 필터 설정
-            if (Input.OrderBy == null) {
-                Input.OrderBy = new SelectProductDACRequestDTO.OrderFilter();
+            if (Input.PROD_NM == null) {
+                Input.PROD_NM = "";
             }
         }
         protected override void ExecuteCore()
@@ -74,14 +68,13 @@ namespace command_proj1
 
             var parameters = new Dictionary<string, object>()
             {
-                {"@com_code", $"{Input.Equal.COM_CODE}" },
-                {"@prod_cd",  $"%{Input.Like.PROD_CD}%" },
-                {"@prod_nm",  $"%{Input.Like.PROD_NM}%" }
+                {"@com_code", $"{Input.COM_CODE}" },
+                {"@prod_cd",  $"%{Input.PROD_CD}%" },
+                {"@prod_nm",  $"%{Input.PROD_NM}%" }
             };
 
             var dbManager = new DbManager();
-            var prdList = dbManager.Query<Product>(sql, parameters, (reader, data) =>
-            {
+            var prdList = dbManager.Query<Product>(sql, parameters, (reader, data) => {
                 data.Key.COM_CODE = reader["com_code"].ToString();
                 data.Key.PROD_CD = reader["prod_cd"].ToString();
                 data.PRICE = (int)reader["price"];
@@ -89,13 +82,10 @@ namespace command_proj1
                 data.WRITE_DT = (DateTime)reader["write_dt"];
             });
 
-            if (Input.OrderBy.PROD_NM != 0) {
-                prdList.OrderBy((a, b) => {
-                    if (Input.OrderBy.PROD_NM > 0) {
-                        return a.PROD_NM.CompareTo(b.PROD_NM);
-                    }
-                    return b.PROD_NM.CompareTo(a.PROD_NM);
-                });
+            if (Input.prodNmOrd > 0) {
+                prdList.OrderBy(prd => prd.PROD_NM);
+            } else if (Input.prodNmOrd < 0) {
+                prdList.OrderByDescending(prd => prd.PROD_NM);
             }
 
             Output = prdList;
