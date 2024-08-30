@@ -24,15 +24,12 @@ namespace command_proj1._04_Data.Db
             // using => 실제로 Db 서버와 연결할건데, 만약 exeception이 날아왔다 => 직접 try catch 잡기 => 모든 커넥션에 그 로직 다 넣어줘야 함
             // => 그게 귀찮아서 내가 여기서 이 블락 끝나면 이 객체에 Dispose (IDisposable) 호출 시켜줘라는 뜻.
             // => using 문 사용하면 이 블락 끝나면 C#은 Dispose를 호출해줄게 라는 뜻 ㅎ 결국 하는 일은 커넥션 클로즈 해주게 되는 것.
-            using (var conn = new NpgsqlConnection(_connectionString))
-            {
+            using (var conn = new NpgsqlConnection(_connectionString)) {
                 conn.Open();
 
-                using (var cmd = conn.CreateCommand())
-                {
+                using (var cmd = conn.CreateCommand()) {
                     cmd.CommandText = sql;
-                    foreach ( var param in parameters)
-                    {
+                    foreach (var param in parameters) {
                         cmd.Parameters.Add(new NpgsqlParameter(param.Key, param.Value));
                     }
 
@@ -44,20 +41,16 @@ namespace command_proj1._04_Data.Db
         public List<T> Query<T>(string sql, Dictionary<string, object> parameters, Action<DbDataReader, T> mapper) // 일일히 매핑을 시켜줘야함. 그냥 데이터를 가져온 것이지.
             where T : new() // T 타입을 가지고도 new를 할 수 있게 해주는.
         {
-            using (var conn = new NpgsqlConnection(_connectionString))
-            {
+            using (var conn = new NpgsqlConnection(_connectionString)) {
                 conn.Open();
 
-                using (var cmd = conn.CreateCommand())
-                {
+                using (var cmd = conn.CreateCommand()) {
                     cmd.CommandText = sql;
-                    foreach (var param in parameters)
-                    {
+                    foreach (var param in parameters) {
                         cmd.Parameters.Add(new NpgsqlParameter(param.Key, param.Value));
                     }
                     var result = new List<T>();
-                    using (var reader = cmd.ExecuteReader())
-                    {
+                    using (var reader = cmd.ExecuteReader()) {
                         while (reader.Read()) // bool 하나씩 읽어오는데 읽을게 없으면 펄즈.
                         {
                             var data = new T();
@@ -69,7 +62,28 @@ namespace command_proj1._04_Data.Db
                     return result;
                 }
             }
+        }
 
+        public T Scalar<T>(string sql, Dictionary<string, object> parameters, Func<DbDataReader, T> mapper) where T : new()
+        {
+            using (var conn = new NpgsqlConnection(_connectionString)) {
+                conn.Open();
+                using (var cmd = conn.CreateCommand()) {
+                    cmd.CommandText = sql;
+                    foreach (var param in parameters) {
+                        cmd.Parameters.Add(new NpgsqlParameter(param.Key, param.Value));
+                    }
+                    T result = default(T);
+                    using (var reader = cmd.ExecuteReader()) {
+                        if (reader.Read()) {
+                            result = new T();
+                            return mapper(reader);
+                        }
+                        throw new Exception("No result");
+                    }
+                    return default(T);
+                }
+            }
         }
     }
 }

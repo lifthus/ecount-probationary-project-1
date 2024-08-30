@@ -27,7 +27,7 @@ namespace command_proj1
         /// 0 NONE
         /// 1 ASC
         /// </summary>
-        public int prodNmOrd; // -1 DESC 1 ASC
+        public int ord_PROD_NM; // -1 DESC 1 ASC
     }
 
     public class SelectProductCommand

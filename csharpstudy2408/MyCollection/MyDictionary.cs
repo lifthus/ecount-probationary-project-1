@@ -249,6 +249,12 @@ namespace MyCollection
                 this._iterator = FindNextEnumerator();
             }
 
+            // IDispose
+            //_________________________________________________________________________________________
+            public void Dispose()
+            { // 소멸자는 생성자와 같이 배치
+            }
+
             protected IEnumerator<KeyValuePair<TKey, TValue>> FindNextEnumerator()
             {
                 // TODO: 현재 인덱스가 딕셔너리의 버킷배열의 크기보다 작을때까지 반복한다.
@@ -263,12 +269,6 @@ namespace MyCollection
                 }
 
                 return null;
-            }
-
-            // IDispose
-            //_________________________________________________________________________________________
-            public void Dispose()
-            {
             }
 
             // IEnumerator
@@ -330,7 +330,7 @@ namespace MyCollection
 
             IEnumerator IEnumerable.GetEnumerator()
             {
-                return this.GetEnumerator();
+                return GetEnumerator();
             }
 
             public abstract IEnumerator<TCurrent> GetEnumerator();

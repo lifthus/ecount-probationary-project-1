@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection.Emit;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -26,14 +27,21 @@ namespace command_proj1
         public string PROD_NM;
 
         /// <summary>
-        /// -1 DESC
-        /// 0 NONE
-        /// 1 ASC
+        /// -1 DESC / 0 NONE / 1 ASC
         /// </summary>
-        public int prodNmOrd; // -1 DESC 1 ASC
+        public int ord_PROD_NM;
+
+        public int pageSize;
+        public int pageNo;
     }
 
-    public class SelectProductDAC : Command<List<Product>>
+    public class SelectProductDACResponseDTO
+    {
+        public List<Product> list;
+        public int totalCount;
+    }
+
+    public class SelectProductDAC : Command<SelectProductDACResponseDTO>
     {
         public SelectProductDACRequestDTO Input { get; set; }
 
@@ -58,23 +66,41 @@ namespace command_proj1
         }
         protected override void ExecuteCore()
         {
-            var sqlBuilder = new StringBuilder()
-                .AppendLine("SELECT *")
-                .AppendLine("FROM flow.product_jhl")
-                .AppendLine("WHERE com_code = @com_code AND prod_cd LIKE @prod_cd AND prod_nm LIKE @prod_nm")
-                .AppendLine("ORDER BY write_dt");
+            var productQueryBuilder = new StringBuilder("SELECT *");
 
-            var sql = sqlBuilder.ToString();
+            var productCountBuilder = new StringBuilder("SELECT COUNT(*)");
+
+            // 리터럴 문자열 연결은 컴파일 하면서 최적화된다.
+            var filterSQL =
+            "FROM flow.product_jhl" +
+            "WHERE com_code = @com_code AND prod_cd LIKE @prod_cd AND prod_nm LIKE @prod_nm";
+            productQueryBuilder.Append(filterSQL);
+            productCountBuilder.Append(filterSQL);
+
+            productQueryBuilder.AppendLine("ORDER BY");
+            if (0 < Input.ord_PROD_NM) {
+                productQueryBuilder.AppendLine("prod_nm, ");
+            } else if (Input.ord_PROD_NM < 0) {
+                productQueryBuilder.AppendLine("prod_nm DESC, ");
+            }
+            productQueryBuilder.AppendLine("write_dt");
 
             var parameters = new Dictionary<string, object>()
             {
                 {"@com_code", $"{Input.COM_CODE}" },
                 {"@prod_cd",  $"%{Input.PROD_CD}%" },
-                {"@prod_nm",  $"%{Input.PROD_NM}%" }
+                {"@prod_nm",  $"%{Input.PROD_NM}%" },
+
             };
 
             var dbManager = new DbManager();
-            var prdList = dbManager.Query<Product>(sql, parameters, (reader, data) => {
+
+
+            var totalCnt = dbManager.Scalar<int>(productCountBuilder.ToString(), parameters, (reader, data) => {
+
+            });
+
+            var prdList = dbManager.Query<Product>(productQueryBuilder.ToString(), parameters, (reader, data) => {
                 data.Key.COM_CODE = reader["com_code"].ToString();
                 data.Key.PROD_CD = reader["prod_cd"].ToString();
                 data.PRICE = (int)reader["price"];
@@ -82,13 +108,8 @@ namespace command_proj1
                 data.WRITE_DT = (DateTime)reader["write_dt"];
             });
 
-            if (Input.prodNmOrd > 0) {
-                prdList.OrderBy(prd => prd.PROD_NM);
-            } else if (Input.prodNmOrd < 0) {
-                prdList.OrderByDescending(prd => prd.PROD_NM);
-            }
-
-            Output = prdList;
+            Output.list = prdList;
+            Output.totalCount = prdList.Count;
         }
         protected override void Executed() { }
     }
