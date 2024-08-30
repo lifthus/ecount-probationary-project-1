@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "2408.MVC", "2408.MVC\2408.M
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "2408.MVC.Tests", "2408.MVC.Tests\2408.MVC.Tests.csproj", "{2F7983AE-BD60-47B0-919B-DADB79ED2608}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "command_proj1", "..\csharpstudy2408\command_proj1\command_proj1.csproj", "{3DFDBFB2-648B-4F15-B836-A49508059C39}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "command_proj1", "command_proj1\command_proj1.csproj", "{3DFDBFB2-648B-4F15-B836-A49508059C39}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

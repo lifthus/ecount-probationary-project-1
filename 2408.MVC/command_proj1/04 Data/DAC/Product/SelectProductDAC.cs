@@ -96,8 +96,8 @@ namespace command_proj1
             var dbManager = new DbManager();
 
 
-            var totalCnt = dbManager.Scalar<int>(productCountBuilder.ToString(), parameters, (reader, data) => {
-
+            var totalCnt = dbManager.Scalar<int>(productCountBuilder.ToString(), parameters, (reader) => {
+                return 0;
             });
 
             var prdList = dbManager.Query<Product>(productQueryBuilder.ToString(), parameters, (reader, data) => {

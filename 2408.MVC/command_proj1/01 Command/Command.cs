@@ -23,6 +23,12 @@ namespace command_proj1
 
         protected TOut Output
         {
+            get {
+                if (_result == null) {
+                    _result = new CommandResult<TOut>(default(TOut), null);
+                }
+                return _result.Output;
+            }
             set { _result = new CommandResult<TOut>(value, Errors); }
         }
 

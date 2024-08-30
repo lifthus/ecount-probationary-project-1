@@ -138,13 +138,13 @@
     <Content Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\csharpstudy2408\command_proj1\command_proj1.csproj">
-      <Project>{3dfdbfb2-648b-4f15-b836-a49508059c39}</Project>
-      <Name>command_proj1</Name>
-    </ProjectReference>
     <ProjectReference Include="..\2408.MVC\2408.MVC.csproj">
       <Project>{58B731D7-2901-4360-A388-62BF8566EFF4}</Project>
       <Name>2408.MVC</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\command_proj1\command_proj1.csproj">
+      <Project>{3dfdbfb2-648b-4f15-b836-a49508059c39}</Project>
+      <Name>command_proj1</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
