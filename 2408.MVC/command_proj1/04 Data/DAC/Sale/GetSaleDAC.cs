@@ -7,15 +7,15 @@ using System.Threading.Tasks;
 
 namespace command_proj1
 {
+    public class GetSaleDACRequestDTO
+    {
+        public string COM_CODE;
+        public string IO_DATE;
+        public int IO_NO;
+    }
+
     public class GetSaleDAC : Command<Sale>
     {
-        public class GetSaleDACRequestDTO
-        {
-            public string COM_CODE;
-            public string IO_DATE;
-            public int IO_NO;
-        }
-
         public GetSaleDACRequestDTO Input { get; set; }
 
         protected override void Init() { }

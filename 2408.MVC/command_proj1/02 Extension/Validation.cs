@@ -38,7 +38,7 @@ namespace command_proj1
         }
         public static bool vIsYYYYSMMSDD(this string v)
         {
-            if (v.Length != 8) {
+            if (v.Length != 10) {
                 return false;
             }
             return DateTime.TryParseExact(v, "yyyy/MM/dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out _);

@@ -31,8 +31,8 @@ namespace command_proj1
 
         protected override void ExecuteCore() {
             var sql = @"
-                INSERT INTO flow.sale_jhl (com_code, io_date, io_no, prod_cd, qty, remarks)
-                VALUES (@com_code,  @io_date, @io_no, @prod_cd, @qty, @remarks)
+                INSERT INTO flow.sale_jhl (com_code, io_date, io_no, prod_cd, prod_nm, unit_price, qty, remarks)
+                VALUES (@com_code,  @io_date, @io_no, @prod_cd, @prod_nm, @unit_price, @qty, @remarks)
             ";
 
             var parameters = new Dictionary<string, object>() {
@@ -40,6 +40,8 @@ namespace command_proj1
                 {"@io_date", Input.Key.IO_DATE },
                 {"@io_no", Input.Key.IO_NO },
                 {"@prod_cd", Input.PROD_CD },
+                {"@prod_nm", Input.PROD_NM },
+                {"@unit_price", Input.UNIT_PRICE },
                 {"@qty", Input.QTY },
                 {"@remarks", Input.REMARKS },
             };

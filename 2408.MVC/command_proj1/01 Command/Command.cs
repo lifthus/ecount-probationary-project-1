@@ -15,7 +15,7 @@ namespace command_proj1
             get {
                 if (_result == null)
                 {
-                    _result = new CommandResult<TOut>(default(TOut), null);
+                    _result = new CommandResult<TOut>(default(TOut), Errors);
                 }
                 return _result; 
             }
@@ -31,7 +31,7 @@ namespace command_proj1
         {
             get {
                 if (_result == null) {
-                    _result = new CommandResult<TOut>(default(TOut), null);
+                    _result = new CommandResult<TOut>(default(TOut), Errors);
                 }
                 return _result.Output;
             }

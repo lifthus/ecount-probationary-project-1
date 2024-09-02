@@ -11,7 +11,23 @@ namespace _2408.MVC.Services
     {
         public SaleDTO Create(CreateSaleCommandInput inp)
         {
-            return null;
+            SaleDTO saleDTO = null;
+
+            var pipeLine = new PipeLine();
+            pipeLine.Register<CreateSaleCommand, Sale>(new CreateSaleCommand())
+                .Mapping(cmd => {
+                    cmd.Input = inp;
+                })
+                .Executed(res => {
+                    if (res.HasError()) {
+                        throw new Exception($"판매 생성 실패: {res.Errors[0].Message}");
+                    }
+                    saleDTO = new SaleDTO(res.Output);
+                });
+
+            pipeLine.Execute();
+
+            return saleDTO;
         }
 
         public SaleDTO Get(GetSaleCommandInput inp)

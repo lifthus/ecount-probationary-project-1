@@ -106,6 +106,8 @@
     <Compile Include="04 Data\DAC\Product\InsertProductDAC.cs" />
     <Compile Include="04 Data\DAC\Product\SelectProductDAC.cs" />
     <Compile Include="04 Data\DAC\Product\UpdateProductDAC.cs" />
+    <Compile Include="04 Data\DAC\SaleNumbering\PickSaleNumberingDAC.cs" />
+    <Compile Include="04 Data\DAC\SaleNumbering\GetSaleNumberingDAC.cs" />
     <Compile Include="04 Data\DAC\Sale\DeleteSaleDAC.cs" />
     <Compile Include="04 Data\DAC\Sale\GetSaleDAC.cs" />
     <Compile Include="04 Data\DAC\Sale\InsertSaleDAC.cs" />
@@ -115,6 +117,7 @@
     <Compile Include="04 Data\Entity.cs" />
     <Compile Include="04 Data\Entity\Product.cs" />
     <Compile Include="04 Data\Entity\Sale.cs" />
+    <Compile Include="04 Data\Entity\SaleNumbering.cs" />
     <Compile Include="04 Data\IEntity.cs" />
     <Compile Include="05 BizDomain\Product\DeleteProductCommand.cs" />
     <Compile Include="05 BizDomain\Product\SelectProductCommand.cs" />
