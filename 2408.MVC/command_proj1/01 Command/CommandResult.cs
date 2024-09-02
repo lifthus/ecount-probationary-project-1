@@ -6,27 +6,12 @@ using System.Threading.Tasks;
 
 namespace command_proj1
 {
-    public class CommandResult<TOut> where TOut : new()
+    public class CommandResult<TOut>
     {
-        private TOut _output;
         public TOut Output
         {
-            get
-            {
-                if (_output == null)
-                {
-                    _output = new TOut();
-                }
-                return _output;
-            }
-            set
-            {
-                if (_output == null)
-                {
-                    _output = new TOut();
-                }
-                _output = value;
-            }
+            get;
+            set;
         }
         public readonly List<Error> Errors;
 

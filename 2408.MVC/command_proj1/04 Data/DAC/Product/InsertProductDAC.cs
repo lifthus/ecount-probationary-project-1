@@ -30,10 +30,9 @@ namespace command_proj1
         protected override void ExecuteCore()
         {
             // 딸라 템플릿 리터럴 변수, 골뱅이 개행 가능 , @쓰면 파라미터로 사용 가능
-            var sql = @"
-                INSERT INTO flow.product_jhl (com_code, prod_cd, prod_nm, price, write_dt)
-                VALUES (@com_code, @prod_cd, @prod_nm, @price, @write_dt)
-            ";
+            var sql =
+                "INSERT INTO flow.product_jhl (com_code, prod_cd, prod_nm, price, write_dt) " +
+                "VALUES (@com_code, @prod_cd, @prod_nm, @price, @write_dt)";
 
             var parameters = new Dictionary<string, object>() {
                 {"@com_code", Input.Key.COM_CODE },

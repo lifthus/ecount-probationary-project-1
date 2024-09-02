@@ -119,11 +119,12 @@ namespace command_proj1
             var prdList = dbManager.Query<Product>(productQueryBuilder.ToString(), parameters, (reader, data) => {
                 data.Key.COM_CODE = reader["com_code"].ToString();
                 data.Key.PROD_CD = reader["prod_cd"].ToString();
-                data.PRICE = (int)reader["price"];
+                data.PRICE = (decimal)reader["price"];
                 data.PROD_NM = reader["prod_nm"].ToString();
                 data.WRITE_DT = (DateTime)reader["write_dt"];
             });
 
+            Output = new SelectProductDACResponseDTO();
             Output.list = prdList;
             Output.totalCount = totalCnt;
             Output.pageSize = Input.pageSize;

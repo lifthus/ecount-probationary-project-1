@@ -6,7 +6,7 @@ namespace command_proj1
     {
         public ProductKey Key { get; set; }
         public string PROD_NM { get; set; }
-        public int PRICE { get; set; }
+        public decimal PRICE { get; set; }
     }
 
     public class UpdateProductCommand : Command<Product>

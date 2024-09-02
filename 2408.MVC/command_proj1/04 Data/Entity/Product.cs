@@ -16,7 +16,7 @@ namespace command_proj1
     public class Product : Entity<ProductKey>
     {
         public string PROD_NM { get; set; }
-        public int PRICE { get; set; }
+        public decimal PRICE { get; set; }
         public DateTime WRITE_DT { get; set; }
 
         public override string ToString()

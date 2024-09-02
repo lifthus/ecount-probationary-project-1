@@ -39,8 +39,12 @@ namespace _2408.MVC.Services
                     cmd.Input = inp;
                 })
                 .Executed(res => {
-                    if (res.Output == null || res.HasError()) {
-                        throw new Exception($"품목 조회 실패");
+                    if (res.HasError()) {
+                        throw new Exception($"품목 조회 실패: {res.Errors[0].Message}");
+                    }
+                    if (res.Output == null)
+                    {
+                        return;
                     }
                     prdDTO = new ProductDTO(res.Output);
                 });

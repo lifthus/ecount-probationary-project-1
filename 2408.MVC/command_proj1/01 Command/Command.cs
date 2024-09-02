@@ -7,12 +7,18 @@ using System.Threading.Tasks;
 
 namespace command_proj1
 {
-    public abstract class Command<TOut> : ICommand where TOut : new()
+    public abstract class Command<TOut> : ICommand
     {
         private CommandResult<TOut> _result;
         public CommandResult<TOut> Result
         {
-            get { return _result; }
+            get {
+                if (_result == null)
+                {
+                    _result = new CommandResult<TOut>(default(TOut), null);
+                }
+                return _result; 
+            }
             protected set { _result = value; }
         }
 
@@ -41,7 +47,7 @@ namespace command_proj1
                 Init();
                 CanExecute();
                 OnExecuting();
-                _result = new CommandResult<TOut>(new TOut(), Errors);
+                _result = new CommandResult<TOut>(default(TOut), Errors);
                 ExecuteCore();
                 Executed();
             } catch (Error err) {

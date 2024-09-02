@@ -21,19 +21,19 @@ namespace _2408.MVC
              );
             routes.MapRoute(
                 name: "ProductView",
-                url: "product/{action}",
+                url: "/product/{action}",
                 defaults: new { controller = "Product", action = "Index" }
              );
             routes.MapRoute(
                 name: "SaleView",
-                url: "sale/{action}",
+                url: "/sale/{action}",
                 defaults: new { controller = "Sale", action = "Index" }
              );
 
             /* API Controllers */
             routes.MapRoute(
                 name: "ProductAPI",
-                url: "api/product/{action}",
+                url: "/api/product/{action}",
                 defaults: new { controller ="ProductAPI" }
             );
         }

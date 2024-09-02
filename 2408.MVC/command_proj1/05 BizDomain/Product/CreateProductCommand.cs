@@ -6,7 +6,7 @@ namespace command_proj1
     {
         public ProductKey Key { get; set; }
         public string PROD_NM { get; set; }
-        public int PRICE { get; set; }
+        public decimal PRICE { get; set; }
     }
 
     public class CreateProductCommand : Command<Product>
@@ -34,8 +34,12 @@ namespace command_proj1
                    cmd.Input = new GetProductDACRequestDTO(Input.Key.COM_CODE, Input.Key.PROD_CD);
                })
                .Executed(res => {
-                   if (res.Output != null || res.Errors.Count > 0) {
-                       throw new InexecutableCommandError($"품목 등록 여부 검증 실패");
+                   if (res.Output != null)
+                   {
+                       throw new InexecutableCommandError($"품목 중복 키 존재");
+                   }
+                   if (res.HasError()) {
+                       throw new InexecutableCommandError($"품목 등록 여부 검증 실패: {res.Errors[0].Message}");
                    }
                });
             _pipeLine.Register<InsertProductDAC, int>(new InsertProductDAC())
@@ -48,8 +52,9 @@ namespace command_proj1
                     cmd.Input = newProd;
                 })
                 .Executed(res => {
-                    if (res.HasError()) {
-                        throw new Exception(Errors[0].Message);
+                    if (res.HasError())
+                    {
+                        throw res.Errors[0];
                     }
                 });
             // 생성 후 엔티티 조회하는 부분 까지 트랜잭션으로 묶였으면 좋겠다.
@@ -58,8 +63,8 @@ namespace command_proj1
                     cmd.Input = new GetProductDACRequestDTO(Input.Key.COM_CODE, Input.Key.PROD_CD);
                 })
                 .Executed(res => {
-                    if (res.Errors.Count > 0) {
-                        throw Errors[0];
+                    if (res.HasError()) {
+                        throw res.Errors[0];
                     }
                     Output = res.Output;
                 });
