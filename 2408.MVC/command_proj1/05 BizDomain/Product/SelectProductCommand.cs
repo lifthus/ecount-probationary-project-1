@@ -6,31 +6,44 @@ using System.Threading.Tasks;
 
 namespace command_proj1
 {
-    public class SelectProductCommandInput : SelectProductDACRequestDTO
+    public class SelectProductCommand : Command<SelectProductDACResponseDTO>
     {
-        /// <summary>
-        /// EQUAL
-        /// </summary>
-        public string COM_CODE;
+        public SelectProductDACRequestDTO Input { get; set; }
 
-        /// <summary>
-        /// LIKE
-        /// </summary>
-        public string PROD_CD;
-        /// <summary>
-        /// LIKE
-        /// </summary>
-        public string PROD_NM;
+        private PipeLine _pipeLine = new PipeLine();
 
-        /// <summary>
-        /// -1 DESC
-        /// 0 NONE
-        /// 1 ASC
-        /// </summary>
-        public int ord_PROD_NM; // -1 DESC 1 ASC
-    }
+        protected override void Init()
+        {
+        }
+        protected override void CanExecute()
+        {
+            if (Input == null)
+            {
+                throw new InexecutableCommandError("품목 조회 커맨드 입력 없음");
+            }
+        }
+        protected override void OnExecuting()
+        {
+        }
+        protected override void ExecuteCore()
+        {
+            _pipeLine.Register<SelectProductDAC, SelectProductDACResponseDTO>(new SelectProductDAC())
+               .Mapping(cmd => {
+                   cmd.Input = Input;
+               })
+               .Executed(res => {
+                   if (res.HasError())
+                   {
+                       throw new InexecutableCommandError($"품목 쿼리 실패: {res.Errors[0].Message}");
+                   }
+                   Output = res.Output;
+               });
+            
+            _pipeLine.Execute();
+        }
+        protected override void Executed()
+        {
+        }
 
-    public class SelectProductCommand
-    {
     }
 }

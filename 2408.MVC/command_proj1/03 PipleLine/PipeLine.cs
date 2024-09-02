@@ -15,6 +15,7 @@ namespace command_proj1
 
         public PipeLineItem<TCmd, TOut> Register<TCmd, TOut>(TCmd command)
             where TCmd : Command<TOut>
+            where TOut : new()
         {
             // Command 를 PipeLine 에 등록하는 동작
             var newPipeLineItem = new PipeLineItem<TCmd, TOut>(command);

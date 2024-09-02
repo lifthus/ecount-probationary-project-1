@@ -6,9 +6,23 @@ using System.Threading.Tasks;
 
 namespace command_proj1
 {
-    public class CommandResult<TOut>
+    public class CommandResult<TOut> where TOut : new()
     {
-        public readonly TOut Output;
+        public TOut Output
+        {
+            get
+            {
+                if (Output == null)
+                {
+                    Output = new TOut();
+                }
+                return Output;
+            }
+            set
+            {
+                Output = value;
+            }
+        }
         public readonly List<Error> Errors;
 
         public CommandResult(TOut output, List<Error> errors) 

@@ -39,6 +39,8 @@ namespace command_proj1
     {
         public List<Product> list;
         public int totalCount;
+        public int pageSize;
+        public int pageNo;
     }
 
     public class SelectProductDAC : Command<SelectProductDACResponseDTO>
@@ -63,20 +65,30 @@ namespace command_proj1
             if (Input.PROD_NM == null) {
                 Input.PROD_NM = "";
             }
+            if (Input.pageSize < 1)
+            {
+                Input.pageSize = 10;
+            }
+            if (Input.pageNo < 1)
+            {
+                Input.pageNo = 1;
+            }
         }
         protected override void ExecuteCore()
         {
+            // * 카운트 쿼리와 실제 쿼리
+            var productCountBuilder = new StringBuilder("SELECT COUNT(*)");
             var productQueryBuilder = new StringBuilder("SELECT *");
 
-            var productCountBuilder = new StringBuilder("SELECT COUNT(*)");
-
+            // * 공통 필터링 쿼리 연결
             // 리터럴 문자열 연결은 컴파일 하면서 최적화된다.
             var filterSQL =
-            "FROM flow.product_jhl" +
+            "FROM flow.product_jhl " +
             "WHERE com_code = @com_code AND prod_cd LIKE @prod_cd AND prod_nm LIKE @prod_nm";
-            productQueryBuilder.Append(filterSQL);
-            productCountBuilder.Append(filterSQL);
+            productQueryBuilder.AppendLine(filterSQL);
+            productCountBuilder.AppendLine(filterSQL);
 
+            // * 실제 쿼리만 정렬
             productQueryBuilder.AppendLine("ORDER BY");
             if (0 < Input.ord_PROD_NM) {
                 productQueryBuilder.AppendLine("prod_nm, ");
@@ -84,20 +96,24 @@ namespace command_proj1
                 productQueryBuilder.AppendLine("prod_nm DESC, ");
             }
             productQueryBuilder.AppendLine("write_dt");
+            // * 실제 쿼리만 페이지네이션
+            productQueryBuilder.AppendLine("LIMIT @pageSize");
+            productQueryBuilder.AppendLine("OFFSET @pageOffset");
 
+            // * 파라미터 설정
             var parameters = new Dictionary<string, object>()
             {
-                {"@com_code", $"{Input.COM_CODE}" },
+                {"@com_code", Input.COM_CODE },
                 {"@prod_cd",  $"%{Input.PROD_CD}%" },
                 {"@prod_nm",  $"%{Input.PROD_NM}%" },
-
+                {"@pageSize", Input.pageSize },
+                {"@pageOffset", Input.pageSize * (Input.pageNo - 1) }
             };
 
             var dbManager = new DbManager();
 
-
             var totalCnt = dbManager.Scalar<int>(productCountBuilder.ToString(), parameters, (reader) => {
-                return 0;
+                return Int32.Parse(reader["count"].ToString());
             });
 
             var prdList = dbManager.Query<Product>(productQueryBuilder.ToString(), parameters, (reader, data) => {
@@ -109,7 +125,9 @@ namespace command_proj1
             });
 
             Output.list = prdList;
-            Output.totalCount = prdList.Count;
+            Output.totalCount = totalCnt;
+            Output.pageSize = Input.pageSize;
+            Output.pageNo = Input.pageNo;
         }
         protected override void Executed() { }
     }

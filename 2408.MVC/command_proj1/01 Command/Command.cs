@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace command_proj1
 {
-    public abstract class Command<TOut> : ICommand
+    public abstract class Command<TOut> : ICommand where TOut : new()
     {
         private CommandResult<TOut> _result;
         public CommandResult<TOut> Result

@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 
 namespace command_proj1
 {
-    public class PipeLineItem<TCmd, TOut> : IPipeLineItem where TCmd: Command<TOut>
+    public class PipeLineItem<TCmd, TOut> : IPipeLineItem 
+        where TCmd: Command<TOut>
+        where TOut: new()
     {
         private TCmd _command;
         //어떤 프로퍼티들이 추가로 필요할 지 고민해보기.

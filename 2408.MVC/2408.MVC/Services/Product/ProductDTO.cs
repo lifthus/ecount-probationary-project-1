@@ -32,4 +32,12 @@ namespace _2408.MVC.Services
             this.WRITE_DT = prd.WRITE_DT.ToString();
         }
     }
+
+    public class ProductSelectDTO
+    {
+        public int totalCount;
+        public int pageSize;
+        public int pageNo;
+        public List<ProductDTO> products;
+    }
 }

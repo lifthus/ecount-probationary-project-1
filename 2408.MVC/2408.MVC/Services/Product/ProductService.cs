@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Web;
 
 namespace _2408.MVC.Services
@@ -48,6 +49,35 @@ namespace _2408.MVC.Services
             return prdDTO;
         }
 
+        public ProductSelectDTO Select(SelectProductDACRequestDTO inp)
+        {
+            ProductSelectDTO resp = null;
+
+            var pipeLine = new PipeLine();
+            pipeLine.Register<SelectProductCommand, SelectProductDACResponseDTO>(new SelectProductCommand())
+                .Mapping(cmd =>
+                {
+                    cmd.Input = inp;
+                })
+                .Executed(res =>
+                {
+                    if (res.HasError())
+                    {
+                        throw new Exception($"품목 쿼리 실패: {res.Errors[0].Message}");
+                    }
+
+                    resp = new ProductSelectDTO()
+                    {
+                        totalCount = res.Output.totalCount,
+                        pageSize = res.Output.pageSize,
+                        pageNo = res.Output.pageNo,
+                        products = res.Output.list.Select(prd => new ProductDTO(prd)).ToList(),
+                    };
+                });
+
+            pipeLine.Execute();
+            return resp;
+        }
         public ProductDTO Put(UpdateProductCommandInput inp)
         {
             ProductDTO prdDTO = null;
