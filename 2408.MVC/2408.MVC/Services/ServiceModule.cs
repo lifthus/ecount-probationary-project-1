@@ -12,6 +12,7 @@ namespace _2408.MVC.Services
 
         public static void Init() {
             _services.Add(typeof(ProductService), new ProductService());
+            _services.Add(typeof(SaleService), new SaleService());
             TestControllers();
         }
 

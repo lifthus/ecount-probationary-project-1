@@ -159,6 +159,7 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\SaleAPIController.cs" />
     <Compile Include="Controllers\ProductAPIController.cs" />
     <Compile Include="Controllers\ProductController.cs" />
     <Compile Include="Controllers\IndexController.cs" />
@@ -169,6 +170,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\Product\ProductDTO.cs" />
     <Compile Include="Services\Product\ProductService.cs" />
+    <Compile Include="Services\Sale\SaleDTO.cs" />
+    <Compile Include="Services\Sale\SaleService.cs" />
     <Compile Include="Services\ServiceModule.cs" />
   </ItemGroup>
   <ItemGroup>

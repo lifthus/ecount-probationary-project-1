@@ -39,7 +39,8 @@ namespace command_proj1
                 data.Key.IO_DATE = reader["io_date"].ToString();
                 data.Key.IO_NO = Int32.Parse(reader["io_no"].ToString());
                 data.PROD_CD = reader["prod_cd"].ToString();
-                data.QTY = (int)reader["qty"];
+                data.QTY = (decimal)reader["qty"];
+                data.UNIT_PRICE = (decimal)reader["unit_price"];
                 data.REMARKS = reader["remarks"].ToString();
             });
             if (sales.Count() < 1) {

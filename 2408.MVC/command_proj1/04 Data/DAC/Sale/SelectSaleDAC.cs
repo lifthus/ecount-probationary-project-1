@@ -16,19 +16,20 @@ namespace command_proj1
         public string EndIODate;
         public int OrdProdCd; // -1, 0, 1 
         public int OrdQty; // -1, 0, 1
-        public SelectSaleDACRequestDTO(string comCode, string[] prodCds, string remarksLike, string startIODate, string endIODate, int ordProdCd, int ordQty)
-        {
-            ComCode = comCode;
-            ProdCds = prodCds;
-            RemarksLike = remarksLike;
-            StartIODate = startIODate;
-            EndIODate = endIODate;
-            OrdProdCd = ordProdCd;
-            OrdQty = ordQty;
+        public SelectSaleDACRequestDTO( )
+        { 
         }
     }
 
-    public class SelectSaleDAC : Command<List<Sale>>
+    public class SelectSaleDACResponseDTO
+    {
+        public List<Sale> list;
+        public int totalCount;
+        public int pageSize;
+        public int pageNo;
+    }
+
+    public class SelectSaleDAC : Command<SelectSaleDACResponseDTO>
     {
         public SelectSaleDACRequestDTO Input { get; set; }
 
@@ -111,11 +112,8 @@ namespace command_proj1
                     tmpEnum = tmpEnum.ThenBy(x => x.QTY);
                 }
             }
-
-            Output = saleList;
+             
         }
         protected override void Executed() { }
     }
 }
-// pipeline 커맨드 실행하기 위한 자료구조
-// 

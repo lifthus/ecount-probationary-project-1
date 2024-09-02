@@ -121,6 +121,11 @@
     <Compile Include="05 BizDomain\Product\UpdateProductCommand.cs" />
     <Compile Include="05 BizDomain\Product\GetProductCommand.cs" />
     <Compile Include="05 BizDomain\Product\CreateProductCommand.cs" />
+    <Compile Include="05 BizDomain\Sale\CreateSaleCommand.cs" />
+    <Compile Include="05 BizDomain\Sale\DeleteSaleCommand.cs" />
+    <Compile Include="05 BizDomain\Sale\GetSaleCommand.cs" />
+    <Compile Include="05 BizDomain\Sale\SelectSaleCommand.cs" />
+    <Compile Include="05 BizDomain\Sale\UpdateSaleCommand.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
