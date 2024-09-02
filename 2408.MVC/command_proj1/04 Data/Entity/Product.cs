@@ -17,6 +17,7 @@ namespace command_proj1
     {
         public string PROD_NM { get; set; }
         public decimal PRICE { get; set; }
+        public bool ACTIVE { get; set; }
         public DateTime WRITE_DT { get; set; }
 
         public override string ToString()

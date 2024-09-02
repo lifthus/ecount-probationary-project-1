@@ -20,7 +20,7 @@ namespace command_proj1
             if (Input == null) {
                 throw new Exception("새 판매 정보 없음");
             }
-            if (!Input.Key.IO_DATE.vIsYYYYMMDD()) {
+            if (!Input.Key.IO_DATE.vIsYYYYSMMSDD()) {
                 throw new Exception("전표일자 형식 오류");
             }
         }

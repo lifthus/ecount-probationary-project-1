@@ -36,12 +36,12 @@ namespace command_proj1
         {
             return lv <= v && v <= rv;
         }
-        public static bool vIsYYYYMMDD(this string v)
+        public static bool vIsYYYYSMMSDD(this string v)
         {
             if (v.Length != 8) {
                 return false;
             }
-            return DateTime.TryParseExact(v, "yyyyMMdd", CultureInfo.InvariantCulture, DateTimeStyles.None, out _);
+            return DateTime.TryParseExact(v, "yyyy/MM/dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out _);
         }
     }
 }

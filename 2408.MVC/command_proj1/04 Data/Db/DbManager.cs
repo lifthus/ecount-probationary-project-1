@@ -81,7 +81,6 @@ namespace command_proj1._04_Data.Db
                         }
                         throw new Exception("No result");
                     }
-                    return default(T);
                 }
             }
         }

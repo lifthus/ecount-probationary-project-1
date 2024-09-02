@@ -31,6 +31,11 @@ namespace command_proj1
         /// </summary>
         public int ord_PROD_NM;
 
+        /// <summary>
+        /// -1 False / 0 NONE / 1 TRUE
+        /// </summary>
+        public int ACTIVE;
+
         public int pageSize;
         public int pageNo;
     }
@@ -65,12 +70,10 @@ namespace command_proj1
             if (Input.PROD_NM == null) {
                 Input.PROD_NM = "";
             }
-            if (Input.pageSize < 1)
-            {
+            if (Input.pageSize < 1) {
                 Input.pageSize = 10;
             }
-            if (Input.pageNo < 1)
-            {
+            if (Input.pageNo < 1) {
                 Input.pageNo = 1;
             }
         }
@@ -82,11 +85,17 @@ namespace command_proj1
 
             // * 공통 필터링 쿼리 연결
             // 리터럴 문자열 연결은 컴파일 하면서 최적화된다.
-            var filterSQL =
+            var filterSQL = new StringBuilder(
             "FROM flow.product_jhl " +
-            "WHERE com_code = @com_code AND prod_cd LIKE @prod_cd AND prod_nm LIKE @prod_nm";
-            productQueryBuilder.AppendLine(filterSQL);
-            productCountBuilder.AppendLine(filterSQL);
+            "WHERE com_code = @com_code AND prod_cd LIKE @prod_cd AND prod_nm LIKE @prod_nm "
+            );
+            if (Input.ACTIVE < 0) {
+                filterSQL.AppendLine("AND active = false ");
+            } else if (Input.ACTIVE > 0) {
+                filterSQL.AppendLine("AND active = true ");
+            }
+            productQueryBuilder.Append(filterSQL);
+            productCountBuilder.Append(filterSQL);
 
             // * 실제 쿼리만 정렬
             productQueryBuilder.AppendLine("ORDER BY");
@@ -121,6 +130,7 @@ namespace command_proj1
                 data.Key.PROD_CD = reader["prod_cd"].ToString();
                 data.PRICE = (decimal)reader["price"];
                 data.PROD_NM = reader["prod_nm"].ToString();
+                data.ACTIVE = (bool)reader["active"];
                 data.WRITE_DT = (DateTime)reader["write_dt"];
             });
 

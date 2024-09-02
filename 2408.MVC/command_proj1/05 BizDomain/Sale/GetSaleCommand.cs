@@ -1,4 +1,5 @@
 ﻿using System;
+using static command_proj1.GetSaleDAC;
 
 namespace command_proj1
 {
@@ -30,10 +31,10 @@ namespace command_proj1
         protected override void CanExecute()
         {
             if (Input == null) {
-                throw new InexecutableCommandError("품목 Get 커맨드 입력 없음");
+                throw new InexecutableCommandError("판매 Get 커맨드 입력 없음");
             }
             if (Input.Key == null || Input.Key.COM_CODE == null || Input.Key.IO_DATE == null) {
-                throw new InexecutableCommandError("Get 대상 품목 COM_CODE, PROD_CD 필요");
+                throw new InexecutableCommandError("Get 대상 판매 COM_CODE, IO_DATE 필요");
             }
         }
         protected override void OnExecuting()
@@ -43,11 +44,16 @@ namespace command_proj1
         {
             _pipeLine.Register<GetSaleDAC, Sale>(new GetSaleDAC())
                 .Mapping(cmd => {
-                    cmd.Input = new GetSaleDACRequestDTO(Input.Key.COM_CODE, Input.Key.IO_DATE, Input.Key.IO_NO);
+                    cmd.Input = new GetSaleDACRequestDTO()
+                    {
+                        COM_CODE = Input.Key.COM_CODE,
+                        IO_DATE = Input.Key.IO_DATE,
+                        IO_NO = Input.Key.IO_NO,
+                    };
                 })
                 .Executed(res => {
-                    if (res.Errors.Count > 0) {
-                        throw Errors[0];
+                    if (res.HasError()) {
+                        throw res.Errors[0];
                     }
                     Output = res.Output;
                 });

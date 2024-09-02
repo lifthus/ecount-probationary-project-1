@@ -22,6 +22,7 @@ namespace _2408.MVC.Services
         public readonly ProductKeyDTO key;
         public readonly string PROD_NM;
         public readonly string PRICE;
+        public readonly bool ACTIVE;
         public readonly string WRITE_DT;
         
         public ProductDTO(Product prd)
@@ -29,6 +30,7 @@ namespace _2408.MVC.Services
             this.key = new ProductKeyDTO(prd.Key);
             this.PROD_NM = prd.PROD_NM;
             this.PRICE = prd.PRICE.ToString();
+            this.ACTIVE = prd.ACTIVE;
             this.WRITE_DT = prd.WRITE_DT.ToString();
         }
     }

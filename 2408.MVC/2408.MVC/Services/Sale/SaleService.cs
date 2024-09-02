@@ -16,24 +16,26 @@ namespace _2408.MVC.Services
 
         public SaleDTO Get(GetSaleCommandInput inp)
         {
-            SaleDTO prdDTO = null;
+            SaleDTO saleDTO = null;
 
             var pipeLine = new PipeLine();
-            pipeLine.Register<GetProductCommand, Product>(new GetProductCommand())
-                .Mapping(cmd => { 
+            pipeLine.Register<GetSaleCommand, Sale>(new GetSaleCommand())
+                .Mapping(cmd => {
+                    cmd.Input = inp;
                 })
                 .Executed(res => {
                     if (res.HasError()) {
-                        throw new Exception($"품목 조회 실패: {res.Errors[0].Message}");
+                        throw new Exception($"판매 조회 실패: {res.Errors[0].Message}");
                     }
                     if (res.Output == null)
                     {
                         return;
-                    } 
+                    }
+                    saleDTO = new SaleDTO(res.Output);
                 });
 
             pipeLine.Execute();
-            return prdDTO;
+            return saleDTO;
         }
 
         public SaleSelectDTO Select(SelectSaleDACRequestDTO inp)

@@ -50,6 +50,7 @@ namespace command_proj1
                 data.Key.PROD_CD = reader["prod_cd"].ToString();
                 data.PRICE = (decimal)reader["price"];
                 data.PROD_NM = reader["prod_nm"].ToString();
+                data.ACTIVE = (bool)reader["active"];
                 data.WRITE_DT = (DateTime)reader["write_dt"];
             });
             if (products.Count() < 1) {

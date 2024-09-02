@@ -43,6 +43,7 @@ namespace _2408.MVC.Controllers
             req.COM_CODE = Request.QueryString["COM_CODE"];
             req.PROD_CD = Request.QueryString["PROD_CD"];
             req.PROD_NM = Request.QueryString["PROD_NM"];
+            Int32.TryParse(Request.QueryString["ACTIVE"], out req.ACTIVE);
             Int32.TryParse(Request.QueryString["ord_PROD_NM"], out req.ord_PROD_NM);
             Int32.TryParse(Request.QueryString["pageSize"], out req.pageSize);
             Int32.TryParse(Request.QueryString["pageNo"], out req.pageNo);

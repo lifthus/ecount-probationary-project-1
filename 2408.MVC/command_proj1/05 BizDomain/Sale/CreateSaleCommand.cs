@@ -31,7 +31,7 @@ namespace command_proj1
         {
             _pipeLine.Register<GetSaleDAC, Sale>(new GetSaleDAC())
                .Mapping(cmd => {
-                   cmd.Input = new GetSaleDACRequestDTO(Input.Key.COM_CODE, Input.Key.IO_DATE, Input.Key.IO_NO);
+                   // cmd.Input = new GetSaleDACRequestDTO(Input.Key.COM_CODE, Input.Key.IO_DATE, Input.Key.IO_NO);
                })
                .Executed(res => {
                    if (res.Output != null)
