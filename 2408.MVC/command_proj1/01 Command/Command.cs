@@ -41,16 +41,15 @@ namespace command_proj1
                 Init();
                 CanExecute();
                 OnExecuting();
+                _result = new CommandResult<TOut>(new TOut(), Errors);
                 ExecuteCore();
                 Executed();
             } catch (Error err) {
                 Console.WriteLine($"커맨드 수행 실패 {err.StackTrace}");
                 Errors.Add(err);
-                Output = default(TOut);
             } catch (Exception ex) {
                 Console.WriteLine($"커맨드 수행 실패 {ex.StackTrace}");
                 Errors.Add(new UnknownError(ex.Message));
-                Output = default(TOut);
             }
         }
 

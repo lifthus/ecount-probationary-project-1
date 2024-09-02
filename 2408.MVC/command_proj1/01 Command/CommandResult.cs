@@ -8,19 +8,24 @@ namespace command_proj1
 {
     public class CommandResult<TOut> where TOut : new()
     {
+        private TOut _output;
         public TOut Output
         {
             get
             {
-                if (Output == null)
+                if (_output == null)
                 {
-                    Output = new TOut();
+                    _output = new TOut();
                 }
-                return Output;
+                return _output;
             }
             set
             {
-                Output = value;
+                if (_output == null)
+                {
+                    _output = new TOut();
+                }
+                _output = value;
             }
         }
         public readonly List<Error> Errors;
