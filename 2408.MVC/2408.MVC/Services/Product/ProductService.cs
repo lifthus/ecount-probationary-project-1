@@ -1,4 +1,5 @@
 ﻿using command_proj1;
+using Microsoft.Extensions.Logging.Abstractions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -95,6 +96,9 @@ namespace _2408.MVC.Services
                     if (res.HasError()) {
                         throw new Exception($"품목 생성 및 조회 실패:{res.Errors[0].Message}");
                     }
+                    if (res.Output == null) {
+                        return;
+                    }
                     prdDTO = new ProductDTO(res.Output);
                 });
 
@@ -114,6 +118,9 @@ namespace _2408.MVC.Services
                 .Executed(res => {
                     if (res.HasError()) {
                         throw new Exception($"품목 삭제 실패");
+                    }
+                    if (res.Output == null) {
+                        return;
                     }
                     prdDTO = new ProductDTO(res.Output);
                 });

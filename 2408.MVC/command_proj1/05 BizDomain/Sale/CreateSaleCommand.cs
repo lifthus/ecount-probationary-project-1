@@ -4,7 +4,18 @@ namespace command_proj1
 {
     public class CreateSaleCommandInput
     {
-        public CreateSaleKeyDTO Key { get; set; }
+        private CreateSaleKeyDTO _key;
+        public CreateSaleKeyDTO Key {
+            get {
+                if (_key == null) {
+                    _key = new CreateSaleKeyDTO();
+                }
+                return _key;
+            }
+            set {
+                _key = value;
+            }
+        }
         public string PROD_CD { get; set; }
         public decimal UNIT_PRICE { get; set; }
         public decimal QTY { get; set; }

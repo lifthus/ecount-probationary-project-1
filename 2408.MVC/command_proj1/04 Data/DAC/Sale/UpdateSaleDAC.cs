@@ -33,7 +33,7 @@ namespace command_proj1
         {
             var sql = @"
                 UPDATE flow.sale_jhl
-                SET prod_cd = @prod_cd, qty = @qty, remarks = @remarks
+                SET prod_cd = @prod_cd, prod_nm = @prod_nm, unit_price = @unit_price, qty = @qty, remarks = @remarks
                 WHERE com_code = @com_code AND io_date = @io_date AND io_no = @io_no
             ";
 
@@ -42,6 +42,8 @@ namespace command_proj1
                 {"@io_date", Input.Key.IO_DATE},
                 {"@io_no", Input.Key.IO_NO },
                 {"@prod_cd", Input.PROD_CD },
+                {"@prod_nm", Input.PROD_NM },
+                {"@unit_price", Input.UNIT_PRICE },
                 {"@qty", Input.QTY },
                 {"@remarks", Input.REMARKS }
             };

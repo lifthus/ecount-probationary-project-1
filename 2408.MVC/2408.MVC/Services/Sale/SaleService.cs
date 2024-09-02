@@ -62,8 +62,25 @@ namespace _2408.MVC.Services
         }
         public SaleDTO Put(UpdateSaleCommandInput inp)
         {
-            SaleDTO prdDTO = null;
-            return prdDTO;
+            SaleDTO saleDTO = null;
+
+            var pipeLine = new PipeLine();
+            pipeLine.Register<UpdateSaleCommand, Sale>(new UpdateSaleCommand())
+                .Mapping(cmd => {
+                    cmd.Input = inp;
+                })
+                .Executed(res => {
+                    if (res.HasError()) {
+                        throw new Exception($"판매 수정 실패: {res.Errors[0].Message}");
+                    }
+                    if (res.Output == null) {
+                        return;
+                    }
+                    saleDTO = new SaleDTO(res.Output);
+                });
+
+            pipeLine.Execute();
+            return saleDTO;
         }
 
         public SaleDTO Delete(DeleteSaleCommandInput inp)

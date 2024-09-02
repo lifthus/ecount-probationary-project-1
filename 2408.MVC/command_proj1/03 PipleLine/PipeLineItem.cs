@@ -30,9 +30,11 @@ namespace command_proj1
             return this;
         }
 
+        /// <summary>
+        /// 커맨드 실행 여부 (파이프라인 뒤의 커맨드는 계속 실행)
+        /// </summary>
         public PipeLineItem<TCmd, TOut> AddFilter(Predicate<TCmd> filter)
         {
-            // 등록된 Command 를 실행할지 말지 결정하는 동작
             _filters.Add(filter);
             return this;
         }
@@ -51,7 +53,7 @@ namespace command_proj1
             _filters.ForEach(filter =>
             {
                 if (!filter(_command)) {
-                    throw new Exception("커맨드 실행 조건 불만족");
+                    return;
                 }
             });
             _command.Execute();

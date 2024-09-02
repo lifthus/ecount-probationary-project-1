@@ -41,16 +41,16 @@ namespace command_proj1
                    targetProduct = res.Output;
                });
             _pipeLine.Register<UpdateProductDAC, int>(new UpdateProductDAC())
+                .Mapping(cmd => {
+                    targetProduct.PROD_NM = Input.PROD_NM;
+                    targetProduct.PRICE = Input.PRICE;
+                    cmd.Input = targetProduct;
+                })
                 .AddFilter(cmd => {
                     if (targetProduct == null) {
                         return false;
                     }
                     return true;
-                })
-                .Mapping(cmd => {
-                    targetProduct.PROD_NM = Input.PROD_NM;
-                    targetProduct.PRICE = Input.PRICE;
-                    cmd.Input = targetProduct;
                 })
                 .Executed(res => {
                     if (res.HasError()) {
@@ -60,6 +60,12 @@ namespace command_proj1
             _pipeLine.Register<GetProductDAC, Product>(new GetProductDAC())
                 .Mapping(cmd => {
                     cmd.Input = new GetProductDACRequestDTO(Input.Key.COM_CODE, Input.Key.PROD_CD);
+                })
+                .AddFilter(_ => {
+                    if (targetProduct == null) {
+                        return false;
+                    }
+                    return true;
                 })
                 .Executed(res => {
                     if (res.Errors.Count > 0) {
