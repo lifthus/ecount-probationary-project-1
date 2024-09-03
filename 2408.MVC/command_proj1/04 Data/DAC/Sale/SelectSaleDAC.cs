@@ -9,16 +9,37 @@ namespace command_proj1
 {
     public class SelectSaleDACRequestDTO
     {
-        public string ComCode;
-        public string[] ProdCds;
-        public string RemarksLike;
-        public string StartIODate;
-        public string EndIODate;
-        public int OrdProdCd; // -1, 0, 1 
-        public int OrdQty; // -1, 0, 1
-        public SelectSaleDACRequestDTO( )
-        { 
-        }
+        /// <summary>
+        /// EQUAL
+        /// </summary>
+        public string COM_CODE { get; set; }
+        /// <summary>
+        /// IN
+        /// </summary>
+        public string[] PROD_CD_list { get; set; }
+        /// <summary>
+        /// LIKE
+        /// </summary>
+        public string REMARKS { get; set; }
+        /// <summary>
+        /// BETWEEN
+        /// </summary>
+        public string IO_DATE_start { get; set; }
+        /// <summary>
+        /// BETWEEN
+        /// </summary>
+        public string IO_DATE_end { get; set; }
+        /// <summary>
+        /// -1 0 date DESC no ASC / 1 date ASC no ASC
+        /// </summary>
+        public int IO_DATE_NO_ord { get; set; }
+        /// <summary>
+        /// -1 DESC / 0 NONE / 1 ASC
+        /// </summary>
+        public int PROD_CD_ord { get; set; }
+
+        public int pageSize;
+        public int pageNo;
     }
 
     public class SelectSaleDACResponseDTO
@@ -37,82 +58,77 @@ namespace command_proj1
         protected override void CanExecute()
         {
             if (Input == null) {
-                throw new Exception("판매 조회 조건 명세 필요");
+                throw new Exception("판매 SELECT 조건 명세 필요");
             }
         }
         protected override void OnExecuting() { }
         protected override void ExecuteCore()
         {
-            var sql = @"
-                SELECT *
-                FROM flow.sale_jhl
-                WHERE 
-                    com_code = @com_code
-                    AND remarks LIKE @remarks_like
-            ";
+            var countQuery = new StringBuilder("SELECT COUNT(*) ");
+            var entityQuery = new StringBuilder("SELECT * ");
+
+            // WHERE 절은 두 쿼리 다 붙이기
+            var filterSQL = new StringBuilder(
+                "FROM flow.sale_jhl " +
+                $"WHERE com_code = @com_code AND prod_cd = ANY(@prod_cd_list) AND remarks LIKE @remarks AND " +
+                "io_date BETWEEN @io_date_start AND @io_date_end "
+                );
+            countQuery.Append(filterSQL);
+            entityQuery.Append(filterSQL);
+
             var parameters = new Dictionary<string, object>()
             {
-                {"@com_code", Input.ComCode },
-                {"@remarks_like", $"%{Input.RemarksLike}%" },
+                {"@com_code", Input.COM_CODE },
+                {"@prod_cd_list", Input.PROD_CD_list },
+                {"@remarks", $"%{Input.REMARKS}%"},
+                {"@io_date_start", Input.IO_DATE_start },
+                {"@io_date_end", Input.IO_DATE_end }
             };
 
-            if (Input.ProdCds != null && Input.ProdCds.Length > 0) {
-                sql += @"
-                    AND prod_cd = ANY(@prod_cds)
-                ";
-                parameters.Add("@prod_cds", Input.ProdCds);
-            }
-
-            var sDate = Input.StartIODate;
-            var eDate = Input.EndIODate;
-            if (sDate != null && sDate.Length != 0) {
-                sql += @"
-                        AND @s_date <= io_date
-                ";
-                parameters.Add("@s_date", sDate);
-            }
-            if (eDate != null && eDate.Length != 0) {
-                sql += @"
-                        AND io_date <= @e_date
-                ";
-                parameters.Add("@e_date", eDate);
-            }
-
-            sql += @"
-                ORDER BY io_date, io_no
-            ";
-
             var dbManager = new DbManager();
-            var saleList = dbManager.Query<Sale>(sql, parameters, (reader, data) =>
+
+            // 카운트 쿼리 먼저 실행
+            var totalCount = dbManager.Scalar(countQuery.ToString(), parameters, reader => {
+                return Int32.Parse(reader["count"].ToString());
+            });
+
+            // 정렬
+            entityQuery.AppendLine("ORDER BY ");
+            if (Input.PROD_CD_ord < 0) {
+                entityQuery.AppendLine("prod_cd DESC, ");
+            } else if (0 < Input.PROD_CD_ord) {
+                entityQuery.AppendLine("prod_cd ASC, ");
+            }
+            if (Input.IO_DATE_NO_ord > 0) {
+                entityQuery.AppendLine("io_date ASC, ");
+            } else {
+                entityQuery.AppendLine("io_date DESC, ");
+            }
+            entityQuery.AppendLine("io_no ASC ");
+
+            entityQuery.AppendLine("LIMIT @pageSize OFFSET @offset");
+
+            parameters.Add("@pageSize", Input.pageSize);
+            parameters.Add("@offset", Input.pageSize * (Input.pageNo - 1));
+
+            // 쿼리
+            var saleList = dbManager.Query<Sale>(entityQuery.ToString(), parameters, (reader, data) =>
             {
-                data.Key.COM_CODE = Input.ComCode;
+                data.Key.COM_CODE = reader["com_code"].ToString();
                 data.Key.IO_DATE = reader["io_date"].ToString();
                 data.Key.IO_NO = (int)reader["io_no"];
                 data.PROD_CD = reader["prod_cd"].ToString();
-                data.QTY = (int)reader["qty"];
+                data.PROD_NM = reader["prod_nm"].ToString();
+                data.UNIT_PRICE = (decimal)reader["unit_price"];
+                data.QTY = (decimal)reader["qty"];
                 data.REMARKS = reader["remarks"].ToString();
             });
 
-            IOrderedEnumerable<Sale> tmpEnum = null;
-            if (Input.OrdProdCd < 0) {
-                tmpEnum = saleList.OrderByDescending(x => x.PROD_CD);
-            } else if (Input.OrdProdCd >0) {
-                tmpEnum = saleList.OrderBy(x => x.PROD_CD);
-            }
-            if (Input.OrdQty < 0) {
-                if (tmpEnum == null) {
-                    tmpEnum = saleList.OrderByDescending(x => x.QTY);
-                } else {
-                    tmpEnum = tmpEnum.ThenByDescending(x => x.QTY);
-                }
-            } else if (Input.OrdQty > 0) {
-                if( tmpEnum == null) {
-                    tmpEnum = saleList.OrderBy(x => x.QTY);
-                } else {
-                    tmpEnum = tmpEnum.ThenBy(x => x.QTY);
-                }
-            }
-             
+            Output = new SelectSaleDACResponseDTO();
+            Output.list = saleList;
+            Output.totalCount = totalCount;
+            Output.pageSize = Input.pageSize;
+            Output.pageNo = Input.pageNo;
         }
         protected override void Executed() { }
     }

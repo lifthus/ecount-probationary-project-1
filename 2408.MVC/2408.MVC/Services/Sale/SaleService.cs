@@ -54,11 +54,27 @@ namespace _2408.MVC.Services
             return saleDTO;
         }
 
-        public SaleSelectDTO Select(SelectSaleDACRequestDTO inp)
+        public SelectSaleDACResponseDTO Select(SelectSaleDACRequestDTO inp)
         {
-            SaleSelectDTO resp = null;
+            SelectSaleDACResponseDTO dto = null;
 
-            return resp;
+            var pipeLine = new PipeLine();
+            pipeLine.Register<SelectSaleCommand, SelectSaleDACResponseDTO>(new SelectSaleCommand())
+                .Mapping(cmd => {
+                    cmd.Input = inp;
+                })
+                .Executed(res => {
+                    if (res.HasError()) {
+                        throw new Exception($"판매 조회 실패: {res.Errors[0].Message}");
+                    }
+                    if (res.Output == null) {
+                        return;
+                    }
+                    dto = res.Output;
+                });
+
+            pipeLine.Execute();
+            return dto;
         }
         public SaleDTO Put(UpdateSaleCommandInput inp)
         {

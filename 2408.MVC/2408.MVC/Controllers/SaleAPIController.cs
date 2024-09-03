@@ -44,12 +44,23 @@ namespace _2408.MVC.Controllers
         public ActionResult Select()
         {
             var req = new SelectSaleDACRequestDTO();
-            //req.COM_CODE = Request.QueryString["COM_CODE"];
-            //req.PROD_CD = Request.QueryString["PROD_CD"];
-            //req.PROD_NM = Request.QueryString["PROD_NM"];
-            //Int32.TryParse(Request.QueryString["ord_PROD_NM"], out req.ord_PROD_NM);
-            //Int32.TryParse(Request.QueryString["pageSize"], out req.pageSize);
-            //Int32.TryParse(Request.QueryString["pageNo"], out req.pageNo);
+            req.COM_CODE = Request.QueryString["COM_CODE"];
+            req.PROD_CD_list = Request.QueryString["PROD_CD_list"].Split(',');
+            req.REMARKS = Request.QueryString["REMARKS"];
+            req.IO_DATE_start = Request.QueryString["IO_DATE_start"];
+            req.IO_DATE_end = Request.QueryString["IO_DATE_end"];
+            int ioDateNoOrd;
+            Int32.TryParse(Request.QueryString["IO_DATE_NO_ord"], out ioDateNoOrd);
+            req.IO_DATE_NO_ord = ioDateNoOrd;
+            int PRODcDoRD;
+            Int32.TryParse(Request.QueryString["PROD_CD_ord"], out PRODcDoRD);
+            req.PROD_CD_ord = PRODcDoRD;
+            int pageSize;
+            Int32.TryParse(Request.QueryString["pageSize"], out pageSize);
+            req.pageSize = pageSize;
+            int pageNo;
+            Int32.TryParse(Request.QueryString["pageNo"], out pageNo);
+            req.pageNo = pageNo;
 
             return Json(saleService.Select(req), JsonRequestBehavior.AllowGet);
         }
