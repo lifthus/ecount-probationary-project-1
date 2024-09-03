@@ -1,17 +1,21 @@
 import { ITEM_CREATE_POPUP_PATH, ITEM_UPDATE_POPUP_PATH, ITEM_PATH, ITEM_SELECT_POPUP_PATH } from "../../constant.js";
-import { deleteItems, queryItems } from "../../api/items.js";
+import { SelectProductRequestDTO, deleteItems, selectProducts } from "../../api/items.js"
 import { openPopup } from "../../util.js";
 
 export class ItemTable extends HTMLElement {
     constructor() {
         super();
     }
-    connectedCallback() {
+    async connectedCallback() {
         const urlQuery = new URLSearchParams(window.location.search);
         const code = urlQuery.get("code") || "";
         const name = urlQuery.get("name") || "";
         const page = Number(urlQuery.get("page")) || 1;
-        const resp = queryItems({ itemCode: code, itemName: name, page });
+
+        const selectProdReqDTO = new SelectProductRequestDTO();
+        selectProdReqDTO.COM_CODE = '80000';
+        const resp = await selectProducts(selectProdReqDTO);
+
         const totalPages = resp.totalPages;
         const maxSelect = Number(urlQuery.get("maxSelect")) || undefined;
         const targetPath = maxSelect ? ITEM_SELECT_POPUP_PATH : ITEM_PATH;
@@ -61,6 +65,8 @@ export class ItemTable extends HTMLElement {
                     </th>
                     <th class="bd-sm bd-solid bd-gray bg-whitesmoke">품목코드</th>
                     <th class="bd-sm bd-solid bd-gray bg-whitesmoke">품목명</th>
+                    <th class="bd-sm bd-solid bd-gray bg-whitesmoke">단가</th>
+                    <th class="bd-sm bd-solid bd-gray bg-whitesmoke">작성일</th>
                     <th class="bd-sm bd-solid bd-gray bg-whitesmoke w-50px">수정</th>
                 </tr>
             </thead>
@@ -85,7 +91,7 @@ export class ItemTable extends HTMLElement {
             }
         </div>
         `;
-        this.renderTableContent(resp.items);
+        this.renderTableContent(resp.products);
         const itemCheckboxes = this.querySelectorAll("[name='item-checkbox']");
         itemCheckboxes.forEach((cb) => {
             cb.addEventListener("click", (e) => {
@@ -113,9 +119,10 @@ export class ItemTable extends HTMLElement {
 
     /**
      *
-     * @param {import("../../api/items.js").ItemDTO[]} items
+     * @param {import("../../api/items.js").ProductDTO[]} items
      */
     renderTableContent(items) {
+        console.log(items.toString(),"ASD");
         const itemTableBody = this.querySelector("#item-table-body");
         itemTableBody.innerHTML = `
         ${items
@@ -123,13 +130,19 @@ export class ItemTable extends HTMLElement {
                 (item) => `
             <tr>
                 <td class="bd-sm bd-solid bd-gray">
-                <input type="checkbox" name="item-checkbox" data-item-code="${item.code}" data-item-name="${item.name}" />
+                <input type="checkbox" name="item-checkbox" data-com-cde="${item.COM_CODE}" data-prod-cd="${item.PROD_CD}" data-prod-nm="${item.PROD_NM}" />
                 </td>
                 <td class="bd-sm bd-solid bd-gray">
-                    ${item.code}
+                    ${item.Key.PROD_CD}
                 </td>
                 <td class="bd-sm bd-solid bd-gray">
-                    ${item.name}
+                    ${item.PROD_NM}
+                </td>
+                <td class="bd-sm bd-solid bd-gray">
+                    ${item.PRICE}
+                </td>
+                <td class="bd-sm bd-solid bd-gray">
+                    ${item.WRITE_DT}
                 </td>
                 <td class="bd-sm bd-solid bd-gray txt-center">
                     <a 

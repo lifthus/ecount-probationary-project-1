@@ -1,3 +1,5 @@
+import { API_PRODUCT_SELECT_PATH } from "../constant.js";
+
 export class ItemDTO {
     /**
      * @param {string} com_code
@@ -73,6 +75,113 @@ export class QueryItemResponseDTO {
     }
 }
 
+export class ProductDTO {
+    constructor(resp) {
+        /**
+         * @type {ProductKeyDTO}
+         */
+        this.Key = resp.Key;
+        /**
+         * @type {string}
+         */
+        this.PROD_NM = resp.PROD_NM;
+        /**
+         * @type {string}
+         */
+        this.PRICE = resp.PRICE;
+        /**
+         * @type {bool}
+         */
+        this.ACTIVE = resp.ACTIVE;
+        /**
+         * @type {string}
+         */
+        this.WRITE_DT = resp.WRITE_DT;
+    }
+}
+
+export class ProductKeyDTO {
+    constructor(key) {
+        /**
+         * @type {string}
+         */
+        this.COM_CODE = key.COM_CODE;
+        /**
+         * @type {string}
+         */
+        this.PROD_CD = key.PROD_CD;
+    }
+}
+
+export class SelectProductRequestDTO {
+    /**
+     * @type {string}
+     */
+    COM_CODE = "";
+    /**
+     * @type {string}
+     */
+    PROD_CD = "";
+    /**
+     * @type {string}
+     */
+    PROD_NM = "";
+    /**
+     * @type {number}
+     */
+    ord_PROD_NM = 0;
+    /**
+     * @type {number}
+     */
+    ACTIVE = 1;
+    /**
+     * @type {number}
+     */
+    pageSize = 10;
+    /**
+     * @type {number}
+     */
+    pageNo = 1;
+}
+
+export class SelectProductResponseDTO {
+    constructor(resp) {
+        /**
+         * @type {ProductDTO[]}
+         */
+        this.products = resp.products;
+        /**
+         * @type {number}
+         */
+        this.totalCount = resp.totalCount;
+        /**
+         * @type {number}
+         */
+        this.pageSize = resp.pageSize;
+        /**
+         * @type {number}
+         */
+        this.pageNo = resp.pageNo;
+    }
+}
+
+/**
+ * 
+ * @param {SelectProductRequestDTO} dto
+ * @return {SelectProductResponseDTO}
+ */
+
+export async function selectProducts(dto) {
+    const queryString = new URLSearchParams(dto).toString();
+    const resp = await fetch(API_PRODUCT_SELECT_PATH + '?' + queryString, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        }
+    });
+    return resp.json();
+}
+
 /**
  *
  * @param {ItemQueryRequestDTO} dto
@@ -84,6 +193,7 @@ export function queryItems(dto) {
     dto.itemCode = dto.itemCode || "";
     dto.itemName = dto.itemName || "";
 
+    const resp = fetch
     return queryItemsLS(dto);
 }
 
