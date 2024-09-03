@@ -19,11 +19,11 @@
                 </div>
                 <div class="filter-item">
                     <label class="w-100px">단가</label>
-                    <input placeholder="품목명" name="item-price" />
+                    <input placeholder="단가" name="item-price" />
                 </div>
             </div>
             <div class="flex-box">
-                <button class="blue-btn" type="submit">저장</button>
+                <button class="blue-btn" type="button" onclick="return onSubmit()">저장</button>
                 <button class="gray-btn" type="reset">다시작성</button>
                 <button class="gray-btn" type="button" onclick="onClose()">닫기</button>
             </div>
@@ -35,15 +35,26 @@
             window.ItemDTO = ItemDTO;
         </script>
         <script>
-            function onSubmit() {
+            async function onSubmit() {
                 const form = document.getElementById("item-create-form");
                 const formData = new FormData(form);
                 const itemCode = formData.get("item-code");
                 const itemName = formData.get("item-name");
-                const itemPrice = formDate.get("item-price");
-                createItem(new ItemDTO(itemCode, itemName));
-                opener.location.reload();
-                self.close();
+                const itemPrice = formData.get("item-price");
+                const resp = await fetch("/api/product/create", {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        "Key": { "COM_CODE": "80000", "PROD_CD": itemCode },
+                        "PROD_NM": itemName,
+                        "PRICE": itemPrice,
+                        "ACTIVE": true,
+                    })
+                });
+                //opener.location.reload();
+                //self.close();
                 return false;
             }
             function onClear() {

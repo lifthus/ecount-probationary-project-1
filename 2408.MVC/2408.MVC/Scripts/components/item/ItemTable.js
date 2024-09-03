@@ -122,7 +122,6 @@ export class ItemTable extends HTMLElement {
      * @param {import("../../api/items.js").ProductDTO[]} items
      */
     renderTableContent(items) {
-        console.log(items.toString(),"ASD");
         const itemTableBody = this.querySelector("#item-table-body");
         itemTableBody.innerHTML = `
         ${items
