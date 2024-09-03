@@ -30,7 +30,10 @@ namespace command_proj1
         protected override void CanExecute()
         {
             if (Input == null) {
-                throw new InexecutableCommandError("품목 삭제 커맨드 입력 없음");
+                throw new InexecutableCommandError("판매 삭제 커맨드 입력 없음");
+            }
+            if (Input.Key.COM_CODE == null || Input.Key.IO_DATE == null ) {
+                throw new InexecutableCommandError("삭제 대상 판매 지정 요망");
             }
         }
         protected override void OnExecuting()
@@ -40,11 +43,19 @@ namespace command_proj1
         {
             Sale targetSale = null;
             _pipeLine.Register<GetSaleDAC, Sale>(new GetSaleDAC())
-               .Mapping(cmd => { 
+               .Mapping(cmd => {
+                   cmd.Input = new GetSaleDACRequestDTO() {
+                       COM_CODE = Input.Key.COM_CODE,
+                       IO_DATE = Input.Key.IO_DATE,
+                       IO_NO = Input.Key.IO_NO,
+                   };
                })
                .Executed(res => {
-                   if (res.Output == null || res.Errors.Count > 0) {
-                       throw new InexecutableCommandError($"품목 등록 여부 검증 실패");
+                   if (res.HasError()) {
+                       throw new InexecutableCommandError($"판매 등록 여부 검증 실패: {res.Errors[0].Message}");
+                   }
+                   if (res.Output == null) {
+                       throw new InexecutableCommandError("대상 판매 없음");
                    }
                    targetSale = res.Output;
                });
@@ -55,7 +66,8 @@ namespace command_proj1
                     }
                     return true;
                 })
-                .Mapping(cmd => { 
+                .Mapping(cmd => {
+                    cmd.Input = new DeleteSaleDACRequestDTO(Input.Key.COM_CODE, Input.Key.IO_DATE, Input.Key.IO_NO);
                 })
                 .Executed(res => {
                     if (res.HasError()) {

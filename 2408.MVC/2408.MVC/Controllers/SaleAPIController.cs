@@ -65,11 +65,11 @@ namespace _2408.MVC.Controllers
         {
             var comCode = Request.QueryString["COM_CODE"];
             var ioDate = Request.QueryString["IO_DATE"];
-            var ioNo = Int32.Parse(Request.QueryString["IO_NO"]);
+            int ioNo;
+            var parsed = Int32.TryParse(Request.QueryString["IO_NO"], out ioNo);
 
-            if (comCode == null || ioDate == null)
-            {
-                throw new Exception("쿼리스트링에 COM_CODE와 IO_DATE 필요");
+            if (comCode == null || ioDate == null || !parsed) {
+                throw new Exception("쿼리스트링에 COM_CODE, IO_DATE와 IO_NO 필요");
             }
 
             var inp = new DeleteSaleCommandInput();
