@@ -1,4 +1,4 @@
-import { ITEM_PATH, ITEM_SELECT_POPUP_PATH } from "../../constant.js";
+import { PRODUCT_PATH } from "../../constant.js";
 
 export class ItemFilter extends HTMLElement {
     constructor() {
@@ -12,6 +12,7 @@ export class ItemFilter extends HTMLElement {
         const query = new URLSearchParams(window.location.search);
         const code = query.get("PROD_CD") || "";
         const name = query.get("PROD_NM") || "";
+        const pageSize = Number(query.get("pageSIze")) || 10;
 
         this.innerHTML = `
           <form class="flex-col" id="item-search-form">
@@ -39,9 +40,11 @@ export class ItemFilter extends HTMLElement {
             if (event.target.id === "item-search-button") {
                 const code = document.getElementById("filter-item-code").value;
                 const name = document.getElementById("filter-item-name").value;
+                const newPageSize = Number(document.getElementById("page-size-input").value) || pageSize;
                 const targetPath = maxSelect ? PRODUCT_SELECT_POPUP_PATH : PRODUCT_PATH;
                 urlQuery.set("PROD_CD", code);
-                urlQUery.set("PROD_NM", name);
+                urlQuery.set("PROD_NM", name);
+                urlQuery.set("pageSize", newPageSize);
                 window.location.href = targetPath + `?${urlQuery.toString()}`;
             }
         });
