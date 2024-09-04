@@ -19,6 +19,7 @@ import { SaleFilter } from "./sale/SaleFilter.js";
 import { FilterDateRange } from "./common/filter/FilterDateRange.js";
 import { FilterItemSelect } from "./common/filter/FilterItemSelect.js";
 import { FilterSelectedItem } from "./common/filter/FilterSelectedItem.js";
+import { PageNav } from "./common/PageNav.js";
 
 /* common */
 defineComponent(ErpBanner);
@@ -26,6 +27,7 @@ defineComponent(ErpBody);
 defineComponent(MenuTitle);
 defineComponent(BlueButton);
 defineComponent(GrayButton);
+defineComponent(PageNav);
 /* filter */
 defineComponent(FilterInputText);
 defineComponent(FilterItemDiv);

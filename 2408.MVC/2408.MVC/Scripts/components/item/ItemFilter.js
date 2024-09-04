@@ -9,18 +9,9 @@ export class ItemFilter extends HTMLElement {
         const urlQuery = new URLSearchParams(window.location.search);
         const maxSelect = Number(urlQuery.get("maxSelect")) || undefined;
 
-        this.addEventListener("click", (event) => {
-            if (event.target.id === "item-search-button") {
-                const code = document.getElementById("filter-item-code").value;
-                const name = document.getElementById("filter-item-name").value;
-                const targetPath = maxSelect ? ITEM_SELECT_POPUP_PATH : ITEM_PATH;
-                window.location.href = targetPath + `?code=${code || ""}&name=${name || ""}&maxSelect=${maxSelect || ""}`;
-            }
-        });
-
         const query = new URLSearchParams(window.location.search);
-        const code = query.get("code") || "";
-        const name = query.get("name") || "";
+        const code = query.get("PROD_CD") || "";
+        const name = query.get("PROD_NM") || "";
 
         this.innerHTML = `
           <form class="flex-col" id="item-search-form">
@@ -43,5 +34,16 @@ export class ItemFilter extends HTMLElement {
                 </div>
             </form>
         `;
+
+        this.addEventListener("click", (event) => {
+            if (event.target.id === "item-search-button") {
+                const code = document.getElementById("filter-item-code").value;
+                const name = document.getElementById("filter-item-name").value;
+                const targetPath = maxSelect ? PRODUCT_SELECT_POPUP_PATH : PRODUCT_PATH;
+                urlQuery.set("PROD_CD", code);
+                urlQUery.set("PROD_NM", name);
+                window.location.href = targetPath + `?${urlQuery.toString()}`;
+            }
+        });
     }
 }

@@ -1,4 +1,4 @@
-import { ITEM_CREATE_POPUP_PATH, ITEM_UPDATE_POPUP_PATH, ITEM_PATH, ITEM_SELECT_POPUP_PATH } from "../../constant.js";
+import { ITEM_CREATE_POPUP_PATH, ITEM_UPDATE_POPUP_PATH, ITEM_PATH, ITEM_SELECT_POPUP_PATH, PRODUCT_PATH } from "../../constant.js";
 import { SelectProductRequestDTO, deleteItems, selectProducts } from "../../api/items.js"
 import { openPopup } from "../../util.js";
 
@@ -8,32 +8,27 @@ export class ItemTable extends HTMLElement {
     }
     async connectedCallback() {
         const urlQuery = new URLSearchParams(window.location.search);
-        const code = urlQuery.get("code") || "";
-        const name = urlQuery.get("name") || "";
-        const page = Number(urlQuery.get("page")) || 1;
+        const PROD_CD = urlQuery.get("PROD_CD") || "";
+        const PROD_NM = urlQuery.get("PROD_NM") || "";
+        const ord_PROD_NM = Number(urlQuery.get("ord_PROD_NM")) || 0;
+        const ACTIVE = Number(urlQuery.get("ord_PROD_NM")) || 0;
+        const pageSize = Number(urlQuery.get("pageSize")) || 10;
+        const pageNo = Number(urlQuery.get("pageNo")) || 1;
 
         const selectProdReqDTO = new SelectProductRequestDTO();
         selectProdReqDTO.COM_CODE = '80000';
+        selectProdReqDTO.PROD_CD = PROD_CD;
+        selectProdReqDTO.PROD_NM = PROD_NM;
+        selectProdReqDTO.ord_PROD_NM = ord_PROD_NM;
+        selectProdReqDTO.ACTIVE = ACTIVE;
+        selectProdReqDTO.pageSize = pageSize;
+        selectProdReqDTO.pageNo = pageNo;
         const resp = await selectProducts(selectProdReqDTO);
 
-        const totalPages = resp.totalPages;
         const maxSelect = Number(urlQuery.get("maxSelect")) || undefined;
-        const targetPath = maxSelect ? ITEM_SELECT_POPUP_PATH : ITEM_PATH;
         this.addEventListener("click", (e) => {
             const id = e.target.id;
-            if (id === "prev-page-button") {
-                if (page === 1) {
-                    location.href = `${targetPath}?code=${code}&name=${name}&page=1&maxSelect=${maxSelect}`;
-                    return;
-                }
-                location.href = `${targetPath}?code=${code}&name=${name}&page=${page - 1}&maxSelect=${maxSelect}`;
-            } else if (id === "next-page-button") {
-                if (page === totalPages) {
-                    location.href = `${targetPath}?code=${code}&name=${name}&page=${totalPages}&maxSelect=${maxSelect}`;
-                    return;
-                }
-                location.href = `${targetPath}?code=${code}&name=${name}&page=${page + 1}&maxSelect=${maxSelect}`;
-            } else if (id === "all-items-check-box") {
+            if (id === "all-items-check-box") {
                 if (maxSelect) return;
                 const allCheckboxes = this.querySelectorAll("input[type='checkbox']");
                 allCheckboxes.forEach((checkbox) => {
@@ -54,8 +49,7 @@ export class ItemTable extends HTMLElement {
         });
         this.innerHTML = `
         <div class="flex p-sm gap-sm">
-            <gray-button buttonId="prev-page-button">< 이전</gray-button>
-            <gray-button buttonId="next-page-button">다음 ></gray-button>
+            <page-nav path="${PRODUCT_PATH}" pageSize="${resp.pageSize}" totalCount="${resp.totalCount}"/>
         </div>
         <table class="w-100 bd-sm bd-solid bd-gray bd-collapse">
             <thead>

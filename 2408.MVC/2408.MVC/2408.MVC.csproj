@@ -197,6 +197,7 @@
     <Content Include="Scripts\components\common\filter\FilterSelectedItem.js" />
     <Content Include="Scripts\components\common\GrayButton.js" />
     <Content Include="Scripts\components\common\MenuTitle.js" />
+    <Content Include="Scripts\components\common\PageNav.js" />
     <Content Include="Scripts\components\component.js" />
     <Content Include="Scripts\components\item\ItemDashboard.js" />
     <Content Include="Scripts\components\item\ItemFilter.js" />
