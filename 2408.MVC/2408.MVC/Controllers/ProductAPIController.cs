@@ -58,8 +58,13 @@ namespace _2408.MVC.Controllers
 
         [HttpPut]
         [Route("api/product")]
-        public ActionResult Put(UpdateProductCommandInput inp)
+        public ActionResult Put(UpdateProductRequestDTO dto)
         {
+            var inp = new UpdateProductCommandInput();
+            inp.Key = dto.Key;
+            inp.PROD_NM = dto.PROD_NM;
+            inp.ACTIVE = dto.ACTIVE;
+            inp.PRICE = decimal.Parse(dto.PRICE);
             return Json(productService.Put(inp));
         }
 
@@ -81,6 +86,14 @@ namespace _2408.MVC.Controllers
     }
 
     public class CreateProductRequestDTO
+    {
+        public ProductKey Key { get; set; }
+        public string PROD_NM { get; set; }
+        public string PRICE { get; set; }
+        public bool ACTIVE { get; set; }
+    }
+
+    public class UpdateProductRequestDTO
     {
         public ProductKey Key { get; set; }
         public string PROD_NM { get; set; }

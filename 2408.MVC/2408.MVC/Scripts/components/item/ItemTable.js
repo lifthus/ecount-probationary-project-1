@@ -124,8 +124,7 @@ export class ItemTable extends HTMLElement {
     renderTableContent(items) {
         const itemTableBody = this.querySelector("#item-table-body");
         itemTableBody.innerHTML = `
-        ${items
-            .map(
+        ${items.map(
                 (item) => `
             <tr>
                 <td class="bd-sm bd-solid bd-gray">
@@ -143,10 +142,10 @@ export class ItemTable extends HTMLElement {
                 <td class="bd-sm bd-solid bd-gray">
                     ${item.WRITE_DT}
                 </td>
-                <td class="bd-sm bd-solid bd-gray txt-center">
+                <td class="bd-sm bd-solid bd-gray txt-center hover:cursor-pointer">
                     <a 
                         name="item-update-button"
-                        data-item-code="${item.code}"
+                        data-prod-cd="${item.Key.PROD_CD}"
                         class="txt-mildblue">
                         수정
                     </a>
@@ -159,8 +158,8 @@ export class ItemTable extends HTMLElement {
         const itemUpdateButtons = this.querySelectorAll("[name='item-update-button']");
         itemUpdateButtons.forEach((btn) => {
             btn.addEventListener("click", (e) => {
-                const code = e.target.dataset.itemCode;
-                openPopup(`${ITEM_UPDATE_POPUP_PATH}?code=${code}`);
+                const prodCd = e.target.dataset.prodCd;
+                openPopup(`${ITEM_UPDATE_POPUP_PATH}?PROD_CD=${prodCd}`);
             });
         });
     }

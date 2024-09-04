@@ -238,6 +238,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <Content Include="Views\Product\Update.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\command_proj1\command_proj1.csproj">
