@@ -1,35 +1,29 @@
-<!DOCTYPE html>
+ï»¿<!DOCTYPE html>
 <html lang="ko">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link rel="stylesheet" href="/styles/common.css" />
-        <title>1Â÷ ÇÁ·ÎÁ§Æ® ´ëºñ °úÁ¦</title>
-    </head>
     <body>
-        <div class="basic-title">¡á Ç°¸ñµî·Ï</div>
+        <div class="basic-title">â–  í’ˆëª©ìˆ˜ì •</div>
         <form class="filter-box" onsubmit="return onSubmit()" id="item-update-form">
             <div>
                 <div class="filter-item">
                     <div class="flex-box">
-                        <label class="w-100px">Ç°¸ñÄÚµå</label>
-                        <input placeholder="Ç°¸ñÄÚµå" name="item-code" disabled />
+                        <label class="w-100px">í’ˆëª© ì½”ë“œ</label>
+                        <input placeholder="í’ˆëª© ì½”ë“œ" name="item-code" disabled />
                     </div>
                 </div>
                 <div class="filter-item">
-                    <label class="w-100px">Ç°¸ñ¸í</label>
-                    <input placeholder="Ç°¸ñ¸í" name="item-name" />
+                    <label class="w-100px">í’ˆëª©ëª…</label>
+                    <input placeholder="í’ˆëª©ëª…" name="item-name" />
                 </div>
                 <div class="filter-item">
-                    <label class="w-100px">´Ü°¡</label>
-                    <input placeholder="´Ü°¡" name="prod-price" />
+                    <label class="w-100px">ë‹¨ê°€</label>
+                    <input placeholder="ë‹¨ê°€" name="prod-price" />
                 </div>
             </div>
             <div class="flex-box">
-                <button class="blue-btn" type="button" onclick="onSubmit()">ÀúÀå</button>
-                <button class="gray-btn" type="button" onclick="onDelete()">»èÁ¦</button>
-                <button class="gray-btn" type="reset">´Ù½ÃÀÛ¼º</button>
-                <button class="gray-btn" type="button" onclick="onClose()">´Ý±â</button>
+                <button class="blue-btn" type="button" onclick="onSubmit()">ì €ìž¥</button>
+                <button class="gray-btn" type="button" onclick="onDelete()">ì‚­ì œ</button>
+                <button class="gray-btn" type="reset">ë‹¤ì‹œìž‘ì„±</button>
+                <button class="gray-btn" type="button" onclick="onClose()">ë‹«ê¸°</button>
             </div>
         </form>
         <script src="/scripts/items.js" type="module"></script>
@@ -70,16 +64,25 @@
                     })
                 });
                 if (!resp.ok) {
-                    alert('Ç°¸ñ ¼öÁ¤ ½ÇÆÐ');
+                    alert('í’ˆëª© ìˆ˜ì • ì‹¤íŒ¨');
                     return;
                 }
                 opener.location.reload();
                 self.close();
             }
-            function onDelete() {
+            async function onDelete() {
                 const urlParams = new URLSearchParams(window.location.search);
-                const code = urlParams.get("code");
-                deleteItem(code);
+                const code = urlParams.get("PROD_CD");
+                urlParams.set('COM_CODE','80000');
+                const resp = await fetch(`/api/product?${urlParams.toString()}`, {
+                    method: 'DELETE',
+                    headers: { 'ContentType': 'application/json'},
+                })
+                if (!resp.ok) {
+                    alert('í’ˆëª© ì‚­ì œ ì‹¤íŒ¨');
+                    return;
+                }
+                opener.location.reload();
                 self.close();
             }
             function onClose() {
