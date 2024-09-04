@@ -11,7 +11,7 @@ export class ItemTable extends HTMLElement {
         const PROD_CD = urlQuery.get("PROD_CD") || "";
         const PROD_NM = urlQuery.get("PROD_NM") || "";
         const ord_PROD_NM = Number(urlQuery.get("ord_PROD_NM")) || 0;
-        const ACTIVE = Number(urlQuery.get("ord_PROD_NM")) || 0;
+        const ACTIVE = Number(urlQuery.get("ACTIVE")) || 0;
         const pageSize = Number(urlQuery.get("pageSize")) || 10;
         const pageNo = Number(urlQuery.get("pageNo")) || 1;
 
@@ -58,7 +58,7 @@ export class ItemTable extends HTMLElement {
                         <input type="checkbox" id="all-items-check-box" />
                     </th>
                     <th class="bd-sm bd-solid bd-gray bg-whitesmoke">품목코드</th>
-                    <th class="bd-sm bd-solid bd-gray bg-whitesmoke">품목명</th>
+                    <th id="ord-prod-nm" class="bd-sm bd-solid bd-gray bg-whitesmoke">품목명 ${ord_PROD_NM == 0 ? '⏺' : ord_PROD_NM > 0 ? '🔼' : '🔽'}</th>
                     <th class="bd-sm bd-solid bd-gray bg-whitesmoke">단가</th>
                     <th class="bd-sm bd-solid bd-gray bg-whitesmoke">작성일</th>
                     <th class="bd-sm bd-solid bd-gray bg-whitesmoke w-50px">수정</th>
@@ -99,6 +99,13 @@ export class ItemTable extends HTMLElement {
                 if (checkedItemCheckboxes.length === 0) allItemsCheckbox.checked = false;
             });
         });
+
+        // 품목명 정렬
+        this.querySelector("#ord-prod-nm").addEventListener("click", () => {
+            urlQuery.set('ord_PROD_NM', (ord_PROD_NM + 2) % 3 - 1);
+            window.location.href = PRODUCT_PATH + `?${urlQuery.toString()}`;
+        });
+
         // 아이템 선택 후 적용 시
         this.querySelector("#item-apply-button").addEventListener("click", () => {
             const checkedItemCheckboxes = this.querySelectorAll("[name='item-checkbox']:checked");

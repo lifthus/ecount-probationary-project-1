@@ -100,11 +100,11 @@ namespace command_proj1
             // * 실제 쿼리만 정렬
             productQueryBuilder.AppendLine("ORDER BY");
             if (0 < Input.ord_PROD_NM) {
-                productQueryBuilder.AppendLine("prod_nm, ");
+                productQueryBuilder.AppendLine("prod_nm ASC, ");
             } else if (Input.ord_PROD_NM < 0) {
                 productQueryBuilder.AppendLine("prod_nm DESC, ");
             }
-            productQueryBuilder.AppendLine("write_dt DESC");
+            productQueryBuilder.AppendLine("prod_cd ASC");
             // * 실제 쿼리만 페이지네이션
             productQueryBuilder.AppendLine("LIMIT @pageSize");
             productQueryBuilder.AppendLine("OFFSET @pageOffset");
