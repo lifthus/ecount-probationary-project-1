@@ -53,9 +53,12 @@
                         "ACTIVE": true,
                     })
                 });
-                //opener.location.reload();
-                //self.close();
-                return false;
+                if (!resp.ok) {
+                    alert("품목 생성 실패");
+                    return;
+                }
+                opener.location.reload();
+                self.close();
             }
             function onClear() {
                 const form = document.getElementById("item-create-form");

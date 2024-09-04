@@ -13,34 +13,7 @@ namespace _2408.MVC
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
-            /* View Controllers */
-            routes.MapRoute(
-                name: "IndexView",
-                url: "",
-                defaults: new { controller = "Index", action = "Index" }
-             );
-            routes.MapRoute(
-                name: "ProductView",
-                url: "product/{action}",
-                defaults: new { controller = "Product", action = "Index" }
-             );
-            routes.MapRoute(
-                name: "SaleView",
-                url: "sale/{action}",
-                defaults: new { controller = "Sale", action = "Index" }
-             );
-
-            /* API Controllers */
-            routes.MapRoute(
-                name: "ProductAPI",
-                url: "api/product/{action}",
-                defaults: new { controller = "ProductAPI" }
-            );
-            routes.MapRoute(
-                name: "SaleAPI",
-                url: "api/sale/{action}",
-                defaults: new { controller = "SaleAPI" }
-            );
+            routes.MapMvcAttributeRoutes();
         }
     }
 }

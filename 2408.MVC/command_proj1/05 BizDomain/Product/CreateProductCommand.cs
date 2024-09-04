@@ -7,6 +7,7 @@ namespace command_proj1
         public ProductKey Key { get; set; }
         public string PROD_NM { get; set; }
         public decimal PRICE { get; set; }
+        public bool ACTIVE { get; set; }
     }
 
     public class CreateProductCommand : Command<Product>
@@ -49,6 +50,7 @@ namespace command_proj1
                     newProd.Key.PROD_CD = Input.Key.PROD_CD;
                     newProd.PROD_NM = Input.PROD_NM;
                     newProd.PRICE = Input.PRICE;
+                    newProd.ACTIVE = Input.ACTIVE;
                     cmd.Input = newProd;
                 })
                 .Executed(res => {

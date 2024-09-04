@@ -9,10 +9,15 @@ namespace _2408.MVC.Controllers
 {
     public class ProductController : Controller
     {
+        [HttpGet]
+        [Route("product")]
         public ActionResult Index()
         {
             return View();
         }
+
+        [HttpGet]
+        [Route("popup/product/create")]
         public ActionResult Create()
         {
             return View();

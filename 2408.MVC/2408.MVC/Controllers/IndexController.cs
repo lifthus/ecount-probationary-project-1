@@ -9,6 +9,8 @@ namespace _2408.MVC.Controllers
 {
     public class IndexController : Controller
     {
+        [HttpGet]
+        [Route("")]
         public ActionResult Index()
         {
             return View();
