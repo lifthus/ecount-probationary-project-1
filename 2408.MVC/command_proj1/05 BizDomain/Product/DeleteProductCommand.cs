@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace command_proj1
 {
@@ -44,11 +45,38 @@ namespace command_proj1
                    cmd.Input = new GetProductDACRequestDTO(Input.Key.COM_CODE, Input.Key.PROD_CD);
                })
                .Executed(res => {
-                   if (res.Output == null || res.Errors.Count > 0) {
+                   if (res.Output == null || res.HasError()) {
                        throw new InexecutableCommandError($"품목 등록 여부 검증 실패");
                    }
                    targetProduct = res.Output;
                });
+            // 기존 SelectSale로 원하는 목적을 달성할 수 있기 때문에 우선 재사용
+            _pipeLine.Register<SelectSaleDAC, SelectSaleDACResponseDTO>(new SelectSaleDAC())
+                .AddFilter(cmd => {
+                    if (targetProduct == null) {
+                        return false;
+                    }
+                    return true;
+                })
+                .Mapping(cmd => {
+                    var req = new SelectSaleDACRequestDTO();
+                    req.COM_CODE = "80000";
+                    req.PROD_CD_list = new string[] { targetProduct.Key.PROD_CD };
+                    req.REMARKS = "";
+                    req.IO_DATE_start = "1900/01/01";
+                    req.IO_DATE_end = "9999/12/31";
+                    req.pageSize = 1;
+                    req.pageNo = 1;
+                    cmd.Input = req;
+                })
+                .Executed(res => {
+                    if (res.HasError()) {
+                        throw res.Errors[0];
+                    }
+                    if (0 < res.Output.totalCount) {
+                        throw new InexecutableCommandError("해당 품목의 판매 이력이 존재");
+                    }
+                });
             _pipeLine.Register<DeleteProductDAC, int>(new DeleteProductDAC())
                 .AddFilter(cmd => {
                     if (targetProduct == null) {

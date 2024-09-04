@@ -117,7 +117,7 @@ namespace _2408.MVC.Services
                 })
                 .Executed(res => {
                     if (res.HasError()) {
-                        throw new Exception($"품목 삭제 실패");
+                        throw new Exception($"품목 삭제 실패: {res.Errors[0].Message}");
                     }
                     if (res.Output == null) {
                         return;

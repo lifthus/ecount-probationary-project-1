@@ -17,12 +17,14 @@ namespace _2408.MVC.Controllers
         }
 
         [HttpPost]
+        [Route("api/sale")]
         public ActionResult Create(CreateSaleCommandInput inp)
         {
             return Json(saleService.Create(inp));
         }
 
         [HttpGet]
+        [Route("api/sale")]
         public ActionResult Get()
         {
             var comCode = Request.QueryString["COM_CODE"];
@@ -41,6 +43,7 @@ namespace _2408.MVC.Controllers
         }
 
         [HttpGet]
+        [Route("api/sale/select")]
         public ActionResult Select()
         {
             var req = new SelectSaleDACRequestDTO();
@@ -66,12 +69,14 @@ namespace _2408.MVC.Controllers
         }
 
         [HttpPut]
+        [Route("api/sale")]
         public ActionResult Put(UpdateSaleCommandInput inp)
         {
             return Json(saleService.Put(inp));
         }
 
         [HttpDelete]
+        [Route("api/sale")]
         public ActionResult Delete()
         {
             var comCode = Request.QueryString["COM_CODE"];
