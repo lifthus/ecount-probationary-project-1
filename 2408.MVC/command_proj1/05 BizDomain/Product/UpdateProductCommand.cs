@@ -23,6 +23,10 @@ namespace command_proj1
             if (Input == null) {
                 throw new InexecutableCommandError("품목 생성 커맨드 입력 없음");
             }
+            // 판매 조회 등에서 구분자로 사용할 문자를 포함하고 있으면 생성 불가
+            if (Input.Key.PROD_CD.Contains(",")) {
+                throw new InexecutableCommandError("품목 코드에 구분자를 포함할 수 없음");
+            }
         }
         protected override void OnExecuting()
         {
