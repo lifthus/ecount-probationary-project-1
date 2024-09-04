@@ -45,8 +45,11 @@ namespace command_proj1
                    cmd.Input = new GetProductDACRequestDTO(Input.Key.COM_CODE, Input.Key.PROD_CD);
                })
                .Executed(res => {
-                   if (res.Output == null || res.HasError()) {
-                       throw new InexecutableCommandError($"품목 등록 여부 검증 실패");
+                   if (res.HasError()) {
+                       throw new InexecutableCommandError($"품목 등록 여부 검증 실패: {res.Errors[0].Message}");
+                   }
+                   if (res.Output == null) {
+                       throw new InexecutableCommandError("해당 품목 없음");
                    }
                    targetProduct = res.Output;
                });

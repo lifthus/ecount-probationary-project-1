@@ -1,4 +1,4 @@
-import { ITEM_CREATE_POPUP_PATH, ITEM_UPDATE_POPUP_PATH, ITEM_PATH, ITEM_SELECT_POPUP_PATH, PRODUCT_PATH } from "../../constant.js";
+import { ITEM_CREATE_POPUP_PATH, ITEM_UPDATE_POPUP_PATH, ITEM_PATH, ITEM_SELECT_POPUP_PATH, PRODUCT_PATH, API_PRODUCT_DELETE_PATH } from "../../constant.js";
 import { SelectProductRequestDTO, deleteItems, selectProducts } from "../../api/items.js"
 import { openPopup } from "../../util.js";
 
@@ -26,7 +26,7 @@ export class ItemTable extends HTMLElement {
         const resp = await selectProducts(selectProdReqDTO);
 
         const maxSelect = Number(urlQuery.get("maxSelect")) || undefined;
-        this.addEventListener("click", (e) => {
+        this.addEventListener("click", async (e) => {
             const id = e.target.id;
             if (id === "all-items-check-box") {
                 if (maxSelect) return;
@@ -40,8 +40,24 @@ export class ItemTable extends HTMLElement {
                 const tbody = this.querySelector("#item-table-body");
                 const checkedBoxNodes = tbody.querySelectorAll("input[type='checkbox']:checked");
                 const codes = [];
-                checkedBoxNodes.forEach((cb) => codes.push(cb.dataset.itemCode));
-                deleteItems(codes);
+                checkedBoxNodes.forEach((cb) => codes.push(cb.dataset.prodCd));
+                let allSucc = true;
+                for (let PROD_CD of codes) {
+                    const urlParams = new URLSearchParams({
+                        'COM_CODE': '80000',
+                        PROD_CD
+                    });
+                    const resp = await fetch(API_PRODUCT_DELETE_PATH + `?${urlParams.toString()}`, {
+                        method: 'DELETE',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                    });
+                    if (!resp.ok) {
+                        allSucc = false;
+                        alert(`품목 ${PROD_CD} 삭제 실패`);
+                    }
+                }
                 location.reload();
             } else if (id === "close-button") {
                 self.close();
@@ -129,7 +145,7 @@ export class ItemTable extends HTMLElement {
                 (item) => `
             <tr>
                 <td class="bd-sm bd-solid bd-gray">
-                <input type="checkbox" name="item-checkbox" data-com-cde="${item.COM_CODE}" data-prod-cd="${item.PROD_CD}" data-prod-nm="${item.PROD_NM}" />
+                <input type="checkbox" name="item-checkbox" data-com-code="${item.Key.COM_CODE}" data-prod-cd="${item.Key.PROD_CD}" data-prod-nm="${item.PROD_NM}" />
                 </td>
                 <td class="bd-sm bd-solid bd-gray">
                     ${item.Key.PROD_CD}

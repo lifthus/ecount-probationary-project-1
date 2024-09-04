@@ -13,5 +13,6 @@ export const PRODUCT_SELECT_POPUP_PATH = "/popup/product/select";
 export const API_PRODUCT_BASE_PATH = "/api/product";
 export const API_PRODUCT_CREATE_PATH = API_PRODUCT_BASE_PATH;
 export const API_PRODUCT_SELECT_PATH = API_PRODUCT_BASE_PATH;
+export const API_PRODUCT_DELETE_PATH = API_PRODUCT_BASE_PATH;
 
 export const SALE_PATH = "/sale";
