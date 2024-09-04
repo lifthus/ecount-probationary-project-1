@@ -41,7 +41,7 @@
                 const itemCode = formData.get("item-code");
                 const itemName = formData.get("item-name");
                 const itemPrice = formData.get("item-price");
-                const resp = await fetch("/api/product/create", {
+                const resp = await fetch("/api/product", {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
