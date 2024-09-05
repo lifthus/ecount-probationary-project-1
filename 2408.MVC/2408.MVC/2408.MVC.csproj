@@ -210,7 +210,6 @@
     <Content Include="Scripts\components\sale\SaleTable.js" />
     <Content Include="Scripts\constant.js" />
     <Content Include="Scripts\items.js" />
-    <Content Include="Scripts\sales.js" />
     <Content Include="Scripts\study.js" />
     <Content Include="Scripts\util.js" />
     <Content Include="Web.config" />

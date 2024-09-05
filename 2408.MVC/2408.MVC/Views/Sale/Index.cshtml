@@ -2,32 +2,8 @@
         <erp-body>
             <menu-title>판매 조회</menu-title>
             <sale-dashboard></sale-dashboard>
-            <hr/>
-        <button class="gray-btn" onclick="onPrevSalesPage()">< 이전</button>
-        <button class="gray-btn" onclick="onNextSalesPage()">다음 ></button>
-        <table class="bordered-table">
-            <thead>
-                <tr>
-                    <th class="w-10px"><input type="checkbox" id="check-whole" onclick="onCheckAll()" /></th>
-                    <th>전표일자/번호</th>
-                    <th>품목코드</th>
-                    <th>품목명</th>
-                    <th>수량</th>
-                    <th>단가</th>
-                    <th>적요</th>
-                </tr>
-            </thead>
-            <tbody id="sales-table-body"></tbody>
-        </table>
-        <button class="blue-btn" onclick="openPopup('/popups/sale-create-input.html');">신규</button>
-        <button class="gray-btn" onclick="onDeleteSales()">선택삭제</button>
         </erp-body>
         <script type="module">
-            import { onPrevSalesPage, onNextSalesPage, onSearchSales } from "/scripts/sales.js";
-            window.onPrevSalesPage = onPrevSalesPage;
-            window.onNextSalesPage = onNextSalesPage;
-            window.onSearchSales = onSearchSales;
-
             import { deleteSales } from "/scripts/api/sales.js";
             window.deleteSales = deleteSales;
         </script>

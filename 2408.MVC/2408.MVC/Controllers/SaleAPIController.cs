@@ -1,6 +1,7 @@
 ﻿using _2408.MVC.Services;
 using command_proj1;
 using System;
+using System.Linq;
 using System.Web.ApplicationServices;
 using System.Web.Mvc;
 
@@ -46,7 +47,7 @@ namespace _2408.MVC.Controllers
             var req = new SelectSaleDACRequestDTO();
             req.COM_CODE = Request.QueryString["COM_CODE"];
             var prodCdList = Request.QueryString["PROD_CD_list"];
-            req.PROD_CD_list = prodCdList == null ? new string[] { } : prodCdList.Split(',');
+            req.PROD_CD_list = prodCdList == null || prodCdList.Length == 0 ? new string[] { } : prodCdList.Split(',');
             req.REMARKS = Request.QueryString["REMARKS"];
             req.IO_DATE_start = Request.QueryString["IO_DATE_start"];
             req.IO_DATE_end = Request.QueryString["IO_DATE_end"];

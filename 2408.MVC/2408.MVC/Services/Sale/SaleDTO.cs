@@ -21,7 +21,7 @@ namespace _2408.MVC.Services
 
     public class SaleDTO
     {
-        public readonly SaleKeyDTO key;
+        public readonly SaleKeyDTO Key;
         public readonly string PROD_CD;
         public readonly string PROD_NM;
         public readonly string QTY;
@@ -30,7 +30,7 @@ namespace _2408.MVC.Services
         
         public SaleDTO(Sale sale)
         {
-            this.key = new SaleKeyDTO(sale.Key);
+            this.Key = new SaleKeyDTO(sale.Key);
             PROD_CD = sale.PROD_CD;
             PROD_NM = sale.PROD_NM;
             QTY = sale.QTY.ToString();

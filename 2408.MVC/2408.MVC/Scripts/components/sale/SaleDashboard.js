@@ -5,6 +5,7 @@ export class SaleDashboard extends HTMLElement {
     connectedCallback() {
         this.innerHTML = `
           <sale-filter></sale-filter>
+          <hr />
           <sale-table></sale-table>
         `;
     }

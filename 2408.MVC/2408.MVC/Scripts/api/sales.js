@@ -1,47 +1,67 @@
-export class SaleDTO {
-    /**
-     * @type {Date}
-     */
-    saleDate;
-    /**
-     * @type {number}
-     */
-    saleNumber;
-    /**
-     * @type {string}
-     */
-    itemCode;
-    /**
-     * @type {string}
-     */
-    itemName;
-    /**
-     * @type {number}
-     */
-    amount;
-    /**
-     * @type {string}
-     */
-    unitPrice;
-    /**
-     * @type {string}
-     */
-    briefs;
-    constructor(saleDate, saleNumber, itemCode, amount, unitPrice, briefs) {
-        this.saleDate = new Date(saleDate);
-        this.saleNumber = saleNumber;
-        this.itemCode = itemCode;
-        this.amount = amount;
-        this.unitPrice = unitPrice;
-        this.briefs = briefs;
+import { API_SALE_SELECT_PATH } from "../constant.js";
 
-        this.itemName = "JOIN";
+export class SaleKeyDTO {
+    constructor(key) {
+        /**
+         * @type {string}
+         */
+        this.COM_CODE = key.COM_CODE;
+        /**
+         * @type {string}
+         */
+        this.IO_DATE = key.IO_DATE;
+        /**
+         * @type {number}
+         */
+        this.IO_NO = key.IO_NO;
+    }
+}
+export class SaleDTO {
+    constructor(resp) {
+        /**
+         * @type {SaleKeyDTO}
+         */
+        this.Key = resp.Key;
+        /**
+         * @type {string}
+         */
+        this.PROD_CD = resp.PROD_CD;
+        /**
+         * @type {string}
+         */
+        this.PROD_NM = resp.PROD_NM;
+        /**
+         * @type {string}
+         */
+        this.QTY = resp.QTY;
+        /**
+         * @type {string}
+         */
+        this.UNIT_PRICE = resp.UNIT_PRICE;
+        /**
+         * @type {string}
+         */
+        this.REMARKS = resp.REMARKS;
     }
 }
 
+export class SelectSaleResponseDTO {
+    constructor(resp) {
+        /**
+         * @type {SaleDTO[]}
+         */
+        this.sales = resp.sales;
+        this.totalCount = resp.totalCount;
+        this.pageSize = resp.pageSize;
+        this.pageNo = resp.pageNo;
+    }
+}
+
+
 /**
  * 
- * @param {SelectSalesRequestDTO} dto
+ * @param {any} dto
+ * @returns {SelectSaleResponseDTO}
  */
 export async function selectSales(dto) {
     const query = new URLSearchParams(dto);
@@ -60,11 +80,14 @@ export class SelectSalesRequestDTO {
     /**
      * @type {string[]}
      */
-    PROD_CD_LIST = [];
+    PROD_CD_list = [];
     /**
      * @type {string}
      */
     REMARKS = '';
+    /**
+     * @type {string}
+     */
     IO_DATE_start = '';
     /**
      * @type {string}
