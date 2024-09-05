@@ -19,8 +19,16 @@ namespace _2408.MVC.Controllers
 
         [HttpPost]
         [Route("api/sale")]
-        public ActionResult Create(CreateSaleCommandInput inp)
+        public ActionResult Create(CreateSaleRequestDTO dto)
         {
+            var inp = new CreateSaleCommandInput();
+            inp.Key.COM_CODE = dto.Key.COM_CODE;
+            inp.Key.IO_DATE = dto.Key.IO_DATE;
+            inp.PROD_CD = dto.PROD_CD;
+            inp.UNIT_PRICE = decimal.Parse(dto.UNIT_PRICE);
+            inp.QTY = decimal.Parse(dto.QTY);
+            inp.REMARKS = dto.REMARKS ?? "";
+
             return Json(saleService.Create(inp));
         }
 
@@ -95,5 +103,30 @@ namespace _2408.MVC.Controllers
 
             return Json(saleService.Delete(inp));
         }
+    }
+
+    public class CreateSaleRequestDTO
+    {
+        public CreateSaleKeyRequestDTO Key { get; set; }
+        public string PROD_CD { get; set; }
+        public string UNIT_PRICE { get; set; }
+        public string QTY { get; set; }
+        public string REMARKS { get; set; }
+    }
+
+    public class CreateSaleKeyRequestDTO
+    {
+        public string COM_CODE { get; set; }
+        public string IO_DATE { get; set; }
+    }
+
+    public class UpdateSaleRequestDTO
+    {
+        public SaleKey Key { get; set; }
+        public string PROD_NM { get; set; }
+        public string PRICE { get; set; }
+        public string UNIT_PRICE { get; set; }
+        public string QTY { get; set; }
+        public string REMARKS { get; set; }
     }
 }

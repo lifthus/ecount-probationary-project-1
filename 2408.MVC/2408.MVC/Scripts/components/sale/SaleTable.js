@@ -104,7 +104,7 @@ export class SaleTable extends HTMLElement {
             </thead>
             <tbody id="sale-table-body"></tbody>
         </table>
-        <button class="blue-btn" onclick="openPopup(${SALE_CREATE_POPUP_PATH});">신규</button>
+        <button class="blue-btn" onclick="openPopup('${SALE_CREATE_POPUP_PATH}');">신규</button>
         <button class="gray-btn" id="sales-delete-btn">선택삭제</button>
         `;
     }

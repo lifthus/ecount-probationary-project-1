@@ -21,6 +21,7 @@ import { FilterItemSelect } from "./common/filter/FilterItemSelect.js";
 import { FilterSelectedItem } from "./common/filter/FilterSelectedItem.js";
 import { PageNav } from "./common/PageNav.js";
 import { SaleTable } from "./sale/SaleTable.js";
+import { CreateSale } from "./sale/CreateSale.js";
 
 /* common */
 defineComponent(ErpBanner);
@@ -42,6 +43,7 @@ defineComponent(MenuButton);
 defineComponent(SaleDashboard);
 defineComponent(SaleFilter);
 defineComponent(SaleTable);
+defineComponent(CreateSale);
 /* item */
 defineComponent(ItemDashboard);
 defineComponent(ItemFilter);
