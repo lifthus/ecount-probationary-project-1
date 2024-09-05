@@ -38,6 +38,56 @@ export class SaleDTO {
         this.itemName = "JOIN";
     }
 }
+
+/**
+ * 
+ * @param {SelectSalesRequestDTO} dto
+ */
+export async function selectSales(dto) {
+    const query = new URLSearchParams(dto);
+    const resp = await fetch(API_SALE_SELECT_PATH + `?${query.toString()}`);
+    if (!resp.ok) {
+        throw new Error("판매 쿼리 실패");
+    }
+    return resp.json();
+}
+
+export class SelectSalesRequestDTO {
+    /**
+     * @type {string}
+     */
+    COM_CODE = '80000';
+    /**
+     * @type {string[]}
+     */
+    PROD_CD_LIST = [];
+    /**
+     * @type {string}
+     */
+    REMARKS = '';
+    IO_DATE_start = '';
+    /**
+     * @type {string}
+     */
+    IO_DATE_end = '';
+    /**
+     * @type {number}
+     */
+    IO_DATE_NO_ord = 0;
+    /**
+     * @type {number}
+     */
+    PROD_CD_ord = 0;
+    /**
+     * @type {number}
+     */
+    pageSize = 10;
+    /**
+     * @type {number}
+     */
+    pageNo = 1;
+}
+
 export class SalesQueryRequestDTO {
     /**
      *

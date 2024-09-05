@@ -1,0 +1,60 @@
+﻿<erp-banner></erp-banner>
+        <erp-body>
+            <menu-title>판매 조회</menu-title>
+            <sale-dashboard></sale-dashboard>
+            <hr/>
+        <button class="gray-btn" onclick="onPrevSalesPage()">< 이전</button>
+        <button class="gray-btn" onclick="onNextSalesPage()">다음 ></button>
+        <table class="bordered-table">
+            <thead>
+                <tr>
+                    <th class="w-10px"><input type="checkbox" id="check-whole" onclick="onCheckAll()" /></th>
+                    <th>전표일자/번호</th>
+                    <th>품목코드</th>
+                    <th>품목명</th>
+                    <th>수량</th>
+                    <th>단가</th>
+                    <th>적요</th>
+                </tr>
+            </thead>
+            <tbody id="sales-table-body"></tbody>
+        </table>
+        <button class="blue-btn" onclick="openPopup('/popups/sale-create-input.html');">신규</button>
+        <button class="gray-btn" onclick="onDeleteSales()">선택삭제</button>
+        </erp-body>
+        <script type="module">
+            import { onPrevSalesPage, onNextSalesPage, onSearchSales } from "/scripts/sales.js";
+            window.onPrevSalesPage = onPrevSalesPage;
+            window.onNextSalesPage = onNextSalesPage;
+            window.onSearchSales = onSearchSales;
+
+            import { deleteSales } from "/scripts/api/sales.js";
+            window.deleteSales = deleteSales;
+        </script>
+        <script>
+            function onCheckAll() {
+                const checkWhole = document.querySelector("#check-whole");
+                const checkboxes = document.querySelectorAll("#sales-table-body input[type='checkbox']");
+                const isChecked = checkWhole.checked;
+                checkboxes.forEach((checkbox) => {
+                    checkbox.checked = isChecked;
+                });
+            }
+            function onDeleteSales() {
+                const checkboxes = document.querySelectorAll("#sales-table-body input[type='checkbox']:checked");
+                const saleNumbers = Array.from(checkboxes).map((checkbox) => Number(checkbox.getAttribute("data-sale-number")));
+                deleteSales(saleNumbers);
+                alert(`${saleNumbers.length}개의 판매가 삭제되었습니다.`);
+            }
+            function onItemSelect(itemCodes) {
+                setItemCodeFilter(itemCodes);
+            }
+            function setItemCodeFilter(itemCodes) {
+                const itemCodeInput = document.querySelector("input[name='sales-item-codes']");
+                itemCodeInput.value = itemCodes.join(",");
+            }
+            function applyItems(items) {
+                console.log(items);
+            }
+        </script>
+        <script src="/scripts/common.js"></script>

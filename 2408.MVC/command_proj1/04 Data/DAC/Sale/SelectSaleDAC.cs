@@ -70,9 +70,12 @@ namespace command_proj1
             // WHERE 절은 두 쿼리 다 붙이기
             var filterSQL = new StringBuilder(
                 "FROM flow.sale_jhl " +
-                $"WHERE com_code = @com_code AND prod_cd = ANY(@prod_cd_list) AND remarks LIKE @remarks AND " +
+                $"WHERE com_code = @com_code AND remarks LIKE @remarks AND " +
                 "io_date BETWEEN @io_date_start AND @io_date_end "
                 );
+            if (Input.PROD_CD_list.Length > 0) {
+                filterSQL.Append("AND prod_cd = ANY(@prod_cd_list) ");
+            }
             countQuery.Append(filterSQL);
             entityQuery.Append(filterSQL);
 

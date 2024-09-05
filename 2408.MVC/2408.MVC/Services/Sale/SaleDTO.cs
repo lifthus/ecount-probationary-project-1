@@ -44,6 +44,6 @@ namespace _2408.MVC.Services
         public int totalCount;
         public int pageSize;
         public int pageNo;
-        public List<SaleDTO> Sales;
+        public List<SaleDTO> sales;
     }
 }

@@ -54,9 +54,9 @@ namespace _2408.MVC.Services
             return saleDTO;
         }
 
-        public SelectSaleDACResponseDTO Select(SelectSaleDACRequestDTO inp)
+        public SaleSelectDTO Select(SelectSaleDACRequestDTO inp)
         {
-            SelectSaleDACResponseDTO dto = null;
+            SaleSelectDTO dto = null;
 
             var pipeLine = new PipeLine();
             pipeLine.Register<SelectSaleCommand, SelectSaleDACResponseDTO>(new SelectSaleCommand())
@@ -70,7 +70,11 @@ namespace _2408.MVC.Services
                     if (res.Output == null) {
                         return;
                     }
-                    dto = res.Output;
+                    dto = new SaleSelectDTO();
+                    dto.totalCount = res.Output.totalCount;
+                    dto.pageSize = res.Output.pageSize;
+                    dto.pageNo = res.Output.pageNo;
+                    dto.sales = res.Output.list.Select(sale => new SaleDTO(sale)).ToList();
                 });
 
             pipeLine.Execute();

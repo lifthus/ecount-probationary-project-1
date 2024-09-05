@@ -27,28 +27,26 @@ namespace _2408.MVC.Controllers
         [Route("api/sale")]
         public ActionResult Get()
         {
-            var comCode = Request.QueryString["COM_CODE"];
-            var ioDate = Request.QueryString["IO_DATE"];
-            var ioNo = Int32.Parse(Request.QueryString["IO_NO"]);
+            var getType = Request.QueryString["type"];
+            if (getType != null && getType.ToLower() == "get") {
+                var comCode = Request.QueryString["COM_CODE"];
+                var ioDate = Request.QueryString["IO_DATE"];
+                var ioNo = Int32.Parse(Request.QueryString["IO_NO"]);
 
-            if (comCode == null || ioDate == null) {
-                throw new Exception("쿼리스트링에 COM_CODE와 IO_DATE 필요");
+                if (comCode == null || ioDate == null) {
+                    throw new Exception("쿼리스트링에 COM_CODE와 IO_DATE 필요");
+                }
+                var inp = new GetSaleCommandInput();
+                inp.Key.COM_CODE = comCode;
+                inp.Key.IO_DATE = ioDate;
+                inp.Key.IO_NO = ioNo;
+
+                return Json(saleService.Get(inp), JsonRequestBehavior.AllowGet);
             }
-            var inp = new GetSaleCommandInput();
-            inp.Key.COM_CODE = comCode;
-            inp.Key.IO_DATE = ioDate;
-            inp.Key.IO_NO = ioNo;
-
-            return Json(saleService.Get(inp), JsonRequestBehavior.AllowGet);
-        }
-
-        [HttpGet]
-        [Route("api/sale/select")]
-        public ActionResult Select()
-        {
             var req = new SelectSaleDACRequestDTO();
             req.COM_CODE = Request.QueryString["COM_CODE"];
-            req.PROD_CD_list = Request.QueryString["PROD_CD_list"].Split(',');
+            var prodCdList = Request.QueryString["PROD_CD_list"];
+            req.PROD_CD_list = prodCdList == null ? new string[] { } : prodCdList.Split(',');
             req.REMARKS = Request.QueryString["REMARKS"];
             req.IO_DATE_start = Request.QueryString["IO_DATE_start"];
             req.IO_DATE_end = Request.QueryString["IO_DATE_end"];
