@@ -197,7 +197,6 @@
     <Content Include="Scripts\components\common\filter\FilterDateRange.js" />
     <Content Include="Scripts\components\common\filter\FilterInputText.js" />
     <Content Include="Scripts\components\common\filter\FilterItemDiv.js" />
-    <Content Include="Scripts\components\common\filter\FilterItemSelect.js" />
     <Content Include="Scripts\components\common\filter\FilterSelectedItem.js" />
     <Content Include="Scripts\components\common\GrayButton.js" />
     <Content Include="Scripts\components\common\MenuTitle.js" />

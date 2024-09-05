@@ -60,7 +60,8 @@ export class CreateSale extends HTMLElement {
                     <div class="bg-darkwhite bdr-sm bd-solid bd-sm bd-lightgray hover:cursor-pointer" id="product-selection">🔍</div>
                     ${this.selectedItem ?
                 `<selected-product cancelId="cancel-selected-prod" code="${this.selectedItem.PROD_CD}" name="${this.selectedItem.PROD_NM}"></selected-product>`
-                : ``}
+            : ``}
+                    <input id="prod-popper" type="text" class="bg-whitesmoke bd-none w-50px focus:outline-none"></input>
                 </div>
                 <div class="filter-item">
                     <label class="w-100px">수량</label>
@@ -82,6 +83,13 @@ export class CreateSale extends HTMLElement {
             </div>
         </form>
         `;
+        this.querySelector("#prod-popper").addEventListener("keydown", e => {
+            if (e.key === 'Backspace') {
+                this.selectedItem = null;
+                this.render();
+                this.querySelector("#prod-popper").focus();
+            }
+        });
 
         this.querySelector("#create-sale-reset").addEventListener("click", () => {
             this.selectedItem = null;

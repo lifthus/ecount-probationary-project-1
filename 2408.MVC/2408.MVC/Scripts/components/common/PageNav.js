@@ -6,8 +6,6 @@
         const urlQuery = new URLSearchParams(window.location.search);
         const pageNo = Number(urlQuery.get("pageNo")) || 1;
 
-        const path = this.getAttribute('path') || '';
-
         let pageSize = Number(this.getAttribute('pageSize')) || 10;
         if (pageSize < 1) pageSize = 1;
         const totalCount = Number(this.getAttribute('totalCount')) || 0;
@@ -17,7 +15,7 @@
 
         if (pageAmount < pageNo) {
             urlQuery.set('pageNo', `${pageAmount}`);
-            window.location.href = path + `?${urlQuery.toString()}`
+            window.location.href = window.location.pathname + `?${urlQuery.toString()}`
         }
 
         const queryString = urlQuery.toString();
@@ -48,21 +46,21 @@
             const prevPage = 1 < pageNo ? pageNo - 1 : 1;
             params.set('pageNo', `${prevPage}`);
             params.set('pageSize', `${getSelectedPageSize()}`)
-            window.location.href = path + `?${params.toString()}`
+            window.location.href = window.location.pathname + `?${params.toString()}`
         });
         this.querySelector('#next-page-button').addEventListener("click", () => {
             const params = new URLSearchParams(queryString);
             const nextPage = pageNo < pageAmount ? pageNo + 1 : pageAmount;
             params.set('pageNo', `${nextPage}`);
             params.set('pageSize', `${getSelectedPageSize()}`)
-            window.location.href = path + `?${params.toString()}`
+            window.location.href = window.location.pathname + `?${params.toString()}`
         });
         this.querySelectorAll('[id^="pageNo-"]').forEach(a => {
             a.addEventListener("click", (e) => {
                 const params = new URLSearchParams(queryString);
                 params.set('pageSize', `${getSelectedPageSize()}`)
                 params.set('pageNo', e.target.dataset.pageNo);
-                window.location.href = path + `?${params.toString()}`
+                window.location.href = window.location.pathname + `?${params.toString()}`
             });
         });
 

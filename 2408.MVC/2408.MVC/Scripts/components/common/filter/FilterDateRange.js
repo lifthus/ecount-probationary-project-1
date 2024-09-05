@@ -7,16 +7,28 @@ export class FilterDateRange extends HTMLElement {
         const endDateId = this.getAttribute("endDateId");
         const defaultStartDate = new Date(this.getAttribute("defaultStartDate"));
         const defaultStartYear = defaultStartDate.getFullYear() || "";
-        const defaultStartMonth = defaultStartDate.getMonth() + 1 || "";
-        const defaultStartDay = defaultStartDate.getDate() || "";
+        let defaultStartMonth = (defaultStartDate.getMonth() + 1).toString() || "";
+        if (defaultStartMonth.length === 1) {
+            defaultStartMonth = '0' + defaultStartMonth;
+        }
+        let defaultStartDay = (defaultStartDate.getDate()).toString() || "";
+        if (defaultStartDay.length === 1) {
+            defaultStartDay = '0' + defaultStartDay;
+        }
         let startDateValue = "";
-        if (defaultStartDate.toString() !== "Invalid Date") startDateValue = `${defaultStartYear}-${defaultStartMonth}-${defaultStartDay}`;
+        if (defaultStartDate.toString() !== "Invalid Date") startDateValue = `${defaultStartYear}/${defaultStartMonth}/${defaultStartDay}`;
         const defaultEndDate = new Date(this.getAttribute("defaultEndDate"));
         const defaultEndYear = defaultEndDate.getFullYear() || "";
-        const defaultEndMonth = defaultEndDate.getMonth() + 1 || "";
-        const defaultEndDay = defaultEndDate.getDate() || "";
+        let defaultEndMonth = (defaultEndDate.getMonth() + 1).toString() || "";
+        if (defaultEndMonth.length === 1) {
+            defaultEndMonth = '0' + defaultEndMonth;
+        }
+        let defaultEndDay = (defaultEndDate.getDate()).toString() || "";
+        if (defaultEndDay.length === 1) {
+            defaultEndDay = '0' + defaultEndDay;
+        }
         let endDateValue = "";
-        if (defaultEndDate.toString() !== "Invalid Date") endDateValue = `${defaultEndYear}-${defaultEndMonth}-${defaultEndDay}`;
+        if (defaultEndDate.toString() !== "Invalid Date") endDateValue = `${defaultEndYear}/${defaultEndMonth}/${defaultEndDay}`;
         const content = this.innerHTML.trim() || href;
         this.innerHTML = `
           <div class="flex bg-whitesmoke bd-solid bd-sm p-sm">
@@ -39,21 +51,20 @@ export class FilterDateRange extends HTMLElement {
                 id="filter-start-year"
                 name="filter-start-year"
             >
-                <option></option>
                 ${Array.from({ length: 50 }, (_, i) => {
                     const thisYear = new Date().getFullYear() - i;
-                    return `<option value=${thisYear} ${thisYear === defaultStartYear ? "selected" : ""}>${new Date().getFullYear() - i}</option>`;
+                    return `<option value="${thisYear}" ${thisYear === defaultStartYear ? "selected" : ""}>${new Date().getFullYear() - i}</option>`;
                 }).join("")}
+                <option value="1900" ${defaultStartYear === 1900 ? 'selected' : ''}>1900</option>
             </select>
             /
             <select
                 id="filter-start-month"
                 name="filter-start-month"
             >
-                <option></option>
                 ${Array.from({ length: 12 }, (_, i) => {
                     const thisMonth = i + 1;
-                    return `<option value=${i + 1} ${thisMonth === defaultStartMonth ? "selected" : ""}>${i + 1}</option>`;
+                    return `<option value="${i+1<10?'0':''}${i + 1}" ${thisMonth === Number(defaultStartMonth) ? "selected" : ""}>${i + 1}</option>`;
                 }).join("")}
             </select>
             /
@@ -61,10 +72,9 @@ export class FilterDateRange extends HTMLElement {
                 id="filter-start-day"
                 name="filter-start-day"
             >
-                <option></option>
                 ${Array.from({ length: 31 }, (_, i) => {
                     const thisDay = i + 1;
-                    return `<option value=${i + 1} ${thisDay === defaultStartDay ? "selected" : ""}>${i + 1}</option>`;
+                    return `<option value="${i + 1 < 10 ? '0' : ''}${i + 1}" ${thisDay === Number(defaultStartDay) ? "selected" : ""}>${i + 1}</option>`;
                 }).join("")}
             </select>
             ~
@@ -72,23 +82,22 @@ export class FilterDateRange extends HTMLElement {
                 id="filter-end-year"
                 name="filter-end-year"
             >
-                <option></option>
                 ${Array.from({ length: 50 }, (_, i) => {
                     const thisYear = new Date().getFullYear() - i;
                     return `<option value=${new Date().getFullYear() - i} ${thisYear === defaultEndYear ? "selected" : ""}>${
                         new Date().getFullYear() - i
                     }</option>`;
                 }).join("")}
+                <option value="9999" ${defaultEndYear === 9999 ? 'selected' : ''}>9999</option>
             </select>
             /
             <select
                 id="filter-end-month"
                 name="filter-end-month"
             >
-                <option></option>
                 ${Array.from({ length: 12 }, (_, i) => {
                     const thisMonth = i + 1;
-                    return `<option value=${i + 1} ${thisMonth === defaultEndMonth ? "selected" : ""}>${i + 1}</option>`;
+                    return `<option value="${i + 1 < 10 ? '0' : ''}${i + 1}" ${thisMonth === Number(defaultEndMonth) ? "selected" : ""}>${i + 1}</option>`;
                 }).join("")}
             </select>
             /
@@ -96,10 +105,9 @@ export class FilterDateRange extends HTMLElement {
                 id="filter-end-day"
                 name="filter-end-day"
             >
-                <option></option>
                 ${Array.from({ length: 31 }, (_, i) => {
                     const thisDay = i + 1;
-                    return `<option value=${i + 1} ${thisDay === defaultEndDay ? "selected" : ""}>${i + 1}</option>`;
+                    return `<option value="${i + 1 < 10 ? '0' : ''}${i + 1}" ${thisDay === Number(defaultEndDay) ? "selected" : ""}>${i + 1}</option>`;
                 }).join("")}
             </select>
         </div>
@@ -113,7 +121,7 @@ export class FilterDateRange extends HTMLElement {
         const endMonthInput = document.getElementById("filter-end-month");
         const endDayInput = document.getElementById("filter-end-day");
         startYearInput.addEventListener("change", () => {
-            const startDate = `${startYearInput.value || "N"}-${startMonthInput.value || "N"}-${startDayInput.value || "N"}`;
+            const startDate = `${startYearInput.value || "N"}/${startMonthInput.value || "N"}/${startDayInput.value || "N"}`;
             const isValidDate = new Date(startDate).toString() !== "Invalid Date";
             if (isValidDate) {
                 startDateInput.value = startDate;
@@ -123,7 +131,7 @@ export class FilterDateRange extends HTMLElement {
             }
         });
         startMonthInput.addEventListener("change", () => {
-            const startDate = `${startYearInput.value || "N"}-${startMonthInput.value || "N"}-${startDayInput.value || "N"}`;
+            const startDate = `${startYearInput.value || "N"}/${startMonthInput.value || "N"}/${startDayInput.value || "N"}`;
             const isValidDate = new Date(startDate).toString() !== "Invalid Date";
             if (isValidDate) {
                 startDateInput.value = startDate;
@@ -132,7 +140,7 @@ export class FilterDateRange extends HTMLElement {
             }
         });
         startDayInput.addEventListener("change", () => {
-            const startDate = `${startYearInput.value || "N"}-${startMonthInput.value || "N"}-${startDayInput.value || "N"}`;
+            const startDate = `${startYearInput.value || "N"}/${startMonthInput.value || "N"}/${startDayInput.value || "N"}`;
             const isValidDate = new Date(startDate).toString() !== "Invalid Date";
             if (isValidDate) {
                 startDateInput.value = startDate;
@@ -141,7 +149,7 @@ export class FilterDateRange extends HTMLElement {
             }
         });
         endYearInput.addEventListener("change", () => {
-            const endDate = `${endYearInput.value || "N"}-${endMonthInput.value || "N"}-${endDayInput.value || "N"}`;
+            const endDate = `${endYearInput.value || "N"}/${endMonthInput.value || "N"}/${endDayInput.value || "N"}`;
             const isValidDate = new Date(endDate).toString() !== "Invalid Date";
             if (isValidDate) {
                 endDateInput.value = endDate;
@@ -150,7 +158,7 @@ export class FilterDateRange extends HTMLElement {
             }
         });
         endMonthInput.addEventListener("change", () => {
-            const endDate = `${endYearInput.value || "N"}-${endMonthInput.value || "N"}-${endDayInput.value || "N"}`;
+            const endDate = `${endYearInput.value || "N"}/${endMonthInput.value || "N"}/${endDayInput.value || "N"}`;
             const isValidDate = new Date(endDate).toString() !== "Invalid Date";
             if (isValidDate) {
                 endDateInput.value = endDate;
@@ -159,7 +167,7 @@ export class FilterDateRange extends HTMLElement {
             }
         });
         endDayInput.addEventListener("change", () => {
-            const endDate = `${endYearInput.value || "N"}-${endMonthInput.value || "N"}-${endDayInput.value || "N"}`;
+            const endDate = `${endYearInput.value || "N"}/${endMonthInput.value || "N"}/${endDayInput.value || "N"}`;
             const isValidDate = new Date(endDate).toString() !== "Invalid Date";
             if (isValidDate) {
                 endDateInput.value = endDate;

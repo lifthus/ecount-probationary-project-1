@@ -17,7 +17,6 @@ import { ItemTable } from "./item/itemTable.js";
 import { SaleDashboard } from "./sale/SaleDashboard.js";
 import { SaleFilter } from "./sale/SaleFilter.js";
 import { FilterDateRange } from "./common/filter/FilterDateRange.js";
-import { FilterItemSelect } from "./common/filter/FilterItemSelect.js";
 import { FilterSelectedItem } from "./common/filter/FilterSelectedItem.js";
 import { PageNav } from "./common/PageNav.js";
 import { SaleTable } from "./sale/SaleTable.js";
@@ -36,7 +35,6 @@ defineComponent(PageNav);
 defineComponent(FilterInputText);
 defineComponent(FilterItemDiv);
 defineComponent(FilterDateRange);
-defineComponent(FilterItemSelect);
 defineComponent(FilterSelectedItem);
 /* main */
 defineComponent(NavBar);

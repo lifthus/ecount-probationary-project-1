@@ -1,4 +1,4 @@
-import { ITEM_CREATE_POPUP_PATH, ITEM_UPDATE_POPUP_PATH, ITEM_PATH, ITEM_SELECT_POPUP_PATH, PRODUCT_PATH, API_PRODUCT_DELETE_PATH } from "../../constant.js";
+import { ITEM_CREATE_POPUP_PATH, ITEM_UPDATE_POPUP_PATH, ITEM_PATH, ITEM_SELECT_POPUP_PATH, PRODUCT_PATH, API_PRODUCT_DELETE_PATH, PRODUCT_SELECT_POPUP_PATH, PRODUCT_UPDATE_POPUP_PATH } from "../../constant.js";
 import { SelectProductRequestDTO, deleteItems, selectProducts } from "../../api/items.js"
 import { openPopup } from "../../util.js";
 
@@ -6,6 +6,7 @@ export class ItemTable extends HTMLElement {
     constructor() {
         super();
     }
+    maxSelect = undefined;
     async connectedCallback() {
         const urlQuery = new URLSearchParams(window.location.search);
         const PROD_CD = urlQuery.get("PROD_CD") || "";
@@ -26,6 +27,8 @@ export class ItemTable extends HTMLElement {
         const resp = await selectProducts(selectProdReqDTO);
 
         const maxSelect = Number(urlQuery.get("maxSelect")) || undefined;
+        this.maxSelect = maxSelect;
+
         this.addEventListener("click", async (e) => {
             const id = e.target.id;
             if (id === "all-items-check-box") {
@@ -119,7 +122,7 @@ export class ItemTable extends HTMLElement {
         // 품목명 정렬
         this.querySelector("#ord-prod-nm").addEventListener("click", () => {
             urlQuery.set('ord_PROD_NM', (ord_PROD_NM + 2) % 3 - 1);
-            window.location.href = PRODUCT_PATH + `?${urlQuery.toString()}`;
+            window.location.href = window.location.pathname + `?${urlQuery.toString()}`;
         });
 
         // 아이템 선택 후 적용 시
@@ -155,7 +158,10 @@ export class ItemTable extends HTMLElement {
                     data-price="${item.PRICE}"
                 />
                 </td>
-                <td class="bd-sm bd-solid bd-gray">
+                <td class="bd-sm bd-solid bd-gray txt-mildblue hover:cursor-pointer" name="cell-prod-cd"
+                    data-prod-cd="${item.Key.PROD_CD}"
+                    data-prod-nm="${item.PROD_NM}"
+                    data-price=${item.PRICE}>
                     ${item.Key.PROD_CD}
                 </td>
                 <td class="bd-sm bd-solid bd-gray">
@@ -180,6 +186,22 @@ export class ItemTable extends HTMLElement {
             )
             .join("")}
         `;
+
+        this.querySelectorAll("[name='cell-prod-cd']").forEach(c => {
+            c.addEventListener("click", () => {
+                if (this.maxSelect) {
+                    opener.onApplyProducts([{
+                        PROD_CD: c.dataset.prodCd,
+                        PROD_NM: c.dataset.prodNm,
+                        PRICE: c.dataset.price
+                    }]);
+                    self.close();
+                    return;
+                }
+                openPopup(PRODUCT_UPDATE_POPUP_PATH + `?PROD_CD=${c.dataset.prodCd}`);
+            })
+        });
+
         const itemUpdateButtons = this.querySelectorAll("[name='item-update-button']");
         itemUpdateButtons.forEach((btn) => {
             btn.addEventListener("click", (e) => {

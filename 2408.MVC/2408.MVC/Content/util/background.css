@@ -4,6 +4,9 @@
 .bg-mildblue {
     background-color: #477eed;
 }
+.hover\:bg-mildblue:hover {
+    background-color: #477eed;
+}
 .bg-lightblue {
     background-color: #7faaff;
 }

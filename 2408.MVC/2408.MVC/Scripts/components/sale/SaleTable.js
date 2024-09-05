@@ -28,6 +28,7 @@ export class SaleTable extends HTMLElement {
         this.PROD_CD_list = q_PROD_CD_list ? q_PROD_CD_list.split(',') : [];
         this.IO_DATE_NO_ord = Number(query.get('IO_DATE_NO_ord')) || 0;
         this.PROD_CD_ord = Number(query.get('PROD_CD_ord')) || 0;
+        this.REMARKS = query.get('REMARKS') || '';
         this.pageSize = Number(query.get('pageSize')) || 10;
         this.pageNo = Number(query.get('pageNo')) || 1;
 
@@ -38,6 +39,7 @@ export class SaleTable extends HTMLElement {
         req.PROD_CD_list = this.PROD_CD_list;
         req.IO_DATE_NO_ord = this.IO_DATE_NO_ord;
         req.PROD_CD_ord = this.PROD_CD_ord;
+        req.REMARKS = this.REMARKS;
         req.pageSize = this.pageSize;
         req.pageNo = this.pageNo;
 

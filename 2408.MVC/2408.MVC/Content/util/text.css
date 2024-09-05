@@ -7,6 +7,9 @@
 .txt-center {
     text-align: center;
 }
+.txt-xs {
+    font-size: 0.5rem;
+}
 .txt-sm {
     font-size: 0.75rem;
 }

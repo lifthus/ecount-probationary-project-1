@@ -1,4 +1,4 @@
-export class SelectedProduct extends HTMLElement {
+﻿export class SelectedProduct extends HTMLElement {
     constructor() {
         super();
     }
@@ -7,11 +7,13 @@ export class SelectedProduct extends HTMLElement {
         const code = this.getAttribute("code");
         const name = this.getAttribute("name");
         this.innerHTML = `
-          <div class="flex bdr-sm bd-solid bd-sm bd-lightgray bg-lightblue txt-white justify-center align-center">
-            ${name}
+          <div class="flex bdr-sm bd-solid bd-sm bd-lightgray bg-lightblue txt-white txt-sm justify-center align-center">
+            ${code}
             |
-            <div class="txt-sm">${code}</div>
-            <div id="${cancelId}" class="justify-center align-center bdr-full bd-solid bd-sm p-xs w-10px h-10px hover:cursor-pointer">x</div>
+            <div class="txt-xs">${name}</div>
+            <div id="${cancelId}" class="flex justify-center align-center bdr-sm w-20px h-20px hover:cursor-pointer hover:bg-mildblue txt-center">
+                🗑
+            </div>
           </div>
         `;
     }
