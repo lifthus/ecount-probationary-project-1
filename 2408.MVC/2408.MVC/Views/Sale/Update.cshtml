@@ -1,0 +1,115 @@
+﻿<!DOCTYPE html>
+<html lang="ko">
+    <body>
+        <div class="basic-title">■ 품목수정</div>
+        <form class="filter-box" onsubmit="return onSubmit()" id="item-update-form">
+            <div>
+                <div class="filter-item">
+                    <div class="flex-box">
+                        <label class="w-100px">품목 코드</label>
+                        <input placeholder="품목 코드" name="item-code" disabled />
+                    </div>
+                </div>
+                <div class="filter-item">
+                    <label class="w-100px">품목명</label>
+                    <input placeholder="품목명" name="item-name" />
+                </div>
+                <div class="filter-item">
+                    <label class="w-100px">단가</label>
+                    <input placeholder="단가" name="prod-price" />
+                </div>
+            </div>
+            <div class="flex-box">
+                <button class="blue-btn" type="button" onclick="onSubmit()">저장</button>
+                <button class="gray-btn" type="button" onclick="onDelete()">삭제</button>
+                <button class="gray-btn" type="reset">다시작성</button>
+                <button class="gray-btn" type="button" onclick="onClose()">닫기</button>
+            </div>
+        </form>
+        <script src="/scripts/items.js" type="module"></script>
+        <script src="/scripts/common.js"></script>
+        <script type="module">
+            import { ItemDTO, updateItem, getItem, deleteItem } from "/scripts/api/items.js";
+            window.updateItem = updateItem;
+            window.ItemDTO = ItemDTO;
+            window.getItem = getItem;
+            window.deleteItem = deleteItem;
+
+            const form2 = document.getElementById("item-update-form");
+            const itemName = form2.querySelector("input[name='item-name']");
+            const urlParams2 = new URLSearchParams(window.location.search);
+            const code2 = urlParams2.get("code");
+            getItem(code2).then((item) => {
+                itemName.defaultValue = item.name;
+            });
+        </script>
+        <script>
+            async function onSubmit() {
+                const form = document.getElementById("item-update-form");
+                const formData = new FormData(form);
+                const urlParams = new URLSearchParams(window.location.search);
+                const PROD_CD = urlParams.get("PROD_CD");
+                const itemName = formData.get("item-name");
+                const prodPrice = formData.get("prod-price");
+                const resp = await fetch('/api/product', {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        'Key': {'COM_CODE': '80000', 'PROD_CD': PROD_CD },
+                        'PROD_NM': itemName,
+                        'PRICE': prodPrice,
+                        'ACTIVE': true,
+                    })
+                });
+                if (!resp.ok) {
+                    alert('품목 수정 실패');
+                    return;
+                }
+                opener.location.reload();
+                self.close();
+            }
+            async function onDelete() {
+                const urlParams = new URLSearchParams(window.location.search);
+                const code = urlParams.get("PROD_CD");
+                urlParams.set('COM_CODE','80000');
+                const resp = await fetch(`/api/product?${urlParams.toString()}`, {
+                    method: 'DELETE',
+                    headers: { 'ContentType': 'application/json'},
+                })
+                if (!resp.ok) {
+                    alert('품목 삭제 실패');
+                    return;
+                }
+                opener.location.reload();
+                self.close();
+            }
+            function onClose() {
+                self.close();
+            }
+
+            const urlParams = new URLSearchParams(window.location.search);
+            const PROD_CD = urlParams.get("PROD_CD");
+            const form = document.getElementById("item-update-form");
+            const itemCodeInput = form.querySelector("input[name='item-code']");
+            itemCodeInput.defaultValue = PROD_CD;
+
+
+            fetch('/api/product' + `?type=get&COM_CODE=80000&PROD_CD=${PROD_CD}`, {
+                method: 'GET',
+                headers: { 'Content-Type': 'application/json'},
+            })
+            .then(res => {
+                return res.json();
+            })
+            .then(dto => {
+                const prodNmInput = form.querySelector("input[name='item-name']");
+                prodNmInput.defaultValue = dto.PROD_NM;
+                const prodPriceInput = form.querySelector("input[name='prod-price']");
+                prodPriceInput.defaultValue = dto.PRICE;
+            });
+        </script>
+    </body>
+    <footer></footer>
+</html>

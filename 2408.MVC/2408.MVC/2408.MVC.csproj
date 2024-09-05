@@ -240,6 +240,8 @@
     <None Include="packages.config" />
     <Content Include="Views\Product\Update.cshtml" />
     <Content Include="Views\Sale\Index.cshtml" />
+    <Content Include="Views\Sale\Create.cshtml" />
+    <Content Include="Views\Sale\Update.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\command_proj1\command_proj1.csproj">

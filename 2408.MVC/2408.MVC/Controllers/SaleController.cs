@@ -15,5 +15,19 @@ namespace _2408.MVC.Controllers
         {
             return View();
         }
+
+        [HttpGet]
+        [Route("popup/sale/create")]
+        public ActionResult Create()
+        {
+            return View();
+        }
+
+        [HttpGet]
+        [Route("popup/sale/update")]
+        public ActionResult Update()
+        {
+            return View();
+        }
     }
 }

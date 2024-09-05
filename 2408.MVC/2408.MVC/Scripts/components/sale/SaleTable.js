@@ -1,5 +1,5 @@
 ﻿import { SelectSalesRequestDTO, selectSales } from "../../api/sales.js";
-import { API_SALE_SELECT_PATH, SALE_PATH } from "../../constant.js";
+import { API_SALE_DELETE_PATH, API_SALE_SELECT_PATH, SALE_CREATE_POPUP_PATH, SALE_PATH } from "../../constant.js";
 
 export class SaleTable extends HTMLElement {
     constructor() {
@@ -47,17 +47,38 @@ export class SaleTable extends HTMLElement {
         this.render();
         this.renderTableContent(resp.sales);
 
-        const saleSearchButton = this.querySelector("#sale-search-button");
-        saleSearchButton.addEventListener("click", () => {
-            const startDateValue = this.querySelector("#start-date-value").value;
-            const endDateValue = this.querySelector("#end-date-value").value;
-            let itemList = [];
-            const briefs = this.querySelector("#filter-sale-briefs").value;
-            window.location.href =
-                `${SALE_PATH}?startDate=${startDateValue}&endDate=${endDateValue}&briefs=${briefs}` +
-                `&itemCodes=${itemList.map((it) => it.code).join(",")}&itemNames=${itemList.map((it) => it.name).join(",")}` +
-                `&page=1`;
+        const checkAllBox = this.querySelector("#all-sales-check-box");
+        checkAllBox.addEventListener("click", (e) => {
+            const allCheckboxes = this.querySelectorAll("input[type='checkbox']");
+            allCheckboxes.forEach((checkbox) => {
+                checkbox.checked = e.target.checked;
+            });
         });
+
+        const delBtn = this.querySelector("#sales-delete-btn");
+        delBtn.addEventListener("click", async (e) => {
+            const boxes = this.querySelectorAll("[name='sale-checkbox']");
+            for (const b of boxes) {
+                if (!b.checked) {
+                    continue;
+                }
+                const COM_CODE = b.dataset.comCode;
+                const IO_DATE = b.dataset.ioDate;
+                const IO_NO = b.dataset.ioNo;
+                const params = new URLSearchParams({
+                    COM_CODE, IO_DATE, IO_NO
+                });
+                const resp = await fetch(API_SALE_DELETE_PATH + `?${params.toString()}`, {
+                    method: 'DELETE',
+                    headers: { 'Content-Type': 'application/json' },
+                });
+                if (!resp.ok) {
+                    alert($`${IO_DATE}-${IO - NO} 삭제 실패`);
+                }
+                location.reload();
+            }
+        });
+
         window.onItemSelect = (itemList) => {
             this.itemList = itemList;
             this.render();
@@ -72,7 +93,7 @@ export class SaleTable extends HTMLElement {
           <table class="bordered-table">
             <thead>
                 <tr>
-                    <th class="w-10px"><input type="checkbox" id="check-whole" onclick="onCheckAll()" /></th>
+                    <th class="w-10px"><input type="checkbox" id="all-sales-check-box" /></th>
                     <th>전표일자/번호</th>
                     <th>품목코드</th>
                     <th>품목명</th>
@@ -83,8 +104,8 @@ export class SaleTable extends HTMLElement {
             </thead>
             <tbody id="sale-table-body"></tbody>
         </table>
-        <button class="blue-btn" onclick="openPopup('/popups/sale-create-input.html');">신규</button>
-        <button class="gray-btn" onclick="onDeleteSales()">선택삭제</button>
+        <button class="blue-btn" onclick="openPopup(${SALE_CREATE_POPUP_PATH});">신규</button>
+        <button class="gray-btn" id="sales-delete-btn">선택삭제</button>
         `;
     }
 
@@ -99,7 +120,7 @@ export class SaleTable extends HTMLElement {
             (sale) => `
             <tr>
                 <td class="bd-sm bd-solid bd-gray">
-                <input type="checkbox" name="item-checkbox" data-com-code="${sale.Key.COM_CODE}" data-io-date="${sale.Key.IO_DATE}" data-io-no="${sale.Key.IO_NO}" />
+                <input type="checkbox" name="sale-checkbox" data-com-code="${sale.Key.COM_CODE}" data-io-date="${sale.Key.IO_DATE}" data-io-no="${sale.Key.IO_NO}" />
                 </td>
                 <td class="bd-sm bd-solid bd-gray">
                     ${sale.Key.IO_DATE}-${sale.Key.IO_NO}
@@ -131,5 +152,6 @@ export class SaleTable extends HTMLElement {
                 openPopup(`${ITEM_UPDATE_POPUP_PATH}?PROD_CD=${prodCd}`);
             });
         });
+
     }
 }
