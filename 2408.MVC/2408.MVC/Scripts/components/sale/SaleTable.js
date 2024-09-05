@@ -1,5 +1,6 @@
 ﻿import { SelectSalesRequestDTO, selectSales } from "../../api/sales.js";
 import { API_SALE_DELETE_PATH, API_SALE_SELECT_PATH, SALE_CREATE_POPUP_PATH, SALE_PATH } from "../../constant.js";
+import { openPopup } from "../../common.js";
 
 export class SaleTable extends HTMLElement {
     constructor() {
@@ -104,9 +105,11 @@ export class SaleTable extends HTMLElement {
             </thead>
             <tbody id="sale-table-body"></tbody>
         </table>
-        <button class="blue-btn" onclick="openPopup('${SALE_CREATE_POPUP_PATH}');">신규</button>
+        <button id="create-new-sale-btn" class="blue-btn">신규</button>
         <button class="gray-btn" id="sales-delete-btn">선택삭제</button>
         `;
+
+        this.querySelector("#create-new-sale-btn").addEventListener("click", () => { openPopup(SALE_CREATE_POPUP_PATH); });
     }
 
     /**

@@ -123,15 +123,18 @@ export class ItemTable extends HTMLElement {
         });
 
         // 아이템 선택 후 적용 시
-        this.querySelector("#item-apply-button").addEventListener("click", () => {
-            const checkedItemCheckboxes = this.querySelectorAll("[name='item-checkbox']:checked");
-            const items = [];
-            checkedItemCheckboxes.forEach((cb) => {
-                items.push({ code: cb.dataset.itemCode, name: cb.dataset.itemName });
+        const itemApplyBtn = this.querySelector("#item-apply-button");
+        if (itemApplyBtn) {
+            itemApplyBtn.addEventListener("click", () => {
+                const checkedItemCheckboxes = this.querySelectorAll("[name='item-checkbox']:checked");
+                const items = [];
+                checkedItemCheckboxes.forEach((cb) => {
+                    items.push({ COM_CODE:'80000', PROD_CD: cb.dataset.prodCd, PROD_NM: cb.dataset.prodNm, PRICE: cb.dataset.price });
+                });
+                window.opener.onApplyProducts(items);
+                self.close();
             });
-            window.opener.onItemSelect(items);
-            self.close();
-        });
+        }
     }
 
     /**
@@ -145,7 +148,12 @@ export class ItemTable extends HTMLElement {
                 (item) => `
             <tr>
                 <td class="bd-sm bd-solid bd-gray">
-                <input type="checkbox" name="item-checkbox" data-com-code="${item.Key.COM_CODE}" data-prod-cd="${item.Key.PROD_CD}" data-prod-nm="${item.PROD_NM}" />
+                <input type="checkbox" name="item-checkbox"
+                    data-com-code="${item.Key.COM_CODE}"
+                    data-prod-cd="${item.Key.PROD_CD}" 
+                    data-prod-nm="${item.PROD_NM}"
+                    data-price="${item.PRICE}"
+                />
                 </td>
                 <td class="bd-sm bd-solid bd-gray">
                     ${item.Key.PROD_CD}

@@ -170,6 +170,7 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Content Include="Scripts\components\sale\CreateSale.js" />
+    <Content Include="Scripts\components\item\SelectedProduct.js" />
     <Compile Include="Services\Product\ProductDTO.cs" />
     <Compile Include="Services\Product\ProductService.cs" />
     <Compile Include="Services\Sale\SaleDTO.cs" />
@@ -243,6 +244,7 @@
     <Content Include="Views\Sale\Index.cshtml" />
     <Content Include="Views\Sale\Create.cshtml" />
     <Content Include="Views\Sale\Update.cshtml" />
+    <Content Include="Views\Product\Select.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\command_proj1\command_proj1.csproj">

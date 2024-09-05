@@ -29,5 +29,12 @@ namespace _2408.MVC.Controllers
         {
             return View();
         }
+
+        [HttpGet]
+        [Route("popup/product/select")]
+        public ActionResult Select()
+        {
+            return View();
+        }
     }
 }

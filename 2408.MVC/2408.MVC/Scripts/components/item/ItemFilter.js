@@ -1,11 +1,10 @@
-import { PRODUCT_PATH } from "../../constant.js";
+import { PRODUCT_PATH, PRODUCT_SELECT_POPUP_PATH } from "../../constant.js";
 
 export class ItemFilter extends HTMLElement {
     constructor() {
         super();
     }
     connectedCallback() {
-        const href = this.getAttribute("href");
         const urlQuery = new URLSearchParams(window.location.search);
         const maxSelect = Number(urlQuery.get("maxSelect")) || undefined;
 
