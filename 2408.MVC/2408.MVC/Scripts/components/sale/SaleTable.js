@@ -1,5 +1,5 @@
 ﻿import { SelectSalesRequestDTO, selectSales } from "../../api/sales.js";
-import { API_SALE_DELETE_PATH, API_SALE_SELECT_PATH, SALE_CREATE_POPUP_PATH, SALE_PATH } from "../../constant.js";
+import { API_SALE_DELETE_PATH, API_SALE_SELECT_PATH, SALE_CREATE_POPUP_PATH, SALE_PATH, SALE_UPDATE_POPUP_PATH } from "../../constant.js";
 import { openPopup } from "../../common.js";
 
 export class SaleTable extends HTMLElement {
@@ -125,7 +125,11 @@ export class SaleTable extends HTMLElement {
                 <td class="bd-sm bd-solid bd-gray">
                 <input type="checkbox" name="sale-checkbox" data-com-code="${sale.Key.COM_CODE}" data-io-date="${sale.Key.IO_DATE}" data-io-no="${sale.Key.IO_NO}" />
                 </td>
-                <td class="bd-sm bd-solid bd-gray">
+                <td class="bd-sm bd-solid bd-gray txt-mildblue hover:cursor-pointer"
+                    data-com-code="${sale.Key.COM_CODE}"
+                    data-io-date="${sale.Key.IO_DATE}"
+                    data-io-no="${sale.Key.IO_NO}"
+                    name="cell-io-date-no">
                     ${sale.Key.IO_DATE}-${sale.Key.IO_NO}
                 </td>
                 <td class="bd-sm bd-solid bd-gray">
@@ -148,13 +152,15 @@ export class SaleTable extends HTMLElement {
         )
                 .join("")}
         `;
-        const itemUpdateButtons = this.querySelectorAll("[name='item-update-button']");
-        itemUpdateButtons.forEach((btn) => {
-            btn.addEventListener("click", (e) => {
-                const prodCd = e.target.dataset.prodCd;
-                openPopup(`${ITEM_UPDATE_POPUP_PATH}?PROD_CD=${prodCd}`);
-            });
-        });
 
+        this.querySelectorAll("[name='cell-io-date-no'")
+            .forEach(c => {
+                c.addEventListener("click", (e) => {
+                    const comCode = e.target.dataset.comCode;
+                    const ioDate = e.target.dataset.ioDate;
+                    const ioNo = e.target.dataset.ioNo
+                    openPopup(SALE_UPDATE_POPUP_PATH + `?COM_CODE=${comCode}&IO_DATE=${ioDate}&IO_NO=${ioNo}`);
+                });
+            });
     }
 }

@@ -1,13 +1,29 @@
 ﻿import { PRODUCT_SELECT_POPUP_PATH } from '../../constant.js';
 import { openPopup } from '../../common.js';
-export class CreateSale extends HTMLElement {
+export class UpdateSale extends HTMLElement {
     constructor() {
         super();
     }
 
     selectedItem = null;
+    saleDTO = null;
 
-    connectedCallback() {
+    async connectedCallback() {
+        const qs = new URLSearchParams(window.location.search);
+        qs.set('type', 'GET');
+        const resp = await fetch('/api/sale?' + qs.toString() , {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' },
+        })
+
+        this.saleDTO = await resp.json();
+        this.selectedItem = {
+            COM_CODE: this.saleDTO.Key.COM_CODE,
+            PROD_CD: this.saleDTO.PROD_CD,
+            PROD_NM: this.saleDTO.PROD_NM,
+            PRICE: this.saleDTO.PRICE
+        };
+
         this.render();
 
         window.onApplyProducts = (products) => {
@@ -20,38 +36,24 @@ export class CreateSale extends HTMLElement {
     }
 
     render() {
+        const saleDTO = this.saleDTO;
         this.innerHTML = `
-          <div class="basic-title">■ 판매입력</div>
+          <div class="basic-title">■ 판매수정</div>
         <form class="filter-box" onsubmit="return onSubmit()" id="sale-create-form">
             <div>
                 <div class="filter-item">
                     <div class="flex-box">
                         <label class="w-100px">전표일자</label>
-                            <select id = "create-sale-year" name = "create-sale-year">
-                                ${Array.from({ length: 50 }, (_, i) => {
-            const thisYear = new Date().getFullYear() - i;
-            const curYear = new Date().getFullYear();
-            return `<option value="${thisYear}" ${thisYear === curYear ? 'selected' : ''}>${new Date().getFullYear() - i}</option>`;
-        }).join("")
-            }
+                            <select id = "create-sale-year" name = "create-sale-year" disabled>
+                                <option selected>${saleDTO.Key.IO_DATE.split('/')[0]}</option>
                             </select >
                             /
-                            <select id = "create-isale-month" name = "create-sale-month" >
-                                ${Array.from({ length: 12 }, (_, i) => {
-                const thisMonth = i + 1;
-                const curMonth = new Date().getMonth() + 1;
-                return `<option value="${thisMonth}" ${thisMonth === curMonth ? 'selected' : ''}>${i + 1}</option>`;
-            }).join("")
-            }
+                            <select id = "create-isale-month" name = "create-sale-month" disabled>
+                                <option selected>${saleDTO.Key.IO_DATE.split('/')[1]}</option>
                             </select >
                             /
-                            <select id = "create-sale-day" name = "create-sale-day" >
-                                ${Array.from({ length: 31 }, (_, i) => {
-                const thisDay = i + 1;
-                const curDay = new Date().getDate();
-                return `<option value="${thisDay}" ${thisDay === curDay ? 'selected' : ''}>${i + 1}</option>`;
-            }).join("")
-            }
+                            <select id = "create-sale-day" name = "create-sale-day" disabled>
+                                <option selected>${saleDTO.Key.IO_DATE.split('/')[2]}</option>
                             </select >
                     </div>
                 </div>
@@ -64,15 +66,15 @@ export class CreateSale extends HTMLElement {
                 </div>
                 <div class="filter-item">
                     <label class="w-100px">수량</label>
-                    <input placeholder="수량" name="create-sale-qty" />
+                    <input placeholder="수량" name="create-sale-qty" value="${saleDTO.QTY}" />
                 </div>
                 <div class="filter-item">
                     <label class="w-100px">단가</label>
-                    <input placeholder="단가" name="create-sale-price" />
+                    <input placeholder="단가" name="create-sale-price" value="${saleDTO.UNIT_PRICE}" />
                 </div>
                 <div class="filter-item">
                     <label class="w-100px">적요</label>
-                    <input placeholder="적요" name="create-sale-remarks" />
+                    <input placeholder="적요" name="create-sale-remarks" value="${saleDTO.REMARKS}" />
                 </div>
             </div>
             <div class="flex-box">
@@ -84,7 +86,12 @@ export class CreateSale extends HTMLElement {
         `;
 
         this.querySelector("#create-sale-reset").addEventListener("click", () => {
-            this.selectedItem = null;
+            this.selectedItem = {
+                COM_CODE: this.saleDTO.Key.COM_CODE,
+                PROD_CD: this.saleDTO.PROD_CD,
+                PROD_NM: this.saleDTO.PROD_NM,
+                PRICE: this.saleDTO.PRICE
+            };
             this.render();
         })
 
@@ -116,12 +123,12 @@ export class CreateSale extends HTMLElement {
         const saleRemarks = formData.get('create-sale-remarks');
 
         const resp = await fetch("/api/sale", {
-            method: 'POST',
+            method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                Key: { COM_CODE: '80000', IO_DATE: `${saleYear}/${Number(saleMonth) < 10 ? `0${saleMonth}` : saleMonth}/${Number(saleDay) < 10 ? `0${saleDay}`:saleDay}` },
+                Key: { COM_CODE: '80000', IO_DATE: this.saleDTO.Key.IO_DATE, IO_NO: this.saleDTO.Key.IO_NO },
                 PROD_CD: saleProdCd,
                 QTY: saleQty,
                 UNIT_PRICE: salePrice,
@@ -130,7 +137,7 @@ export class CreateSale extends HTMLElement {
         });
 
         if (!resp.ok) {
-            alert("판매 생성 실패");
+            alert("판매 수정 실패");
             return;
         }
         opener.location.reload();

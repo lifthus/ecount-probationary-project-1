@@ -169,6 +169,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Content Include="Scripts\components\sale\UpdateSale.js" />
     <Content Include="Scripts\components\sale\CreateSale.js" />
     <Content Include="Scripts\components\item\SelectedProduct.js" />
     <Compile Include="Services\Product\ProductDTO.cs" />
