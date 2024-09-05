@@ -95,8 +95,8 @@ export class SaleTable extends HTMLElement {
             <thead>
                 <tr>
                     <th class="w-10px"><input type="checkbox" id="all-sales-check-box" /></th>
-                    <th>전표일자/번호</th>
-                    <th>품목코드</th>
+                    <th id="ord-io-date-no">전표일자/번호 ${this.IO_DATE_NO_ord == 0 ? '⏺' : this.IO_DATE_NO_ord > 0 ? '🔼' : '🔽'}</th>
+                    <th id="ord-prod-cd">품목코드 ${this.PROD_CD_ord == 0 ? '⏺' : this.PROD_CD_ord > 0 ? '🔼' : '🔽'}</th>
                     <th>품목명</th>
                     <th>수량</th>
                     <th>단가</th>
@@ -110,6 +110,17 @@ export class SaleTable extends HTMLElement {
         `;
 
         this.querySelector("#create-new-sale-btn").addEventListener("click", () => { openPopup(SALE_CREATE_POPUP_PATH); });
+
+        this.querySelector("#ord-io-date-no").addEventListener("click", () => {
+            const urlQuery = new URLSearchParams(window.location.search);
+            urlQuery.set('IO_DATE_NO_ord', (this.IO_DATE_NO_ord + 2) % 3 - 1);
+            window.location.href = SALE_PATH + `?${urlQuery.toString()}`;
+        });
+        this.querySelector("#ord-prod-cd").addEventListener("click", () => {
+            const urlQuery = new URLSearchParams(window.location.search);
+            urlQuery.set('PROD_CD_ord', (this.PROD_CD_ord + 2) % 3 - 1);
+            window.location.href = SALE_PATH + `?${urlQuery.toString()}`;
+        });
     }
 
     /**
